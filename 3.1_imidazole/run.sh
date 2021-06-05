@@ -1,7 +1,9 @@
 #!/bin/bash
 
-    MOL=imidazole
-    export GAUSS_SCRDIR=/scr/$USER/$MOL.$$
-    (time g16 < $MOL.com) > $MOL.out 2>&1
-    formchk $MOL.chk
+MOL=imidazole
+export GAUSS_SCRDIR=/scr/$USER/$MOL.$$
+(time g16 < $MOL.com) > $MOL.out 2>&1
+formchk $MOL.chk
+cubegen 0 Density=SCF   $MOL.fchk $MOL.density.cub 0 h
+cubegen 0 Potential=SCF $MOL.fchk $MOL.esp.cub     0 h
 
