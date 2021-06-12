@@ -1,0 +1,99 @@
+Info) VMD for MACOSXX86, version 1.9.3 (November 30, 2016)
+Info) http://www.ks.uiuc.edu/Research/vmd/                         
+Info) Email questions and bug reports to vmd@ks.uiuc.edu           
+Info) Please include this reference in published work using VMD:   
+Info)    Humphrey, W., Dalke, A. and Schulten, K., `VMD - Visual   
+Info)    Molecular Dynamics', J. Molec. Graphics 1996, 14.1, 33-38.
+Info) -------------------------------------------------------------
+Info) Multithreading available, 4 CPUs detected.
+Info) Dynamically loaded 2 plugins in directory:
+Info) /Applications/VMD 1.9.3.app/Contents/vmd/plugins/MACOSXX86/molfile
+vmd > 1.7
+../2_psfgen/proa.psf
+../2_psfgen/proa.pdb
+Info) generating solute plus one replica of water...
+psfgen) reading structure from psf file ../2_psfgen/proa.psf
+psfgen) reading coordinates from pdb file ../2_psfgen/proa.pdb
+psfgen) reading structure from psf file /Applications/VMD 1.9.3.app/Contents/vmd/plugins/noarch/tcl/solvate1.7/wat.psf
+psfgen) psf file does not contain cross-terms
+psfgen) reading coordinates from pdb file /Applications/VMD 1.9.3.app/Contents/vmd/plugins/noarch/tcl/solvate1.7/wat.pdb
+psfgen) Info: writing psf file combine.psf
+psfgen) total of 27825 atoms
+psfgen) total of 18563 bonds
+psfgen) total of 18594 angles
+psfgen) total of 91 dihedrals
+psfgen) total of 8 impropers
+psfgen) total of 0 explicit exclusions
+psfgen) total of 3 cross-terms
+psfgen) Info: psf file complete.
+psfgen) Info: writing pdb file combine.pdb
+psfgen) Info: pdb file complete.
+psfplugin) Detected a Charmm PSF file
+Info) Using plugin psf for structure file combine.psf
+Info) Analyzing structure ...
+Info)    Atoms: 27825
+Info)    Bonds: 18563
+Info)    Angles: 18594  Dihedrals: 91  Impropers: 8  Cross-terms: 3
+Info)    Bondtypes: 0  Angletypes: 0  Dihedraltypes: 0  Impropertypes: 0
+Info)    Residues: 9264
+Info)    Waters: 9261
+Info)    Segments: 2
+Info)    Fragments: 9262   Protein: 1   Nucleic: 0
+Info) Using plugin pdb for coordinates from file combine.pdb
+Info) Finished with coordinate file combine.pdb.
+Info) generating water residue lists...
+Info) single water residue type, creating residue list...
+Info) replicating 1 water segments, 1 by 1 by 1
+psfgen) reading topology file /Applications/VMD 1.9.3.app/Contents/vmd/plugins/noarch/tcl/solvate1.7/wat.top
+
+psfgen) >>>>>> Combined CHARMM All-Hydrogen Topology File for <<<<<<<<<
+psfgen) >>>>>>>>> CHARMM22 Proteins and CHARMM27 Lipids <<<<<<<<<<
+psfgen) from
+psfgen) >>>>>>>>CHARMM22 All-Hydrogen Topology File for Proteins <<<<<<
+psfgen) >>>>>>>>>>>>>>>>>>>>> August 1999 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+psfgen) >>>>>>> Direct comments to Alexander D. MacKerell Jr. <<<<<<<<<
+psfgen) >>>>>> 410-706-7442 or email: alex,mmiris.ab.umd.edu  <<<<<<<<<
+psfgen) and
+psfgen)   \\\\\\\ CHARMM27 All-Hydrogen Lipid Topology File ///////
+psfgen)   \\\\\\\\\\\\\\\\\\ Developmental /////////////////////////
+psfgen) 		Alexander D. MacKerell Jr.
+psfgen) 			August 1999
+psfgen)  All comments to ADM jr.  email: alex,mmiris.ab.umd.edu
+psfgen) 		telephone: 410-706-7442
+psfgen) 
+psfgen) Created by CHARMM version 27 1
+psfgen) building segment WT1
+psfgen) setting patch for first residue to NONE
+psfgen) setting patch for last residue to NONE
+psfgen) Info: generating structure...segment complete.
+psfgen) Info: writing psf file wbox.psf
+psfgen) total of 11859 atoms
+psfgen) total of 7919 bonds
+psfgen) total of 4011 angles
+psfgen) total of 91 dihedrals
+psfgen) total of 8 impropers
+psfgen) total of 0 explicit exclusions
+psfgen) total of 3 cross-terms
+psfgen) Info: psf file complete.
+psfgen) Info: writing pdb file wbox.pdb
+psfgen) Info: pdb file complete.
+psfgen) clearing structure, preserving topology and aliases
+psfplugin) Detected a Charmm PSF file
+Info) Using plugin psf for structure file wbox.psf
+Info) Analyzing structure ...
+Info)    Atoms: 11859
+Info)    Bonds: 7919
+Info)    Angles: 4011  Dihedrals: 91  Impropers: 8  Cross-terms: 3
+Info)    Bondtypes: 0  Angletypes: 0  Dihedraltypes: 0  Impropertypes: 0
+Info)    Residues: 3942
+Info)    Waters: 3939
+Info)    Segments: 2
+Info)    Fragments: 3940   Protein: 1   Nucleic: 0
+Info) Using plugin pdb for coordinates from file wbox.pdb
+Info) Finished with coordinate file wbox.pdb.
+Info) Opened coordinate file wbox.pdb for writing.
+Info) Finished with coordinate file wbox.pdb.
+Info) Extra structure overlap safety check...
+Info) Solvate completed successfully.
+Info) VMD for MACOSXX86, version 1.9.3 (November 30, 2016)
+Info) Exiting normally.

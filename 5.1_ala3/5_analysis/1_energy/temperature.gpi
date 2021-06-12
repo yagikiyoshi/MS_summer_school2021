@@ -1,0 +1,9 @@
+set terminal pdf size 10.0 cm, 6.0 cm
+unset key
+set xlabel "Time (ps)"
+set ylabel "Temperature (K)"
+set yrange [285:315]
+
+set out "temperature.pdf"
+plot 'energy.log' u ($0/2):16 with lines
+

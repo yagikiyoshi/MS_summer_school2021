@@ -1,0 +1,45 @@
+[INPUT]
+topfile = ../toppar/top_all36_prot.rtf     # topology file
+parfile = ../toppar/par_all36m_prot.prm    # parameter file
+strfile = ../toppar/toppar_water_ions.str  # stream file
+psffile = ../1_setup/3_solvate/wbox.psf    # protein structure file
+pdbfile = ../1_setup/3_solvate/wbox.pdb    # PDB file
+rstfile = md4.rst                          # restart file
+ 
+[OUTPUT]
+dcdfile = md5.dcd           # DCD trajectory file
+rstfile = md5.rst           # restart file
+ 
+[ENERGY]
+forcefield        = CHARMM  # [CHARMM]
+electrostatic     = PME     # [PME]
+switchdist        = 10.0    # switch distance
+cutoffdist        = 12.0    # cutoff distance
+pairlistdist      = 13.5    # pair-list distance
+vdw_force_switch  = YES     # force switch option for van der Waals
+pme_nspline       = 4       # order of B-spline in [PME]
+pme_max_spacing   = 1.2     # Max grid spacing allowed
+
+[DYNAMICS]
+integrator        =   VRES  # [LEAP,VVER,VRES]
+nsteps            =  40000  # number of MD steps (100ps)
+timestep          = 0.0025  # timestep (2.5fs)
+eneout_period     =    200  # energy output period (0.5ps)
+crdout_period     =    200  # coordinates output period (0.5ps)
+rstout_period     =  40000  # restart output period
+nbupdate_period   =     10  # nonbond update period
+elec_long_period  =      2  # period of reciprocal space calculation
+thermostat_period =     10  # period of thermostat update
+barostat_period   =     10  # period of barostat update
+
+[CONSTRAINTS]
+rigid_bond        = YES     # constraints all bonds involving hydrogen
+
+[ENSEMBLE]
+ensemble          = NPT     # [NVE,NVT,NPT,NPAT,NPgT]
+tpcontrol         = BUSSI   # [NO,BERENDSEN,BUSSI,LANGEVIN]
+temperature       = 298.15  # initial and target temperature (K)
+pressure          = 1.0     # target pressure (atm)
+
+[BOUNDARY]
+type              = PBC     # [PBC, NOBC]

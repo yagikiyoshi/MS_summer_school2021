@@ -1,0 +1,8 @@
+set terminal pdf size 10.0 cm, 6.0 cm
+
+set xlabel 'Time (ps)'
+set ylabel 'Distance (Angs)'
+set yrange [7:13]
+
+set out "distance.pdf"
+plot 'output.dis' u ($1/2):2 t "OY-HNT distance" with lines
