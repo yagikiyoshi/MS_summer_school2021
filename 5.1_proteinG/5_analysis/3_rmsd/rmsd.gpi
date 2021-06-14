@@ -1,0 +1,9 @@
+set terminal pdf size 10.0 cm, 6.0 cm
+
+set xlabel 'Time (ps)'
+set ylabel 'RMSD (Angs)'
+set yrange [0:1.5]
+set ytics 0.3
+
+set out "rmsd.pdf"
+plot 'output.rms' u ($1/2):2 t "" with lines

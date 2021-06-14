@@ -1,0 +1,56 @@
+[INPUT]
+topfile = ../toppar/top_all36_prot.rtf      # topology file
+parfile = ../toppar/par_all36m_prot.prm     # parameter file
+strfile = ../toppar/toppar_water_ions.str   # stream file
+psffile = ../charmm-gui/step3_pbcsetup.psf  # protein structure file
+pdbfile = ../charmm-gui/step3_pbcsetup.pdb  # PDB file
+reffile = ../charmm-gui/step3_pbcsetup.pdb  # reference PDB file for restraint
+rstfile = eq2.rst                           # restart file
+ 
+[OUTPUT]
+dcdfile = eq3.dcd           # DCD trajectory file
+rstfile = eq3.rst           # restart file
+ 
+[ENERGY]
+forcefield       = CHARMM   # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = PME      # [CUTOFF,PME]
+switchdist       = 10.0     # switch distance
+cutoffdist       = 12.0     # cutoff distance
+pairlistdist     = 13.5     # pair-list distance
+vdw_force_switch = YES      # force switch option for van der Waals
+pme_nspline      = 4        # order of B-spline in [PME]
+pme_max_spacing  = 1.2      # Max grid spacing allowed
+
+[DYNAMICS]
+integrator        =   VRES  # [LEAP,VVER,VRES]
+nsteps            =  20000  # number of MD steps (50ps)
+timestep          = 0.0025  # timestep (2.5fs)
+eneout_period     =    400  # energy output period (1ps)
+crdout_period     =    400  # coordinates output period (1ps)
+rstout_period     =  20000  # restart output period
+nbupdate_period   =     10  # nonbond update period
+elec_long_period  =      2  # period of reciprocal space calculation
+thermostat_period =     10  # period of thermostat update
+barostat_period   =     10  # period of barostat update
+
+[CONSTRAINTS]
+rigid_bond       = YES      # constraints all bonds involving hydrogen
+
+[ENSEMBLE]
+ensemble         = NPT      # [NVE,NVT,NPT,NPAT,NPgT]
+tpcontrol        = BUSSI    # [NO,BERENDSEN,BUSSI,LANGEVIN]
+temperature      = 298.15   # initial and target temperature (K)
+pressure         = 1.0      # target pressure (atm)
+
+[BOUNDARY]
+type             = PBC      # [PBC, NOBC]
+
+[SELECTION]
+group1           = an:N or an:CA or an:C or an:O  # restraint group 1
+
+[RESTRAINTS]
+nfunctions       = 1        # number of functions
+function1        = POSI     # restraint function type
+direction1       = ALL      # direction [ALL,X,Y,Z]
+constant1        = 1.0      # force constant
+select_index1    = 1        # restrained groups

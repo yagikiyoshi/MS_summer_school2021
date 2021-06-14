@@ -1,0 +1,34 @@
+[INPUT]
+topfile = ../toppar/top_all36_prot.rtf      # topology file
+parfile = ../toppar/par_all36m_prot.prm     # parameter file
+strfile = ../toppar/toppar_water_ions.str   # stream file
+psffile = ../charmm-gui/step3_pbcsetup.psf  # protein structure file
+pdbfile = ../charmm-gui/step3_pbcsetup.pdb  # PDB file
+ 
+[OUTPUT]
+dcdfile = min.dcd          # DCD trajectory file
+rstfile = min.rst          # restart file
+ 
+[ENERGY]
+forcefield       = CHARMM  # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = PME     # [CUTOFF,PME]
+switchdist       = 10.0    # switch distance
+cutoffdist       = 12.0    # cutoff distance
+pairlistdist     = 13.5    # pair-list distance
+vdw_force_switch = YES     # force switch option for van der Waals
+pme_nspline      = 4       # order of B-spline in [PME]
+pme_max_spacing  = 1.2     # Max grid spacing allowed 
+
+[MINIMIZE]
+method           = SD      # [SD] or [LBFGS]
+nsteps           = 2000    # number of minimization steps
+eneout_period    =   50    # energy output period
+crdout_period    =   50    # coordinates output period
+rstout_period    = 2000    # restart output period
+nbupdate_period  =   10    # nonbond update period
+ 
+[BOUNDARY]
+type             = PBC     # [NOBC,PBC]
+box_size_x       = 60.0    # box size (x) in [PBC]
+box_size_y       = 60.0    # box size (y) in [PBC]
+box_size_z       = 60.0    # box size (z) in [PBC]

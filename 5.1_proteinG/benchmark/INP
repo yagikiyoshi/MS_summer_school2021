@@ -1,0 +1,39 @@
+[INPUT]
+topfile = ../toppar/top_all36_prot.rtf     # topology file
+parfile = ../toppar/par_all36m_prot.prm    # parameter file
+strfile = ../toppar/toppar_water_ions.str  # stream file
+psffile = ../1_setup/5_ionize/ionized.psf  # protein structure file
+pdbfile = ../1_setup/5_ionize/ionized.pdb  # PDB file
+rstfile = ../3_equilibrate/eq3.rst         # restart file
+ 
+[ENERGY]
+forcefield       = CHARMM   # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = PME      # [CUTOFF,PME]
+switchdist       = 10.0     # switch distance
+cutoffdist       = 12.0     # cutoff distance
+pairlistdist     = 13.5     # pair-list distance
+vdw_force_switch = YES      # force switch option for van der Waals
+pme_nspline      = 4        # order of B-spline in [PME]
+pme_max_spacing  = 1.2      # Max grid spacing allowed
+
+[DYNAMICS]
+integrator        =   VRES  # [LEAP,VVER,VRES]
+nsteps            =   1000  # number of MD steps (2.5ps)
+timestep          = 0.0025  # timestep
+eneout_period     =    100  # energy output period
+nbupdate_period   =     10  # nonbond update period
+elec_long_period  =      2  # period of reciprocal space calculation
+thermostat_period =     10  # period of thermostat update
+barostat_period   =     10  # period of barostat update
+
+[CONSTRAINTS]
+rigid_bond       = YES      # constraints all bonds involving hydrogen
+
+[ENSEMBLE]
+ensemble         = NPT      # [NVE,NVT,NPT,NPAT,NPgT]
+tpcontrol        = BUSSI    # [NO,BERENDSEN,BUSSI,LANGEVIN]
+temperature      = 298.15   # initial and target temperature (K)
+pressure         = 1.0      # target pressure (atm)
+
+[BOUNDARY]
+type             = PBC      # [PBC, NOBC]

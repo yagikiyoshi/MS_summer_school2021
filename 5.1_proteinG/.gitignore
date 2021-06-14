@@ -1,0 +1,7 @@
+*.dcd
+*.rst
+*.pdf
+log
+charmm-gui
+5_analysis/*/output.*
+

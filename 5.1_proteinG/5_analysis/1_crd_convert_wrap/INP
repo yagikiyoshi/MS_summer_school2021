@@ -1,0 +1,41 @@
+[INPUT]
+psffile = ../../charmm-gui/step3_pbcsetup.psf  # protein structure file
+reffile = ../../charmm-gui/step3_pbcsetup.pdb  # PDB file
+ 
+[OUTPUT]
+pdbfile = output.pdb                          # PDB file
+trjfile = output.dcd                          # trajectory file
+ 
+[TRAJECTORY]
+trjfile1       = ../../4_production/md1.dcd   # trajectory file
+trjfile2       = ../../4_production/md2.dcd   # trajectory file
+trjfile3       = ../../4_production/md3.dcd   # trajectory file
+#trjfile4       = ../../4_production/md4.dcd   # trajectory file
+#trjfile5       = ../../4_production/md5.dcd   # trajectory file
+md_step1       = 40000                        # number of MD steps
+mdout_period1  = 200                          # MD output period
+ana_period1    = 800                          # analysis period
+#repeat1        = 5
+repeat1        = 3
+trj_format     = DCD             # (PDB/DCD)
+trj_type       = COOR+BOX        # (COOR/COOR+BOX)
+trj_natom      = 0               # (0:uses reference PDB atom count)
+ 
+[SELECTION]
+group1         = an:CA           # selection group 1
+group2         = all             # selection group 2
+ 
+[FITTING]
+fitting_method = NO              # NO/TR+ROT/TR/TR+ZROT/XYTR/XYTR+ZROT
+ 
+[OPTION]
+centering      = YES             # shift center of mass (YES requres psf/prmtop/grotop)
+centering_atom = 1               # atom group
+center_coord   = 0.0 0.0 0.0     # target center coordinates
+pbc_correct    = MOLECULE        # (NO/MOLECULE) (MOLECULE requres psf/prmtop/grotop)
+trjout_format  = DCD             # (PDB/DCD)
+trjout_type    = COOR+BOX        # (COOR/COOR+BOX)
+trjout_atom    = 2               # atom group
+
+# Note: Coordinates are converted in the following order:
+#       read traj -> centering -> pbc_correct -> fitting -> write traj
