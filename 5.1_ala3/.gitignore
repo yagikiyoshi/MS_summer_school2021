@@ -1,7 +1,0 @@
-*.dcd
-*.rst
-*.pdf
-log*
-5_analysis/1_energy/energy.log
-5_analysis/2_distance/output.dis
-
