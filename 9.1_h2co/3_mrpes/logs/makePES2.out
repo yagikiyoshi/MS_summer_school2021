@@ -1,0 +1,141 @@
+2021.06.16 at 18:45:49 JST
+-------------------------------------------------------
+
+      Make Potential Energy Surface for SINDO
+                         Version 4.0
+                         Release beta
+
+                COPYRIGHT 2019:  
+                   Kiyoshi Yagi  kiyoshi.yagi@riken.jp 
+
+-------------------------------------------------------
+
+Launch MakePES module
+
+  o Input options read via makePES2.xml ...  [OK] 
+     - Molecular info via ../1_harmonic/h2co-b3lyp-dz.minfo ...  [OK] 
+     - Minfo_folder = minfo.files/
+     - InterDomain  = false
+     - ActiveModes:
+        * Domain 1
+            1   2   3   4   5   6 
+     - Dipole  = false
+
+  o Options for Quantum Chemistry jobs 
+
+    QCID: ene
+     - Program      = gaussian
+     - Title        = CCSD(T)/cc-pVTZ
+     - Removefiles  = true
+     - Dryrun       = false
+     - Template     = GaussianTemplate3
+     - ExecCommand  = runGaussian.sh /home1/yagi/tutorial/MS_summer_school2021/9.1_h2co/3_mrpes basename.inp 
+
+  o Options for Grid 
+
+     - QCID         = ene
+     - MR           = 3
+     - 1-mode coupling = 1-6
+
+  o Queue Manager via resources.info ...  [OK] 
+     -----
+     ID       : 0
+     Hosts    : lemon.novalocal
+     Ppn      : 1
+     Memory   : unlimit
+     SCR      : unlimit
+     Status   : FREE
+     -----
+     ID       : 1
+     Hosts    : lemon.novalocal
+     Ppn      : 1
+     Memory   : unlimit
+     SCR      : unlimit
+     Status   : FREE
+     -----
+
+Setup MakeGrid module
+
+  o ngrid =    11 
+  o 1MR Grid: 
+      1 2 3 4 5 6 
+
+Enter GridPES generation:
+
+   Execute electronic structure calculations.
+
+Thread0@lemon.novalocal> Running minfo.files/mkg-eq.inp on lemon.novalocal at Wed Jun 16 18:45:49 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-0.inp on lemon.novalocal at Wed Jun 16 18:45:49 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-1.inp on lemon.novalocal at Wed Jun 16 18:45:55 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q1-11-2.inp on lemon.novalocal at Wed Jun 16 18:45:56 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-3.inp on lemon.novalocal at Wed Jun 16 18:46:01 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q1-11-4.inp on lemon.novalocal at Wed Jun 16 18:46:03 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-6.inp on lemon.novalocal at Wed Jun 16 18:46:08 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q1-11-7.inp on lemon.novalocal at Wed Jun 16 18:46:09 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-8.inp on lemon.novalocal at Wed Jun 16 18:46:14 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q1-11-9.inp on lemon.novalocal at Wed Jun 16 18:46:16 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q1-11-10.inp on lemon.novalocal at Wed Jun 16 18:46:21 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q2-11-0.inp on lemon.novalocal at Wed Jun 16 18:46:21 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q2-11-1.inp on lemon.novalocal at Wed Jun 16 18:46:26 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q2-11-2.inp on lemon.novalocal at Wed Jun 16 18:46:28 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q2-11-3.inp on lemon.novalocal at Wed Jun 16 18:46:34 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q2-11-4.inp on lemon.novalocal at Wed Jun 16 18:46:35 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q2-11-6.inp on lemon.novalocal at Wed Jun 16 18:46:39 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q2-11-7.inp on lemon.novalocal at Wed Jun 16 18:46:40 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q2-11-8.inp on lemon.novalocal at Wed Jun 16 18:46:45 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q2-11-9.inp on lemon.novalocal at Wed Jun 16 18:46:46 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q2-11-10.inp on lemon.novalocal at Wed Jun 16 18:46:51 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q3-11-0.inp on lemon.novalocal at Wed Jun 16 18:46:53 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q3-11-1.inp on lemon.novalocal at Wed Jun 16 18:46:58 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q3-11-2.inp on lemon.novalocal at Wed Jun 16 18:46:59 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q3-11-3.inp on lemon.novalocal at Wed Jun 16 18:47:04 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q3-11-4.inp on lemon.novalocal at Wed Jun 16 18:47:05 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q3-11-6.inp on lemon.novalocal at Wed Jun 16 18:47:11 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q3-11-7.inp on lemon.novalocal at Wed Jun 16 18:47:11 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q3-11-8.inp on lemon.novalocal at Wed Jun 16 18:47:18 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q3-11-9.inp on lemon.novalocal at Wed Jun 16 18:47:18 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q3-11-10.inp on lemon.novalocal at Wed Jun 16 18:47:24 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-0.inp on lemon.novalocal at Wed Jun 16 18:47:24 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-1.inp on lemon.novalocal at Wed Jun 16 18:47:31 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q4-11-2.inp on lemon.novalocal at Wed Jun 16 18:47:31 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-3.inp on lemon.novalocal at Wed Jun 16 18:47:36 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q4-11-4.inp on lemon.novalocal at Wed Jun 16 18:47:38 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-6.inp on lemon.novalocal at Wed Jun 16 18:47:43 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q4-11-7.inp on lemon.novalocal at Wed Jun 16 18:47:44 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-8.inp on lemon.novalocal at Wed Jun 16 18:47:49 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q4-11-9.inp on lemon.novalocal at Wed Jun 16 18:47:50 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q4-11-10.inp on lemon.novalocal at Wed Jun 16 18:47:55 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q5-11-0.inp on lemon.novalocal at Wed Jun 16 18:47:57 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q5-11-1.inp on lemon.novalocal at Wed Jun 16 18:48:02 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q5-11-2.inp on lemon.novalocal at Wed Jun 16 18:48:03 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q5-11-3.inp on lemon.novalocal at Wed Jun 16 18:48:07 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q5-11-4.inp on lemon.novalocal at Wed Jun 16 18:48:08 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q5-11-6.inp on lemon.novalocal at Wed Jun 16 18:48:13 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q5-11-7.inp on lemon.novalocal at Wed Jun 16 18:48:14 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q5-11-8.inp on lemon.novalocal at Wed Jun 16 18:48:19 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q5-11-9.inp on lemon.novalocal at Wed Jun 16 18:48:21 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q5-11-10.inp on lemon.novalocal at Wed Jun 16 18:48:26 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q6-11-0.inp on lemon.novalocal at Wed Jun 16 18:48:27 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q6-11-1.inp on lemon.novalocal at Wed Jun 16 18:48:33 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q6-11-2.inp on lemon.novalocal at Wed Jun 16 18:48:33 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q6-11-3.inp on lemon.novalocal at Wed Jun 16 18:48:39 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q6-11-4.inp on lemon.novalocal at Wed Jun 16 18:48:40 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q6-11-6.inp on lemon.novalocal at Wed Jun 16 18:48:45 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q6-11-7.inp on lemon.novalocal at Wed Jun 16 18:48:45 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q6-11-8.inp on lemon.novalocal at Wed Jun 16 18:48:51 JST 2021
+Thread1@lemon.novalocal> Running minfo.files/mkg-q6-11-9.inp on lemon.novalocal at Wed Jun 16 18:48:52 JST 2021
+Thread0@lemon.novalocal> Running minfo.files/mkg-q6-11-10.inp on lemon.novalocal at Wed Jun 16 18:48:57 JST 2021
+   End of electronic structure calculations.
+
+Generating pot files.
+
+   o q1.pot  [OK]
+   o q2.pot  [OK]
+   o q3.pot  [OK]
+   o q4.pot  [OK]
+   o q5.pot  [OK]
+   o q6.pot  [OK]
+
+
+End of GridPES generation:
+
