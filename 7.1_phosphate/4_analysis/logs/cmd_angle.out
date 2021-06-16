@@ -1,0 +1,183 @@
+****************************************************
+*                                                  *
+*                   TRJ_ANALYSIS                   *
+*                                                  *
+*        Utility to analyze trajectory files       *
+*                                                  *
+*              Developed by RIKEN AICS             *
+*                                                  *
+****************************************************
+ 
+[STEP1] Read Control Parameters for Analysis
+ 
+Read_Ctrl_Input> Input Files
+  psffile         = ../1_setup/ionized.psf
+  reffile         = ../1_setup/ionized.pdb
+ 
+Read_Ctrl_Output> Output Files
+  angfile         = output_cmd.ang
+ 
+Read_Ctrl_Trajectory> Parameters of Trajectory
+  # of trj files  =          1
+    trajectory file 1 = ../2_md/prod.dcd
+         md steps :      50000
+     mdout period :        500
+       ana period :        500
+  trj format      = DCD       
+  trj type        =   COOR+BOX
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          0
+  # of mole names =          0
+ 
+Read_Ctrl_Option> Parameters of Options
+  check only      = no
+  allow backup    = no
+   # of angle     =          3
+        angle 1 = PO4:1:PO42:O1 PO4:1:PO42:P PO4:1:PO42:O2
+        angle 2 = PO4:1:PO42:O3 PO4:1:PO42:P PO4:1:PO42:O4
+        angle 3 = PO4:1:PO42:O1 PO4:1:PO42:P PO4:1:PO42:O3
+ 
+[STEP2] Set Relevant Variables and Structures
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =      11747  num_bonds       =       7832
+  num_angles      =       3921  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          1
+  total_charge    =      0.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =      11747
+ 
+Define_Molecule> Summary of molecules
+  num_atoms       =      11747  num_bonds       =       7832
+  num_angles      =       3921  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       3915  num_molecules   =       3915
+  num_segments    =          3  num_deg_freedom =      35241
+  total_charge    =      0.000
+ 
+ ndis=            0
+Setup_Option> angle atom indices: 
+    1 )       2      1      4
+    2 )       6      1      7
+    3 )       2      1      6
+ 
+[STEP3] Analysis trajectory files
+ 
+       number of structures =            1
+       number of structures =            2
+       number of structures =            3
+       number of structures =            4
+       number of structures =            5
+       number of structures =            6
+       number of structures =            7
+       number of structures =            8
+       number of structures =            9
+       number of structures =           10
+       number of structures =           11
+       number of structures =           12
+       number of structures =           13
+       number of structures =           14
+       number of structures =           15
+       number of structures =           16
+       number of structures =           17
+       number of structures =           18
+       number of structures =           19
+       number of structures =           20
+       number of structures =           21
+       number of structures =           22
+       number of structures =           23
+       number of structures =           24
+       number of structures =           25
+       number of structures =           26
+       number of structures =           27
+       number of structures =           28
+       number of structures =           29
+       number of structures =           30
+       number of structures =           31
+       number of structures =           32
+       number of structures =           33
+       number of structures =           34
+       number of structures =           35
+       number of structures =           36
+       number of structures =           37
+       number of structures =           38
+       number of structures =           39
+       number of structures =           40
+       number of structures =           41
+       number of structures =           42
+       number of structures =           43
+       number of structures =           44
+       number of structures =           45
+       number of structures =           46
+       number of structures =           47
+       number of structures =           48
+       number of structures =           49
+       number of structures =           50
+       number of structures =           51
+       number of structures =           52
+       number of structures =           53
+       number of structures =           54
+       number of structures =           55
+       number of structures =           56
+       number of structures =           57
+       number of structures =           58
+       number of structures =           59
+       number of structures =           60
+       number of structures =           61
+       number of structures =           62
+       number of structures =           63
+       number of structures =           64
+       number of structures =           65
+       number of structures =           66
+       number of structures =           67
+       number of structures =           68
+       number of structures =           69
+       number of structures =           70
+       number of structures =           71
+       number of structures =           72
+       number of structures =           73
+       number of structures =           74
+       number of structures =           75
+       number of structures =           76
+       number of structures =           77
+       number of structures =           78
+       number of structures =           79
+       number of structures =           80
+       number of structures =           81
+       number of structures =           82
+       number of structures =           83
+       number of structures =           84
+       number of structures =           85
+       number of structures =           86
+       number of structures =           87
+       number of structures =           88
+       number of structures =           89
+       number of structures =           90
+       number of structures =           91
+       number of structures =           92
+       number of structures =           93
+       number of structures =           94
+       number of structures =           95
+       number of structures =           96
+       number of structures =           97
+       number of structures =           98
+       number of structures =           99
+       number of structures =          100
+
+Analyze> Detailed information in the output files
+
+  [angfile] output_cmd.ang
+    Column 1: Snapshot index
+    Column 2: Angle (degree)
+    If multiple groups were specified in [OPTION],
+    Column N+1: Angle for the N-th selected group
+
+[STEP4] Deallocate memory
+ 

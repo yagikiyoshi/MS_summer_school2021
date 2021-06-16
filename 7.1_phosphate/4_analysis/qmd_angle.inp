@@ -1,0 +1,21 @@
+[INPUT]
+psffile = ../3_qmmm/cmd_100.psf     # protein structure file
+reffile = ../3_qmmm/cmd_100.pdb     # PDB file
+ 
+[OUTPUT]
+angfile = output_qmd.ang            # angle file
+ 
+[TRAJECTORY]
+trjfile1      = ../3_qmmm/qmmm_prod.dcd     # trajectory file
+md_step1      = 10000                       # number of MD steps
+mdout_period1 = 100                         # MD output period
+ana_period1   = 100                         # analysis period
+repeat1       = 1
+trj_format    = DCD               # (PDB/DCD)
+trj_type      = COOR+BOX          # (COOR/COOR+BOX)
+trj_natom     = 0                 # (0:uses reference PDB atom count)
+
+[OPTION]
+angle1  = PO4:1:PO42:O1 PO4:1:PO42:P PO4:1:PO42:O2
+angle2  = PO4:1:PO42:O3 PO4:1:PO42:P PO4:1:PO42:O4
+angle3  = PO4:1:PO42:O1 PO4:1:PO42:P PO4:1:PO42:O3
