@@ -5,7 +5,7 @@ The lecture is aimed at those who are interested in computational chemistry, and
 want to develop the skills to perform electronic structure calculations and 
 molecular dynamics (MD) simulations.
 
-- Electronic structure calculations using Gaussian16
+- Electronic structure calculations using [Gaussian16](https://gaussian.com/)
   -  3.1. Basic: Water molecule
   -  3.2. ESP surface of imidazole
   -  3.3. Excited states of rhodamine using TD-DFT
