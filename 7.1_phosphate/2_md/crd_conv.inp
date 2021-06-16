@@ -1,0 +1,36 @@
+[INPUT]
+psffile = ../1_setup/ionized.psf    # protein structure file
+reffile = ../1_setup/ionized.pdb    # PDB file
+ 
+[OUTPUT]
+pdbfile = prod_wrap.pdb                          # PDB file
+trjfile = prod_wrap.dcd                          # trajectory file
+ 
+[TRAJECTORY]
+trjfile1       = prod.dcd   # trajectory file
+md_step1       = 50000                        # number of MD steps
+mdout_period1  = 500                          # MD output period
+ana_period1    = 500                          # analysis period
+repeat1        = 1
+trj_format     = DCD             # (PDB/DCD)
+trj_type       = COOR+BOX        # (COOR/COOR+BOX)
+trj_natom      = 0               # (0:uses reference PDB atom count)
+ 
+[SELECTION]
+group1         = an:P            # selection group 1
+group2         = all             # selection group 2
+ 
+[FITTING]
+fitting_method = NO              # NO/TR+ROT/TR/TR+ZROT/XYTR/XYTR+ZROT
+ 
+[OPTION]
+centering      = YES             # shift center of mass (YES requres psf/prmtop/grotop)
+centering_atom = 1               # atom group
+center_coord   = 0.0 0.0 0.0     # target center coordinates
+pbc_correct    = MOLECULE        # (NO/MOLECULE) (MOLECULE requres psf/prmtop/grotop)
+trjout_format  = DCD             # (PDB/DCD)
+trjout_type    = COOR+BOX        # (COOR/COOR+BOX)
+trjout_atom    = 2               # atom group
+
+# Note: Coordinates are converted in the following order:
+#       read traj -> centering -> pbc_correct -> fitting -> write traj
