@@ -20,8 +20,8 @@ molecular dynamics (MD) simulations.
   -  9.1. VSCF, VCI, VQDPT2 applied to formaldehyde
 
 ## Author
-Kiyoshi Yagi
-Theoretical Molecular Science Laboratory,
-Clusters for Pioneering Research,
-RIKEN
-kiyoshi.yagi@riken.jp
+Kiyoshi Yagi  
+Theoretical Molecular Science Laboratory,  
+Clusters for Pioneering Research,  
+RIKEN  
+kiyoshi.yagi@riken.jp  
