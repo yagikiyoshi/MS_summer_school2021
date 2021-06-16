@@ -1,0 +1,69 @@
+[INPUT]
+topfile = ../1_setup/po4.rtf        # topology file
+parfile = ../1_setup/po4.prm        # parameter file
+psffile = cmd_100.psf               # protein structure file
+pdbfile = cmd_100.pdb               # PDB file
+reffile = cmd_100.pdb               # PDB file
+rstfile = qmmm_equil.rst            # restart file
+
+[OUTPUT]
+rstfile = qmmm_prod.rst
+dcdfile = qmmm_prod.dcd
+
+[ENERGY]
+forcefield       = CHARMM  # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = CUTOFF    # [CUTOFF,PME]
+switchdist       = 16.0      # switch distance
+cutoffdist       = 18.0      # cutoff distance
+pairlistdist     = 19.5      # pair-list distance
+pme_nspline      = 4       # order of B-spline in [PME]
+pme_max_spacing  = 1.2     # Max grid spacing allowed 
+
+[DYNAMICS]
+integrator      = VVER          # [LEAP,VVER]
+timestep        = 0.002         # timestep (ps)
+nsteps          = 10000         # number of MD steps
+crdout_period   = 100
+eneout_period   = 100           # energy output period
+rstout_period   = 100
+nbupdate_period = 10
+stoptr_period   = 10
+iseed           = 20210816
+
+[CONSTRAINTS]
+rigid_bond      = YES           # constraints all bonds involving hydrogen
+hydrogen_type   = BOTH
+shake_iteration = 2000
+
+[ENSEMBLE]
+ensemble      = NVT       # [NVE,NVT,NPT]
+tpcontrol     = BUSSI     # thermostat and barostat
+temperature   = 300.0     # initial temperature (K)
+tau_t         = 0.5
+
+[BOUNDARY]
+type          = NOBC      # [PBC]
+spherical_pot = yes
+
+[QMMM]
+qmtyp              = dftb+
+qmcnt              = dftb_01.hsd
+qmexe              = runDFTB.sh
+workdir            = /dev/shm/qmmm_prod
+savedir            = qmmm_prod
+basename           = job
+qmsave_period      = 1000
+qmmaxtrial         = 1
+qmatm_select_index = 1
+exclude_charge     = group
+
+[SELECTION]
+group1  = sid:PO4
+group2  = atomno:1
+
+[RESTRAINTS]
+nfunctions      = 1
+function1       = POSI
+constant1       = 1.0
+select_index1   = 2
+

@@ -1,0 +1,490 @@
+****************************************************
+*                                                  *
+*                  GENESIS ATDYN                   *
+*                                                  *
+*        A Molecular Dynamics Simulator with       *
+*            Atomic Decomposition Scheme           *
+*                                                  *
+*               Developed by RIKEN                 *
+*                                                  *
+****************************************************
+ 
+[STEP0] Architecture and Compiler Information
+ 
+GENESIS_Information> GENESIS Information
+  version      = 1.6.0
+  commit ID    = 1.6.0 [2020-12-20 21:42:07 +0900]
+  precision    = double
+  nonbonding   = CPU
+
+Build_Information> Compiler Information
+  build host   = yagi@lemon.novalocal
+  fortran      = ifort (IFORT) 19.0.5.281 20190815
+  option       = -xHost -O3 -ip -mkl=parallel  -assume byterecl -qopenmp 
+  C            = icc (ICC) 19.0.5.281 20190815
+  option       = -O3 -ip -axCORE-AVX2  -qopenmp
+  defined var. =  -DMPI -DOMP -DFFTE -DLAPACK -DDSFMT_MEXP=19937 -DINTEL
+  link option  = 
+  -assume byterecl -qopenmp  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_
+ lapack95_lp64 
+
+Runtime_Information> Machine and Library Information
+  date       = 2021/06/16 14:38:04
+  cpu model    = Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+  exec. host   = yagi@lemon.novalocal
+  LD library   = 
+ /APL/ISV/x86_64/intel/impi/2019.5.281/intel64/lib/release:/APL/ISV/x86_64/intel
+ /impi/2019.5.281/intel64/lib:/APL/ISV/x86_64/intel/impi/2019.5.281/intel64/libf
+ abric/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_lib
+ raries_2019/linux/compiler/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe
+ _2019.5.075/compilers_and_libraries_2019/linux/compiler/lib/intel64_lin:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /mpi/intel64/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_
+ and_libraries_2019/linux/mpi/intel64/libfabric/lib:/APL/ISV/x86_64/intel/parall
+ el_studio_xe_2019.5.075/compilers_and_libraries_2019/linel64:/APL/ISV/x86_64/in
+ tel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux/compiler/l
+ ib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_li
+ braries_2019/linux/mkl/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_201
+ 9.5.075/compilers_and_libraries_2019/linux/tbb/lib/intel64/gcc4.7:/APL/ISV/x86_
+ 64/intel/debugger_2019/iga/lib:/APL/ISV/x86_64/intel/debugger_tel64/lib:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /daal/lib/intel64_lin:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compi
+ lers_and_libraries_2019/linux/daal/../tbb/lib/intel64_lin/gcc4.7
+
+[STEP1] Read Control Parameters
+ 
+Read_Ctrl_Input> Input Files
+  topfile = ../1_setup/po4.rtf
+  parfile = ../1_setup/po4.prm
+  psffile = cmd_100.psf
+  pdbfile = cmd_100.pdb
+  reffile = cmd_100.pdb
+ 
+Read_Ctrl_Output> Output Files
+  dcdfile    = qmmm_mini.dcd
+  rstfile    = qmmm_mini.rst
+ 
+Read_Ctrl_Energy>  WARNING: water_model is not available
+Read_Ctrl_Energy> Parameters of Energy Calculations
+  forcefield      =     CHARMM
+  switchdist      =     16.000  cutoffdist      =     18.000
+  pairlistdist    =     19.500  dielec_const    =      1.000
+ vdW force_switch =         no
+  electrostatic   =  CUTOFF
+  implicit_solvent=       none
+  table_order     =          3
+  table_density   =     20.000
+  water_model     =       NONE
+  output_style    =    GENESIS
+  dispersion_corr =       none
+  nonb_limiter    =      no
+ 
+Read_Ctrl_Minimize> Parameters of MIN
+  method                     =      SD     nsteps                     =        500
+  eneout_period              =         10  crdout_period              =        100
+  rstout_period              =        500  nbupdate_period            =         10
+  fixatm_select_index        =       none
+  tol_rmsg                   =   0.36E+00  tol_maxg                   =   0.54E+00
+  verbose                    =         no
+  force_scale_init           =      0.010  force_scale_max            =      0.100
+  macro                      =         no
+  check_structure            =         no  fix_ring_error             =         no
+  fix_chirality_error        =         no
+ 
+Read_Ctrl_Boundary> Parameters of Boundary Condition
+  type            =       NOBC
+  spherical_pot   =        yes  restart         =          T
+  center_info     =   selector  nindex          =          1
+  constant        =     10.000  exponent        =          2
+  fixatom         =          T  fix_layer       =      0.000
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          2
+    group 1 = atomno:1
+    group 2 = sid:PO4
+  # of mole names =          0
+ 
+Read_Ctrl_Restraints> Parameters of Restraint
+  numfunc         =   1
+  function1 = POSI     
+    direction     = ALL 
+    constant      = 1.0
+    reference     = 
+    select_index  = 1
+    mode          =   0
+    exponent      =   2
+    exponent_dist = 
+    weight_dist   = 
+
+  pressure_position   = NO
+  pressure_rmsd     = NO
+
+Read_Ctrl_Fitting_MD> Parameters of Fitting
+  fitting method  =  TR+ROT   
+  fitting atom    = group1
+  mass_weight     =         no
+ 
+Read_Ctrl_QMMM> Parameters of QM/MM
+  qmtyp              = dftb+
+  qmcnt              = dftb_01.hsd
+  qmexe              = runDFTB.sh
+  workdir            = /dev/shm/qmmm_mini
+  savedir            = qmmm_mini
+  basename           = job
+  qmsave_period      = 100
+  qmmaxtrial         = 1
+  qmatm_select_index = 2
+  exclude_charge     = GROUP
+ 
+[STEP2] Setup MPI
+ 
+Setup_Mpi_Md> Summary of Setup MPI
+  number of MPI processes   =          1
+  number of OpenMP threads  =         16
+  total number of CPU cores =         16
+
+[STEP3] Set Relevant Variables and Structures
+ 
+Input_Top> Summary of Topfile
+  num_atom_class  =          7  num_resi_type   =          1
+ 
+Input_Par> Summary of Parfile
+  num_bonds       =          5  num_angles      =          5
+  num_dihedrals   =          3  num_impropers   =          0
+  num_atom_cls    =          7  num_nbfix       =          0
+  num_cmap_terms  =          0
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          0
+  total_charge    =     -1.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =       4324
+ 
+Define_Molecule> Summary of molecules
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       1440  num_molecules   =       1440
+  num_segments    =          2  num_deg_freedom =      12972
+  total_charge    =     -1.000
+ 
+Setup_Boundary> Setup Variables for Boundary Condition
+  origin(x,y,z)   =      0.000     0.000     0.000
+  nfunctions      =        1
+    center(x,y,z) =     -6.029   -10.603    -5.635
+    radius        =     18.000
+    constant      =     10.000
+    exponent      =          2
+ 
+  num_fixatm      =     2010
+ 
+ 
+Setup_QMMM> Setup QM region
+  QM assignment info
+     1 PO4       1 PO42   P    PG3    assigned to QM atom    1 of element: P    15
+     2 PO4       1 PO42   O1   OG311  assigned to QM atom    2 of element: O     8
+     3 PO4       1 PO42   H1   HGP1   assigned to QM atom    3 of element: H     1
+     4 PO4       1 PO42   O2   OG311  assigned to QM atom    4 of element: O     8
+     5 PO4       1 PO42   H2   HGP1   assigned to QM atom    5 of element: H     1
+     6 PO4       1 PO42   O3   OG2P1  assigned to QM atom    6 of element: O     8
+     7 PO4       1 PO42   O4   OG2P1  assigned to QM atom    7 of element: O     8
+  number of QM atoms = 7
+ 
+ 
+ 
+  Check the control file for DFTB+ [ dftb_01.hsd ]
+  Passed the check!
+ 
+Setup_Enefunc_Cmap_Par> Natural spline is used to derive cmap coefs.
+
+Setup_Enefunc_Table> Setup Variables for LookupTable
+  num_solutes     =       4324  num_waters      =          0
+
+Setup_Enefunc_Restraint> Setup restraint groups
+ group =     1, "atomno:1"
+ # of atoms =     1
+ atomlist: 
+      1
+ group =     2, "sid:PO4"
+ # of atoms =     7
+ atomlist: 
+      1      2      3      4      5      6      7
+Setup_Enefunc_Restraint> Setup restraint functions
+ func  =     1 kind  =     1
+ const(total, x, y, z) =    1.000   1.000   1.000   1.000
+ exponend of function =     2
+ # of groups  =     1
+ grouplist:   1
+
+Define_Enefunc_CHARMM> Number of Interactions in Each Term
+  bond_ene        =       2878  angle_ene       =       1439
+  urey_ene        =          0
+  torsion_ene     =          0  improper_ene    =          0
+  cmap_ene        =          0
+  restraint_groups=          2  restraint_funcs =          1
+ 
+Setup_Fitting_Atdyn> NO fitting is applied, skip
+  fitting method  =  NO
+ 
+Setup_MinAtoms> Atoms info in minimize
+  number of fixed atoms     = 2010
+  number of minimized atoms = 2314
+ 
+[STEP4] Compute Single Point Energy for Molecules
+ 
+SKIPPED: Energy calculation is omitted when QMMM is performed
+ 
+[STEP5] Perform Energy Minimization
+ 
+INFO:       STEP   POTENTIAL_ENE            RMSG            MAXG            BOND           ANGLE    UREY-BRADLEY         VDWAALS           ELECT RESTRAINT_TOTAL    RESTRAINT001    RESTR_CVS001              QM            SPOT
+ --------------- --------------- --------------- --------------- ---------------
+INFO:          0     -22582.3448         14.5879        283.5306          0.2138          0.0311          0.0000       1430.0148     -13865.7480          0.0000          0.0000          0.0000     -10146.8566          0.0000
+
+  maxg =   283.5306 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         10     -23569.9906          3.2396        108.0539        232.6723        185.6654          0.0000       1295.2438     -15081.6919          0.0182          0.0182          0.0000     -10201.8984          0.0000
+
+  maxg =   108.0539 at          1 PO4       1 PO42   P    PG3   
+
+INFO:         20     -23750.6170          4.0488        146.3609        252.4138        191.1239          0.0000       1273.2590     -15286.5453          0.0277          0.0277          0.0000     -10180.8962          0.0001
+
+  maxg =   146.3609 at          1 PO4       1 PO42   P    PG3   
+
+INFO:         30     -23868.4914          3.7585        139.7872        257.2877        191.9448          0.0000       1271.2451     -15410.3466          0.0282          0.0282          0.0000     -10178.6517          0.0011
+
+  maxg =   139.7872 at          1 PO4       1 PO42   P    PG3   
+
+INFO:         40     -23988.8477          2.0880         92.0242        263.3212        193.0011          0.0000       1271.4028     -15504.9617          0.0080          0.0080          0.0000     -10211.6212          0.0021
+
+  maxg =    92.0242 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         50     -24052.9940          2.6938        106.8448        267.7767        193.7638          0.0000       1277.0447     -15583.2055          0.0078          0.0078          0.0000     -10208.3844          0.0030
+
+  maxg =   106.8448 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         60     -24107.7479          2.7683        127.4203        271.0144        194.2413          0.0000       1284.8564     -15650.5784          0.0089          0.0089          0.0000     -10207.2941          0.0037
+
+  maxg =   127.4203 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         70     -24149.3293          3.2442        104.9386        275.3778        195.0973          0.0000       1293.4452     -15707.6758          0.0081          0.0081          0.0000     -10205.5859          0.0041
+
+  maxg =   104.9386 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         80     -24188.1296          3.4902        155.7651        276.7068        195.3306          0.0000       1303.6464     -15761.4519          0.0111          0.0111          0.0000     -10202.3768          0.0043
+
+  maxg =   155.7651 at          2 PO4       1 PO42   O1   OG311 
+
+INFO:         90     -24235.3700          1.3827         51.0353        279.6868        196.0077          0.0000       1313.0303     -15809.8637          0.0094          0.0094          0.0000     -10214.2449          0.0044
+
+  maxg =    51.0353 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        100     -24268.7589          1.0720         39.7127        282.1525        196.7682          0.0000       1322.7615     -15856.0557          0.0042          0.0042          0.0000     -10214.3940          0.0043
+
+  maxg =    39.7127 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        110     -24297.6224          1.7625         74.2034        285.4756        197.6020          0.0000       1335.1688     -15902.1598          0.0060          0.0060          0.0000     -10213.7190          0.0041
+
+  maxg =    74.2034 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        120     -24322.1705          1.6049         75.4662        285.0710        197.7591          0.0000       1347.2237     -15940.7382          0.0136          0.0136          0.0000     -10211.5037          0.0039
+
+  maxg =    75.4662 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        130     -24343.6205          1.7764         98.9166        286.7774        198.3311          0.0000       1357.1287     -15975.4864          0.0133          0.0133          0.0000     -10210.3883          0.0038
+
+  maxg =    98.9166 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        140     -24363.1308          1.9354        104.0913        288.2928        198.8404          0.0000       1367.0963     -16008.4065          0.0143          0.0143          0.0000     -10208.9717          0.0036
+
+  maxg =   104.0913 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        150     -24380.7117          2.0833        111.5717        289.9366        199.3833          0.0000       1376.6625     -16038.6678          0.0153          0.0153          0.0000     -10208.0451          0.0034
+
+  maxg =   111.5717 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        160     -24404.8726          0.5420          9.6622        292.3039        200.1917          0.0000       1384.6974     -16065.8476          0.0057          0.0057          0.0000     -10216.2270          0.0033
+
+  maxg =     9.6622 at          7 PO4       1 PO42   O4   OG2P1 
+
+INFO:        170     -24423.1219          0.5723         14.2472        293.5586        200.7129          0.0000       1394.8384     -16096.4448          0.0051          0.0051          0.0000     -10215.7954          0.0033
+
+  maxg =    14.2472 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        180     -24438.5169          0.6299         22.9323        295.0319        201.2779          0.0000       1403.6595     -16122.9282          0.0043          0.0043          0.0000     -10215.5656          0.0034
+
+  maxg =    22.9323 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        190     -24452.5498          1.1309         45.3888        296.5378        201.8292          0.0000       1412.7621     -16149.8769          0.0054          0.0054          0.0000     -10213.8111          0.0037
+
+  maxg =    45.3888 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        200     -24465.8306          1.2070         48.9198        297.7240        202.3169          0.0000       1421.3089     -16173.7041          0.0055          0.0055          0.0000     -10213.4862          0.0045
+
+  maxg =    48.9198 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        210     -24478.3378          1.2717         51.7869        298.9490        202.8150          0.0000       1429.5491     -16196.3995          0.0051          0.0051          0.0000     -10213.2625          0.0060
+
+  maxg =    51.7869 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        220     -24490.1124          1.3662         53.6027        299.7427        203.1946          0.0000       1437.8278     -16218.0818          0.0058          0.0058          0.0000     -10212.8093          0.0078
+
+  maxg =    53.6027 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        230     -24501.1043          1.4594         58.0933        300.7173        203.6283          0.0000       1445.6807     -16238.9114          0.0059          0.0059          0.0000     -10212.2348          0.0097
+
+  maxg =    58.0933 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        240     -24511.5037          1.5268         61.2658        301.4626        204.0004          0.0000       1453.2826     -16258.6522          0.0066          0.0066          0.0000     -10211.6154          0.0117
+
+  maxg =    61.2658 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        250     -24525.8720          0.3961          6.5882        302.6156        204.5368          0.0000       1460.4633     -16277.1400          0.0046          0.0046          0.0000     -10216.3668          0.0144
+
+  maxg =     6.5882 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        260     -24538.2521          0.5846         21.1117        304.0528        205.1593          0.0000       1469.0837     -16300.7101          0.0041          0.0041          0.0000     -10215.8616          0.0198
+
+  maxg =    21.1117 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        270     -24547.7421          0.9554         35.2239        305.1239        205.6102          0.0000       1476.8926     -16319.5339          0.0046          0.0046          0.0000     -10215.8649          0.0255
+
+  maxg =    35.2239 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        280     -24556.6509          1.0161         41.2110        305.6033        205.9229          0.0000       1483.7175     -16336.3226          0.0046          0.0046          0.0000     -10215.6081          0.0315
+
+  maxg =    41.2110 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        290     -24565.2347          1.0922         45.1514        306.3401        206.2948          0.0000       1490.3158     -16352.7952          0.0045          0.0045          0.0000     -10215.4328          0.0382
+
+  maxg =    45.1514 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        300     -24573.4882          1.1597         47.9065        307.1832        206.6984          0.0000       1496.6701     -16368.7826          0.0044          0.0044          0.0000     -10215.3071          0.0455
+
+  maxg =    47.9065 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        310     -24582.6531          0.3744          8.5483        308.1150        207.0676          0.0000       1502.1754     -16383.0323          0.0050          0.0050          0.0000     -10217.0364          0.0526
+
+  maxg =     8.5483 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        320     -24590.3959          0.3794          9.7097        308.8719        207.4360          0.0000       1508.1904     -16397.8546          0.0051          0.0051          0.0000     -10217.1049          0.0603
+
+  maxg =     9.7097 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        330     -24597.7890          0.3584          8.4684        309.5990        207.7900          0.0000       1514.0574     -16412.0342          0.0051          0.0051          0.0000     -10217.2749          0.0685
+
+  maxg =     8.4684 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        340     -24604.9935          0.3691         10.1543        310.3189        208.1449          0.0000       1519.8614     -16426.0588          0.0052          0.0052          0.0000     -10217.3426          0.0776
+
+  maxg =    10.1543 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        350     -24611.7241          0.3621         10.1413        310.9819        208.4795          0.0000       1525.3886     -16439.2432          0.0052          0.0052          0.0000     -10217.4230          0.0869
+
+  maxg =    10.1413 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        360     -24618.8514          0.3439          8.9227        311.7325        208.8315          0.0000       1531.3373     -16453.1967          0.0057          0.0057          0.0000     -10217.6591          0.0973
+
+  maxg =     8.9227 at          1 PO4       1 PO42   P    PG3   
+
+INFO:        370     -24625.0576          0.7757         29.9566        312.3701        209.1581          0.0000       1537.2512     -16467.1007          0.0061          0.0061          0.0000     -10216.8503          0.1080
+
+  maxg =    29.9566 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        380     -24630.8648          0.8236         33.2893        313.1001        209.5191          0.0000       1542.3096     -16479.2447          0.0057          0.0057          0.0000     -10216.6719          0.1173
+
+  maxg =    33.2893 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        390     -24636.3868          0.8845         36.0431        313.7475        209.8472          0.0000       1547.3061     -16490.8699          0.0055          0.0055          0.0000     -10216.5497          0.1265
+
+  maxg =    36.0431 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        400     -24642.2168          1.0130         35.8255        314.4120        210.1305          0.0000       1553.1422     -16502.9831          0.0060          0.0060          0.0000     -10217.0608          0.1364
+
+  maxg =    35.8255 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        410     -24647.3652          0.9987         40.2895        314.6043        210.3874          0.0000       1557.6955     -16514.0126          0.0067          0.0067          0.0000     -10216.1914          0.1450
+
+  maxg =    40.2895 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        420     -24653.9077          0.3555         10.6897        315.1813        210.7356          0.0000       1562.3859     -16524.5648          0.0059          0.0059          0.0000     -10217.8050          0.1533
+
+  maxg =    10.6897 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        430     -24658.8070          0.4017         13.9143        315.6840        211.0250          0.0000       1566.9416     -16534.8089          0.0060          0.0060          0.0000     -10217.8163          0.1616
+
+  maxg =    13.9143 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        440     -24664.0167          0.4486         13.8956        316.2618        211.3692          0.0000       1571.6337     -16545.9176          0.0058          0.0058          0.0000     -10217.5400          0.1705
+
+  maxg =    13.8956 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        450     -24668.6302          0.4489         16.9179        316.7557        211.6392          0.0000       1575.9974     -16555.3620          0.0060          0.0060          0.0000     -10217.8448          0.1783
+
+  maxg =    16.9179 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        460     -24672.8243          0.6482         25.9235        317.2046        211.9198          0.0000       1580.1715     -16564.7232          0.0059          0.0059          0.0000     -10217.5887          0.1859
+
+  maxg =    25.9235 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        470     -24677.0286          0.6895         27.9121        317.6615        212.1915          0.0000       1584.1151     -16573.6154          0.0058          0.0058          0.0000     -10217.5802          0.1931
+
+  maxg =    27.9121 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        480     -24681.4951          0.7258         26.8829        318.2955        212.5262          0.0000       1588.2083     -16583.2149          0.0060          0.0060          0.0000     -10217.5170          0.2008
+
+  maxg =    26.8829 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        490     -24685.5204          0.7792         31.5157        318.6320        212.7626          0.0000       1592.0823     -16591.6939          0.0059          0.0059          0.0000     -10217.5170          0.2078
+
+  maxg =    31.5157 at          4 PO4       1 PO42   O2   OG311 
+
+INFO:        500     -24689.1730          0.8890         36.3804        319.1284        213.0413          0.0000       1595.5926     -16599.7289          0.0056          0.0056          0.0000     -10217.4262          0.2143
+
+  maxg =    36.3804 at          4 PO4       1 PO42   O2   OG311 
+
+
+Final energy =    -24689.1729941392
+
+ >>>>> STOP: Total number of iterations exceeds limit.
+
+Check_Chirality> Check chirality
+ 
+  No suspicious residue was detected.
+ 
+ 
+[STEP6] Deallocate Arrays
+ 
+Output_Time> Averaged timer profile (Min, Max)
+  total time      =      70.036
+    setup         =       0.188
+    dynamics      =      69.848
+      energy      =      68.999
+      integrator  =       0.000
+      pairlist    =       0.816 (       0.816,       0.816)
+  energy           
+    bond          =       0.038 (       0.038,       0.038)
+    angle         =       0.023 (       0.023,       0.023)
+    dihedral      =       0.013 (       0.013,       0.013)
+    nonbond       =       3.806 (       3.806,       3.806)
+      pme real    =       3.806 (       3.806,       3.806)
+      pme recip   =       0.000 (       0.000,       0.000)
+    solvation     =       0.000 (       0.000,       0.000)
+      polar       =       0.000 (       0.000,       0.000)
+      non-polar   =       0.000 (       0.000,       0.000)
+    restraint     =       0.001 (       0.001,       0.001)
+    qmmm          =      65.063 (      65.063,      65.063)
+  integrator       
+    constraint    =       0.000 (       0.000,       0.000)
+    update        =       0.000 (       0.000,       0.000)
+    comm_coord    =       0.000 (       0.000,       0.000)
+    comm_force    =       0.000 (       0.000,       0.000)
+    comm_migrate  =       0.000 (       0.000,       0.000)
+

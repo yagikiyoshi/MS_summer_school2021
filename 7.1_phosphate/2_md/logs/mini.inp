@@ -1,0 +1,33 @@
+[INPUT]
+topfile = ../1_setup/po4.rtf        # topology file
+parfile = ../1_setup/po4.prm        # parameter file
+psffile = ../1_setup/ionized.psf    # protein structure file
+pdbfile = ../1_setup/ionized.pdb    # PDB file
+
+[OUTPUT]
+dcdfile = mini.dcd  # DCD trajectory file
+rstfile = mini.rst  # restart file
+
+[ENERGY]
+forcefield       = CHARMM  # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = PME     # [CUTOFF,PME]
+switchdist       = 10.0    # switch distance
+cutoffdist       = 12.0    # cutoff distance
+pairlistdist     = 13.5    # pair-list distance
+pme_nspline      = 4       # order of B-spline in [PME]
+pme_max_spacing  = 1.2     # Max grid spacing allowed 
+
+[MINIMIZE]
+method           = SD    # [SD] or [LBFGS]
+nsteps           = 1000  # number of steps
+eneout_period    =  100  # energy output period
+crdout_period    =  100  # coordinates output period
+rstout_period    = 1000  # restart output period
+nbupdate_period  =   10  # nonbond update period
+
+[BOUNDARY]
+type          = PBC   # [PBC,NOBC]
+box_size_x    = 50.0  # box size (x) in [PBC]
+box_size_y    = 50.0  # box size (y) in [PBC]
+box_size_z    = 50.0  # box size (z) in [PBC]
+

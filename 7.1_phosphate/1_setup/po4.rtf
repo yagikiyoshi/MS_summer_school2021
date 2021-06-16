@@ -1,0 +1,78 @@
+*>>>>>>>>CHARMM22 All-Hydrogen Topology File for Proteins <<<<<<
+*>>>>> Includes phi, psi cross term map (CMAP) correction <<<<<<<
+*>>>>>>>>>>>>>>>>>>>>>> September 2010 <<<<<<<<<<<<<<<<<<<<<<<<<<
+* All comments to ADM jr. via the CHARMM web site: www.charmm.org
+*               parameter set discussion forum
+*
+31  1
+
+MASS     4 HT     1.00800
+MASS    52 OT    15.99940
+MASS   146 HGP1   1.00800
+
+RESI PO42          -1.00   ! H2PO4-
+GROUP                      !
+ATOM P    PG3       1.54   !                   O1-H1
+ATOM O1   OG311    -0.81   !                   |
+ATOM H1   HGP1      0.44   !                   |
+ATOM O2   OG311    -0.81   !               O2==P2==O3
+ATOM H2   HGP1      0.44   !                   |
+ATOM O3   OG2P1    -0.90   !                   O2
+ATOM O4   OG2P1    -0.90   !                   |
+!                   H2
+
+BOND P  O1   P  O2   P  O3   P  O4   O2  H2  O1 H1
+
+*  --------------------------------------------------------------------------  *
+*          CGenFF: Topology for the Charmm General Force Field v. 2b4          *
+*                    for Small Molecule Drug Design                            *
+*  --------------------------------------------------------------------------  *
+*
+36  1
+
+!  --------------------------------------------------------------------------  !
+!  Reference: K. Vanommeslaeghe, E. Hatcher, C. Acharya, S. Kundu, S. Zhong,   !
+!      J. Shim, E. Darian, O. Guvench, P. Lopes, I. Vorobyov and               !
+!      A. D. Mackerell Jr., J. Comput. Chem., DOI: 10.1002/jcc.21367           !
+!  --------------------------------------------------------------------------  !
+!  Notes: - As more functional groups will be introduced, small changes in     !
+!               existing parameters and/or charges may occur.                  !
+!         - Comments in this file may be misleading.                           !
+!  --------------------------------------------------------------------------  !
+!  Contributors: adm   = Alexander D. MacKerell Jr.                            !
+!                alr   = Ashley L. Ringer                                      !
+!                cacha = Chayan Acharya                                        !
+!                ed    = Eva Darian                                            !
+!                erh   = Elizabeth R. Hatcher Frush                            !
+!                jhs   = JiHyun Shim                                           !
+!                kevo  = Kenno VanOmmeslaeghe                                  !
+!                kundu = Sibsankar Kundu                                       !
+!                og    = Olgun Guvench                                         !
+!                peml  = Pedro Lopes                                           !
+!                sz    = Shijun Zhong                                          !
+!                viv   = Igor Vorobyov                                         !
+!                xxwy  = Wenbo Yu                                              !
+!                yapol = Iakov Polyak                                          !
+!                yin   = Daxu Yin                                              !
+!  --------------------------------------------------------------------------  !
+!  All comments to ADM jr. via the CHARMM web site: www.charmm.org             !
+!                 parameter set discussion forum                               !
+!  --------------------------------------------------------------------------  !
+!           ATOM NAME     SERIAL NO. SLOTS                                     !
+!                         RESERVED FOR THE ATOMS                               !
+!           Hydrogens        1 --  39                                          !
+!           Carbons         40 --  99                                          !
+!           Nitrogens      100 -- 149                                          !
+!           Oxygens        150 -- 189                                          !
+!           Sulphurs       190 -- 209                                          !
+!           Halogens       210 -- 249                                          !
+!           Miscellaneous  250 -- ---                                          !
+!  --------------------------------------------------------------------------  !
+
+MASS   211 HGP1     1.00800  ! polar H
+MASS   356 OG2P1   15.99940  ! =O in phosphate or sulfate
+MASS   363 OG311   15.99940  ! hydroxyl oxygen
+MASS   455 PG3     30.97400  ! protonated pyrophosphate
+
+END
+

@@ -1,0 +1,122 @@
+****************************************************
+*                                                  *
+*                 QMMM_GENERATOR                   *
+*                                                  *
+*   QMMM-Input Generator using Trajectory File(s)  *
+*                                                  *
+*                Developed by RIKEN                *
+*                                                  *
+****************************************************
+ 
+[STEP1] Read Control Parameters for Generating QM/MM Inputs
+ 
+Read_Ctrl_Input> Input Files
+  psffile         = ../1_setup/ionized.psf
+  reffile         = ../1_setup/ionized.pdb
+ 
+Read_Ctrl_Output> Output Files
+  qmmm_crdfile    = cmd_{}.crd
+  qmmm_psffile    = cmd_{}.psf
+  qmmm_pdbfile    = cmd_{}.pdb
+ 
+Read_Ctrl_Trajectory> Parameters of Trajectory
+  # of trj files  =          1
+    trajectory file 1 = ../2_md/prod.dcd
+         md steps :      50000
+     mdout period :        500
+       ana period :        500
+  trj format      = DCD       
+  trj type        =   COOR+BOX
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          2
+    group 1 = sid:PO4
+    group 2 = ((sid:PO4) around_res:20.0) and not sid:ION
+  # of mole names =          0
+ 
+Read_Ctrl_Fitting> Parameters of Fitting
+  fitting method  =  NO       
+  fitting atom    = group1
+  z-rot # of grid =         10
+  z-rot grid size =      1.000
+  mass_weight     =         no
+ 
+Read_Ctrl_Option> Parameters of Options
+  Check only      = NO
+  allow backup    = no
+  Output format   =   CHARMM  
+  QM/MM atoms     = group: 1 2
+  Origin defined  = group: 1
+  Reconciliation  = NO
+  Frame number    = 100
+  # of rename res =          0
+ 
+[STEP2] Set Relevant Variables and Structures
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =      11747  num_bonds       =       7832
+  num_angles      =       3921  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          1
+  total_charge    =      0.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =      11747
+ 
+Define_Molecule> Summary of molecules
+  num_atoms       =      11747  num_bonds       =       7832
+  num_angles      =       3921  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       3915  num_molecules   =       3915
+  num_segments    =          3  num_deg_freedom =      35241
+  total_charge    =      0.000
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :   11740
+                 distance    :   20.00
+                contact atom list :    4257
+ 
+Setup_Option> # of QMMM atoms =     4264
+Setup_Option> # of atoms to define center =        7
+Setup_Option> **NOTICE** 
+              Around_residues for protein is not recommended.
+              Please use qmmm_psffile at your own risk.
+Setup_Option> **NOTICE** 
+Setup_Option> Reconciliation of # of atoms : SKIP
+Setup_Option> # of frames to be saved =    1
+ 
+[STEP3] Take Snapshots from Trajectory File(s)
+ 
+--------------------------------------------------
+Frame number = 100
+
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :   11740
+                 distance    :   20.00
+                contact atom list :    4317
+ 
+Select_Atom> number of new selection :    4324
+ 
+Write_Psf> TYPE = XPLOR EXT
+Write_Psf> Number of Atoms         =     4324
+Write_Psf> Number of Bonds         =     2884
+Write_Psf> Number of Angles        =     1447
+Write_Psf> Number of Dihedrals     =        6
+Write_Psf> Number of Impropers     =        0
+Write_Psf> Number of Cross-terms   =        0
+Write_Psf> Number of HB donors     =        0
+Write_Psf> Number of HB acceptors  =        0
+Write_Psf> Number of NB exclusions =        0
+Write_Psf> Number of Groups        =        0
+Write_Psf> Total charge            =   -1.000
+  
+         * Save this frame to cmd_100.crd
+ 
+[STEP4] Deallocate Memory
+ 

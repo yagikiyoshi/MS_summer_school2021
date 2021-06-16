@@ -1,0 +1,43 @@
+[INPUT]
+topfile = ../1_setup/po4.rtf        # topology file
+parfile = ../1_setup/po4.prm        # parameter file
+psffile = ../1_setup/ionized.psf    # protein structure file
+pdbfile = ../1_setup/ionized.pdb    # PDB file
+rstfile = mini.rst                  # restart file
+ 
+[OUTPUT]
+dcdfile = equil.dcd  # DCD trajectory file
+rstfile = equil.rst  # restart file
+
+[ENERGY]
+forcefield       = CHARMM  # [CHARMM,AAGO,CAGO,KBGO,AMBER,GROAMBER,GROMARTINI]
+electrostatic    = PME     # [CUTOFF,PME]
+switchdist       = 10.0    # switch distance
+cutoffdist       = 12.0    # cutoff distance
+pairlistdist     = 13.5    # pairlist distance
+pme_nspline      = 4       # order of B-spline in [PME]
+pme_max_spacing  = 1.2     # Max grid spacing allowed 
+ 
+[DYNAMICS]
+integrator      = VVER    # [LEAP,VVER]
+nsteps          = 25000   # number of MD steps
+timestep        = 0.002   # timestep (ps)
+eneout_period   =   500   # energy output period
+crdout_period   =   500   # coordinates output period
+rstout_period   = 25000   # restart output period
+nbupdate_period =    10   # nonbond update period
+iseed           = 31415   # random number seed 
+ 
+[CONSTRAINTS]
+rigid_bond    = YES       # constraints all bonds
+                          # involving hydrogen
+ 
+[ENSEMBLE]
+ensemble      = NPT       # [NVE,NVT,NPT]
+tpcontrol     = BUSSI     # thermostat and barostat
+temperature   = 300.0     # initial temperature (K)
+pressure      = 1.0       # target pressure (atm)
+ 
+[BOUNDARY]
+type          = PBC      # [PBC,NOBC]
+
