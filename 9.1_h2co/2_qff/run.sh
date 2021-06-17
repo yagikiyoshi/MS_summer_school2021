@@ -3,6 +3,10 @@
 module load gaussian
 . /home1/common/sindo/sindovars.sh
 
-unset SINDO_RSH
+if [ -e resources.info ]; then
+  rm resources.info
+fi
+hostname >> resources.info
+
 java RunMakePES -f makePES.xml >& makePES.out
 
