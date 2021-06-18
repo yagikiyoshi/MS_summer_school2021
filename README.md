@@ -2,8 +2,9 @@
 
 This is an on-line material of my lectures in molecular science summer school 2021.
 The lecture is aimed at those who are interested in computational chemistry, and 
-want to develop the skills to perform electronic structure calculations and 
-molecular dynamics (MD) simulations.
+want to develop the skills to perform electronic structure calculations,
+molecular dynamics (MD) simulations, hybrid quantum mechanics / molecular mechanics 
+(QM/MM) calculations, and anharmonic vibrational calculations.
 
 - Electronic structure calculations using [Gaussian16](https://gaussian.com/)
   -  3.1. Basic: Water molecule
