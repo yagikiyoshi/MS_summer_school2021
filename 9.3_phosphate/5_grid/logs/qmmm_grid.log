@@ -1,0 +1,375 @@
+****************************************************
+*                                                  *
+*                  GENESIS ATDYN                   *
+*                                                  *
+*        A Molecular Dynamics Simulator with       *
+*            Atomic Decomposition Scheme           *
+*                                                  *
+*               Developed by RIKEN                 *
+*                                                  *
+****************************************************
+ 
+[STEP0] Architecture and Compiler Information
+ 
+GENESIS_Information> GENESIS Information
+  version      = 1.6.0
+  commit ID    = 1.6.0 [2020-12-20 21:42:07 +0900]
+  precision    = double
+  nonbonding   = CPU
+
+Build_Information> Compiler Information
+  build host   = yagi@lemon.novalocal
+  fortran      = ifort (IFORT) 19.0.5.281 20190815
+  option       = -xHost -O3 -ip -mkl=parallel  -assume byterecl -qopenmp 
+  C            = icc (ICC) 19.0.5.281 20190815
+  option       = -O3 -ip -axCORE-AVX2  -qopenmp
+  defined var. =  -DMPI -DOMP -DFFTE -DLAPACK -DDSFMT_MEXP=19937 -DINTEL
+  link option  = 
+  -assume byterecl -qopenmp  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_
+ lapack95_lp64 
+
+Runtime_Information> Machine and Library Information
+  date       = 2021/06/19 01:01:41
+  cpu model    = Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+  exec. host   = yagi@lemon.novalocal
+  LD library   = 
+ /APL/ISV/x86_64/intel/impi/2019.5.281/intel64/lib/release:/APL/ISV/x86_64/intel
+ /impi/2019.5.281/intel64/lib:/APL/ISV/x86_64/intel/impi/2019.5.281/intel64/libf
+ abric/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_lib
+ raries_2019/linux/compiler/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe
+ _2019.5.075/compilers_and_libraries_2019/linux/compiler/lib/intel64_lin:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /mpi/intel64/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_
+ and_libraries_2019/linux/mpi/intel64/libfabric/lib:/APL/ISV/x86_64/intel/parall
+ el_studio_xe_2019.5.075/compilers_and_libraries_2019/linel64:/APL/ISV/x86_64/in
+ tel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux/compiler/l
+ ib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_li
+ braries_2019/linux/mkl/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_201
+ 9.5.075/compilers_and_libraries_2019/linux/tbb/lib/intel64/gcc4.7:/APL/ISV/x86_
+ 64/intel/debugger_2019/iga/lib:/APL/ISV/x86_64/intel/debugger_tel64/lib:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /daal/lib/intel64_lin:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compi
+ lers_and_libraries_2019/linux/daal/../tbb/lib/intel64_lin/gcc4.7
+
+[STEP1] Read Control Parameters
+ 
+Read_Ctrl_Input> Input Files
+  topfile = ../1_setup/po4.rtf
+  parfile = ../1_setup/po4.prm
+  psffile = ../1_setup/cmd_100.psf
+  pdbfile = ../1_setup/cmd_100.pdb
+  rstfile = ../2_minimize/qmmm_mini.rst
+ 
+Read_Ctrl_Output> Output Files
+ 
+Read_Ctrl_Energy>  WARNING: water_model is not available
+Read_Ctrl_Energy> Parameters of Energy Calculations
+  forcefield      =     CHARMM
+  switchdist      =     16.000  cutoffdist      =     18.000
+  pairlistdist    =     19.500  dielec_const    =      1.000
+ vdW force_switch =         no
+  electrostatic   =  CUTOFF
+  implicit_solvent=       none
+  table_order     =          3
+  table_density   =     20.000
+  water_model     =       NONE
+  output_style    =    GENESIS
+  dispersion_corr =       none
+  nonb_limiter    =      no
+ 
+Read_Ctrl_Vibration> Parameters of VIBRATION
+  runmode             =       GRID
+  nreplica            =          2
+  vibatm_select_index = 3
+  minfo_folder        = minfo.files
+  gridfile            = makeGrid.xyz
+  datafile            = makeGrid.dat
+ 
+Read_Ctrl_Boundary> Parameters of Boundary Condition
+  type            =       NOBC
+  spherical_pot   =         no  restart         =          T
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          3
+    group 1 = not (sid:PO4 around_res: 15.0 or sid:PO4)
+    group 2 = sid:PO4
+    group 3 = sid:PO4
+  # of mole names =          0
+ 
+Read_Ctrl_Restraints> No restraint in the system
+
+Read_Ctrl_QMMM> Parameters of QM/MM
+  qmtyp              = gaussian
+  qmcnt              = gaussian.com
+  qmexe              = runGau.sh
+  workdir            = qmmm_grid
+  savedir            = none
+  basename           = job
+  qmsave_period      = 20
+  qmmaxtrial         = 1
+  qmatm_select_index = 2
+  exclude_charge     = GROUP
+ 
+[STEP2] Setup MPI
+ 
+Setup_Mpi_Vib> Summary of Setup MPI
+  number of MPI processes                =          2
+  number of MPI processes in one replica =          1
+  number of OpenMP threads               =          8
+  total number of CPU cores              =         16
+     world_rank     country_no   country_rank
+              0              0              0  REAL        MASTER
+              1              1              0  REAL        MASTER
+
+[STEP3] Set Relevant Variables and Structures
+ 
+Input_Top> Summary of Topfile
+  num_atom_class  =          7  num_resi_type   =          1
+ 
+Input_Par> Summary of Parfile
+  num_bonds       =          5  num_angles      =          5
+  num_dihedrals   =          3  num_impropers   =          0
+  num_atom_cls    =          7  num_nbfix       =          0
+  num_cmap_terms  =          0
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          0
+  total_charge    =     -1.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =       4324
+ 
+Read_Rst_Binary> Summary of RST file
+  num_atoms       =       4324  iseed           =          0
+  boxsize (x,y,z) =      0.000     0.000     0.000
+  num_of_qm_charge           7
+
+Define_Molecule> Summary of molecules
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       1440  num_molecules   =       1440
+  num_segments    =          2  num_deg_freedom =      12972
+  total_charge    =     -1.000
+ 
+Setup_Boundary> Setup Variables for Boundary Condition
+  origin(x,y,z)   =      0.000     0.000     0.000
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :   15.00
+                contact atom list :    1959
+ 
+Setup_QMMM> Setup QM region
+  QM assignment info
+     1 PO4       1 PO42   P    PG3    assigned to QM atom    1 of element: P    15
+     2 PO4       1 PO42   O1   OG311  assigned to QM atom    2 of element: O     8
+     3 PO4       1 PO42   H1   HGP1   assigned to QM atom    3 of element: H     1
+     4 PO4       1 PO42   O2   OG311  assigned to QM atom    4 of element: O     8
+     5 PO4       1 PO42   H2   HGP1   assigned to QM atom    5 of element: H     1
+     6 PO4       1 PO42   O3   OG2P1  assigned to QM atom    6 of element: O     8
+     7 PO4       1 PO42   O4   OG2P1  assigned to QM atom    7 of element: O     8
+  number of QM atoms = 7
+ 
+  QM charges retreived from rstfile.
+ 
+ 
+  Check the control file for Gaussian [ gaussian.com ]
+  Passed the check!
+Setup_Enefunc_Cmap_Par> Natural spline is used to derive cmap coefs.
+
+Setup_Enefunc_Table> Setup Variables for LookupTable
+  num_solutes     =       4324  num_waters      =          0
+
+Define_Enefunc_CHARMM> Number of Interactions in Each Term
+  bond_ene        =       2878  angle_ene       =       1439
+  urey_ene        =          0
+  torsion_ene     =          0  improper_ene    =          0
+  cmap_ene        =          0
+  restraint_groups=          0  restraint_funcs =          0
+ 
+Setup_Vibration_Atoms> Atoms subject to vibrational analysis
+     1     1 PO4       1 PO42   P    PG3   
+     2     2 PO4       1 PO42   O1   OG311 
+     3     3 PO4       1 PO42   H1   HGP1  
+     4     4 PO4       1 PO42   O2   OG311 
+     5     5 PO4       1 PO42   H2   HGP1  
+     6     6 PO4       1 PO42   O3   OG2P1 
+     7     7 PO4       1 PO42   O4   OG2P1 
+  number of VIB atoms = 7
+ 
+[STEP4] Compute Single Point Energy for Molecules
+ 
+SKIPPED: Energy calculation is omitted when QMMM is performed
+ 
+[STEP5] Perform Vibrational Analysis
+ 
+ Compute energy at grid points: data written to [ makeGrid.dat ]
+      Done for                    mkg-q9-11-0 :    replicaID =     1
+      Done for                         mkg-eq :    replicaID =     2
+      Done for                    mkg-q9-11-2 :    replicaID =     1
+      Done for                    mkg-q9-11-1 :    replicaID =     2
+      Done for                    mkg-q9-11-3 :    replicaID =     2
+      Done for                    mkg-q9-11-4 :    replicaID =     1
+      Done for                    mkg-q9-11-6 :    replicaID =     2
+      Done for                    mkg-q9-11-7 :    replicaID =     1
+      Done for                    mkg-q9-11-8 :    replicaID =     2
+      Done for                    mkg-q9-11-9 :    replicaID =     1
+      Done for                   mkg-q9-11-10 :    replicaID =     2
+      Done for                   mkg-q10-11-0 :    replicaID =     1
+      Done for                   mkg-q10-11-1 :    replicaID =     2
+      Done for                   mkg-q10-11-2 :    replicaID =     1
+      Done for                   mkg-q10-11-3 :    replicaID =     2
+      Done for                   mkg-q10-11-4 :    replicaID =     1
+      Done for                   mkg-q10-11-6 :    replicaID =     2
+      Done for                   mkg-q10-11-7 :    replicaID =     1
+      Done for                   mkg-q10-11-8 :    replicaID =     2
+      Done for                   mkg-q10-11-9 :    replicaID =     1
+      Done for                  mkg-q10-11-10 :    replicaID =     2
+      Done for                   mkg-q11-11-0 :    replicaID =     1
+      Done for                   mkg-q11-11-1 :    replicaID =     2
+      Done for                   mkg-q11-11-2 :    replicaID =     1
+      Done for                   mkg-q11-11-3 :    replicaID =     2
+      Done for                   mkg-q11-11-4 :    replicaID =     1
+      Done for                   mkg-q11-11-6 :    replicaID =     2
+      Done for                   mkg-q11-11-7 :    replicaID =     1
+      Done for                   mkg-q11-11-8 :    replicaID =     2
+      Done for                   mkg-q11-11-9 :    replicaID =     1
+      Done for                  mkg-q11-11-10 :    replicaID =     2
+      Done for                   mkg-q12-11-0 :    replicaID =     1
+      Done for                   mkg-q12-11-1 :    replicaID =     2
+      Done for                   mkg-q12-11-2 :    replicaID =     1
+      Done for                   mkg-q12-11-3 :    replicaID =     2
+      Done for                   mkg-q12-11-4 :    replicaID =     1
+      Done for                   mkg-q12-11-6 :    replicaID =     2
+      Done for                   mkg-q12-11-7 :    replicaID =     1
+      Done for                   mkg-q12-11-8 :    replicaID =     2
+      Done for                   mkg-q12-11-9 :    replicaID =     1
+      Done for                  mkg-q12-11-10 :    replicaID =     2
+      Done for                   mkg-q13-11-0 :    replicaID =     1
+      Done for                   mkg-q13-11-1 :    replicaID =     2
+      Done for                   mkg-q13-11-2 :    replicaID =     1
+      Done for                   mkg-q13-11-3 :    replicaID =     2
+      Done for                   mkg-q13-11-4 :    replicaID =     1
+      Done for                   mkg-q13-11-6 :    replicaID =     2
+      Done for                   mkg-q13-11-7 :    replicaID =     1
+      Done for                   mkg-q13-11-8 :    replicaID =     2
+      Done for                   mkg-q13-11-9 :    replicaID =     1
+      Done for                  mkg-q13-11-10 :    replicaID =     2
+      Done for                   mkg-q14-11-0 :    replicaID =     1
+      Done for                   mkg-q14-11-1 :    replicaID =     2
+      Done for                   mkg-q14-11-2 :    replicaID =     1
+      Done for                   mkg-q14-11-3 :    replicaID =     2
+      Done for                   mkg-q14-11-4 :    replicaID =     1
+      Done for                   mkg-q14-11-6 :    replicaID =     2
+      Done for                   mkg-q14-11-7 :    replicaID =     1
+      Done for                   mkg-q14-11-8 :    replicaID =     2
+      Done for                   mkg-q14-11-9 :    replicaID =     1
+      Done for                  mkg-q14-11-10 :    replicaID =     2
+      Done for                   mkg-q15-11-0 :    replicaID =     1
+      Done for                   mkg-q15-11-1 :    replicaID =     2
+      Done for                   mkg-q15-11-2 :    replicaID =     1
+      Done for                   mkg-q15-11-3 :    replicaID =     2
+      Done for                   mkg-q15-11-4 :    replicaID =     1
+      Done for                   mkg-q15-11-6 :    replicaID =     2
+      Done for                   mkg-q15-11-7 :    replicaID =     1
+      Done for                   mkg-q15-11-8 :    replicaID =     2
+      Done for                   mkg-q15-11-9 :    replicaID =     1
+      Done for                  mkg-q15-11-10 :    replicaID =     2
+      Done for                   mkg-q16-11-0 :    replicaID =     1
+      Done for                   mkg-q16-11-1 :    replicaID =     2
+      Done for                   mkg-q16-11-2 :    replicaID =     1
+      Done for                   mkg-q16-11-3 :    replicaID =     2
+      Done for                   mkg-q16-11-4 :    replicaID =     1
+      Done for                   mkg-q16-11-6 :    replicaID =     2
+      Done for                   mkg-q16-11-7 :    replicaID =     1
+      Done for                   mkg-q16-11-8 :    replicaID =     2
+      Done for                   mkg-q16-11-9 :    replicaID =     1
+      Done for                  mkg-q16-11-10 :    replicaID =     2
+      Done for                   mkg-q17-11-0 :    replicaID =     1
+      Done for                   mkg-q17-11-1 :    replicaID =     2
+      Done for                   mkg-q17-11-2 :    replicaID =     1
+      Done for                   mkg-q17-11-3 :    replicaID =     2
+      Done for                   mkg-q17-11-4 :    replicaID =     1
+      Done for                   mkg-q17-11-6 :    replicaID =     2
+      Done for                   mkg-q17-11-7 :    replicaID =     1
+      Done for                   mkg-q17-11-8 :    replicaID =     2
+      Done for                   mkg-q17-11-9 :    replicaID =     1
+      Done for                  mkg-q17-11-10 :    replicaID =     2
+      Done for                   mkg-q18-11-0 :    replicaID =     1
+      Done for                   mkg-q18-11-1 :    replicaID =     2
+      Done for                   mkg-q18-11-2 :    replicaID =     1
+      Done for                   mkg-q18-11-3 :    replicaID =     2
+      Done for                   mkg-q18-11-4 :    replicaID =     1
+      Done for                   mkg-q18-11-6 :    replicaID =     2
+      Done for                   mkg-q18-11-7 :    replicaID =     1
+      Done for                   mkg-q18-11-8 :    replicaID =     2
+      Done for                   mkg-q18-11-9 :    replicaID =     1
+      Done for                  mkg-q18-11-10 :    replicaID =     2
+      Done for                   mkg-q19-11-0 :    replicaID =     1
+      Done for                   mkg-q19-11-1 :    replicaID =     2
+      Done for                   mkg-q19-11-2 :    replicaID =     1
+      Done for                   mkg-q19-11-3 :    replicaID =     2
+      Done for                   mkg-q19-11-4 :    replicaID =     1
+      Done for                   mkg-q19-11-6 :    replicaID =     2
+      Done for                   mkg-q19-11-7 :    replicaID =     1
+      Done for                   mkg-q19-11-8 :    replicaID =     2
+      Done for                   mkg-q19-11-9 :    replicaID =     1
+      Done for                  mkg-q19-11-10 :    replicaID =     2
+      Done for                   mkg-q20-11-0 :    replicaID =     1
+      Done for                   mkg-q20-11-1 :    replicaID =     2
+      Done for                   mkg-q20-11-2 :    replicaID =     1
+      Done for                   mkg-q20-11-3 :    replicaID =     2
+      Done for                   mkg-q20-11-4 :    replicaID =     1
+      Done for                   mkg-q20-11-6 :    replicaID =     2
+      Done for                   mkg-q20-11-7 :    replicaID =     1
+      Done for                   mkg-q20-11-8 :    replicaID =     2
+      Done for                   mkg-q20-11-9 :    replicaID =     1
+      Done for                  mkg-q20-11-10 :    replicaID =     2
+      Done for                   mkg-q21-11-0 :    replicaID =     1
+      Done for                   mkg-q21-11-1 :    replicaID =     2
+      Done for                   mkg-q21-11-2 :    replicaID =     1
+      Done for                   mkg-q21-11-3 :    replicaID =     2
+      Done for                   mkg-q21-11-4 :    replicaID =     1
+      Done for                   mkg-q21-11-6 :    replicaID =     2
+      Done for                   mkg-q21-11-7 :    replicaID =     1
+      Done for                   mkg-q21-11-8 :    replicaID =     2
+      Done for                   mkg-q21-11-9 :    replicaID =     1
+      Done for                  mkg-q21-11-10 :    replicaID =     2
+ 
+[STEP6] Deallocate Arrays
+ 
+Output_Time> Averaged timer profile (Min, Max)
+  total time      =     246.471
+    setup         =       0.142
+    dynamics      =     246.329
+      energy      =     245.597
+      integrator  =       0.000
+      pairlist    =       0.052 (       0.049,       0.055)
+  energy           
+    bond          =       0.020 (       0.019,       0.021)
+    angle         =       0.005 (       0.005,       0.005)
+    dihedral      =       0.003 (       0.003,       0.003)
+    nonbond       =       1.169 (       1.157,       1.180)
+      pme real    =       1.169 (       1.157,       1.180)
+      pme recip   =       0.000 (       0.000,       0.000)
+    solvation     =       0.000 (       0.000,       0.000)
+      polar       =       0.000 (       0.000,       0.000)
+      non-polar   =       0.000 (       0.000,       0.000)
+    restraint     =       0.000 (       0.000,       0.000)
+    qmmm          =     244.393 (     243.660,     245.126)
+  integrator       
+    constraint    =       0.000 (       0.000,       0.000)
+    update        =       0.000 (       0.000,       0.000)
+    comm_coord    =       0.000 (       0.000,       0.000)
+    comm_force    =       0.000 (       0.000,       0.000)
+    comm_migrate  =       0.000 (       0.000,       0.000)
+

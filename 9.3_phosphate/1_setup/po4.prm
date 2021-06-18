@@ -1,0 +1,49 @@
+*>>>> CHARMM36 All-Hydrogen Parameter File for Proteins <<<<<<<<<<
+*>>>>> Includes phi, psi cross term map (CMAP) correction <<<<<<<
+*>>>>>>>>>>>>>>>>>>>>>>>>>> May 2011 <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+* All comments to the CHARMM web site: www.charmm.org
+*             parameter set discussion forum
+*
+
+BONDS
+OG2P1  PG3     480.000     1.5300
+OG311  PG3     237.000     1.5800
+OG311  HGP1    545.000     0.9600
+
+HT   HT      0.000     1.5139 ! ALLOW WAT
+                ! FROM TIPS3P GEOMETRY (FOR SHAKE/W PARAM)
+OT   HT    450.000     0.9572 ! ALLOW   WAT
+                ! FROM TIPS3P GEOM
+
+ANGLES
+PG3    OG311  HGP1     30.000   120.0000   40.00   2.35000
+OG2P1  PG3    OG2P1   104.000   120.0000
+OG2P1  PG3    OG311    98.900   108.2300
+OG311  PG3    OG311    48.100   108.0000
+
+HT   OT   HT     55.000   104.5200 ! ALLOW WAT
+                ! TIP3P GEOMETRY, ADM JR.
+ 
+DIHEDRALS
+HGP1   OG311  PG3    OG2P1      0.3000  3     0.00
+HGP1   OG311  PG3    OG311      1.6000  1   180.00
+HGP1   OG311  PG3    OG311      0.9000  2     0.00
+
+
+NONBONDED
+PG3      0.000000  -0.585000     2.150000
+OG2P1    0.000000  -0.120000     1.700000
+OG311    0.000000  -0.192100     1.765000
+HGP1     0.000000  -0.046000     0.224500
+
+HT     0.000000  -0.046000     0.224500 ! ALLOW WAT
+                !TIP3P HYDROGEN PARAMETERS, adm jr., NBFIX obsolete
+
+OT     0.000000  -0.152100     1.768200 ! ALLOW   WAT
+                !TIP3P OXYGEN PARAMETERS, adm jr., NBFIX obsolete
+
+SOD      0.0     -0.0469    1.36375   ! sodium
+                   ! D. Beglovd and B. Roux, dA=-100.8 kcal/mol
+
+END
+

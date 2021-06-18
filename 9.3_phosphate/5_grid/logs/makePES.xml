@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<makePES>
+   <minfoFile   value="../3_harmonic/qmmm_harm.minfo" />
+   <MR          value="1" />
+   <activemode  value="9-21" />
+   <dipole       value="true" />
+   <qchem>
+      <program  value="generic" />
+      <title    value="QM/MM: B3LYP-D3/cc-pVDZ" />
+      <xyzfile  value="makeGrid" />
+   </qchem>
+   <grid>
+      <ngrid  value="11" />
+      <fullmc value="true"/>
+   </grid>
+</makePES>
+ 
+

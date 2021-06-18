@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<makePES>
+   <minfoFile   value="../3_harmonic/qmmm_harm.minfo" />
+   <MR          value="3" />
+   <activemode  value="9-21" />
+   <qchem>
+      <program     value="generic" />
+      <title       value="QM/MM: B3LYP-D3/cc-pVDZ" />
+      <xyzfile   value="makeQFF" />
+   </qchem>
+   <qff>
+      <stepsize  value="0.5" />
+      <ndifftype value="grad"/>
+      <mopfile   value="prop_no_1.mop" />
+   </qff>
+</makePES>
+ 
+

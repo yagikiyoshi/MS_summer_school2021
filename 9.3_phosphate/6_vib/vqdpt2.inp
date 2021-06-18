@@ -1,0 +1,53 @@
+#--- [  INPUT PARAMETER  ]
+ &mol minfofile='../3_harmonic/qmmm_harm.minfo' /
+ &sys maxmem=500 /
+
+#--- [  MRPES ]
+ &mrpes mopFile='prop_no_1.mop' mcs_cutoff=-1.0D-03 /
+
+#--- [  VIB  ]
+ &vib 
+  MR=3 vscf=.t.  vqdpt=.t.  prpt=.t. 
+  vmaxall=-1
+  vmax(9)=10
+  vmax(10)=10
+  vmax(11)=10
+  vmax(12)=10
+  vmax(13)=10
+  vmax(14)=10
+  vmax(15)=10
+  vmax(16)=10
+  vmax(17)=10
+  vmax(18)=10
+  vmax(19)=10
+  vmax(20)=10
+  vmax(21)=10
+ /
+
+#--- [  VSCF  ]
+ &vscf Maxitr=20 Ethresh=1.D-03 / 
+
+ &states
+  fund=.t.
+ /
+
+#--- [  VQDPT  ]
+ &vqdpt 
+  maxSum=4
+  nGen=3 
+ /
+
+#--- [  PRPT  ]
+ &prpt
+  MR=3
+  vqdptprpt=.t.
+  infrared=.t.
+ /
+
+ &IRspectrum
+  minOmega=300.0
+  maxOmega=1800.0
+  delOmega=1.0
+  fwhm=5.0
+ /
+

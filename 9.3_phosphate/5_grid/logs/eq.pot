@@ -1,0 +1,4 @@
+# Number of data
+     1 
+# Data at the reference geometry
+          -666.976636066984500

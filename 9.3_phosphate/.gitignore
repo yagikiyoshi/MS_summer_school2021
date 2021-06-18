@@ -1,0 +1,9 @@
+*.wfn
+*.pdf
+*.chk
+*.Fchk
+*.dcd
+*.rst
+minfo.files
+pes
+

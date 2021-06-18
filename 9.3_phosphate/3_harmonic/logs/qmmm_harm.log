@@ -1,0 +1,498 @@
+****************************************************
+*                                                  *
+*                  GENESIS ATDYN                   *
+*                                                  *
+*        A Molecular Dynamics Simulator with       *
+*            Atomic Decomposition Scheme           *
+*                                                  *
+*               Developed by RIKEN                 *
+*                                                  *
+****************************************************
+ 
+[STEP0] Architecture and Compiler Information
+ 
+GENESIS_Information> GENESIS Information
+  version      = 1.6.0
+  commit ID    = 1.6.0 [2020-12-20 21:42:07 +0900]
+  precision    = double
+  nonbonding   = CPU
+
+Build_Information> Compiler Information
+  build host   = yagi@lemon.novalocal
+  fortran      = ifort (IFORT) 19.0.5.281 20190815
+  option       = -xHost -O3 -ip -mkl=parallel  -assume byterecl -qopenmp 
+  C            = icc (ICC) 19.0.5.281 20190815
+  option       = -O3 -ip -axCORE-AVX2  -qopenmp
+  defined var. =  -DMPI -DOMP -DFFTE -DLAPACK -DDSFMT_MEXP=19937 -DINTEL
+  link option  = 
+  -assume byterecl -qopenmp  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_
+ lapack95_lp64 
+
+Runtime_Information> Machine and Library Information
+  date       = 2021/06/19 00:38:00
+  cpu model    = Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+  exec. host   = yagi@lemon.novalocal
+  LD library   = 
+ /APL/ISV/x86_64/intel/impi/2019.5.281/intel64/lib/release:/APL/ISV/x86_64/intel
+ /impi/2019.5.281/intel64/lib:/APL/ISV/x86_64/intel/impi/2019.5.281/intel64/libf
+ abric/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_lib
+ raries_2019/linux/compiler/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe
+ _2019.5.075/compilers_and_libraries_2019/linux/compiler/lib/intel64_lin:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /mpi/intel64/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_
+ and_libraries_2019/linux/mpi/intel64/libfabric/lib:/APL/ISV/x86_64/intel/parall
+ el_studio_xe_2019.5.075/compilers_and_libraries_2019/linel64:/APL/ISV/x86_64/in
+ tel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux/compiler/l
+ ib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_li
+ braries_2019/linux/mkl/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_201
+ 9.5.075/compilers_and_libraries_2019/linux/tbb/lib/intel64/gcc4.7:/APL/ISV/x86_
+ 64/intel/debugger_2019/iga/lib:/APL/ISV/x86_64/intel/debugger_tel64/lib:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /daal/lib/intel64_lin:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compi
+ lers_and_libraries_2019/linux/daal/../tbb/lib/intel64_lin/gcc4.7
+
+[STEP1] Read Control Parameters
+ 
+Read_Ctrl_Input> Input Files
+  topfile = ../1_setup/po4.rtf
+  parfile = ../1_setup/po4.prm
+  psffile = ../1_setup/cmd_100.psf
+  pdbfile = ../2_minimize/qmmm_mini.pdb
+  rstfile = ../2_minimize/qmmm_mini.rst
+ 
+Read_Ctrl_Output> Output Files
+  minfofile  = qmmm_harm.minfo
+ 
+Read_Ctrl_Energy>  WARNING: water_model is not available
+Read_Ctrl_Energy> Parameters of Energy Calculations
+  forcefield      =     CHARMM
+  switchdist      =     16.000  cutoffdist      =     18.000
+  pairlistdist    =     19.500  dielec_const    =      1.000
+ vdW force_switch =         no
+  electrostatic   =  CUTOFF
+  implicit_solvent=       none
+  table_order     =          3
+  table_density   =     20.000
+  water_model     =       NONE
+  output_style    =    GENESIS
+  dispersion_corr =       none
+  nonb_limiter    =      no
+ 
+Read_Ctrl_Vibration> Parameters of VIBRATION
+  runmode             =       HARM
+  nreplica            =          2
+  vibatm_select_index = 3
+  output_minfo_atm    = 4
+  minfo_folder        = minfo.files
+  diff_stepsize       =   0.10E-01
+ 
+Read_Ctrl_Boundary> Parameters of Boundary Condition
+  type            =       NOBC
+  spherical_pot   =         no  restart         =          T
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          4
+    group 1 = not (sid:PO4 around_res: 15.0 or sid:PO4)
+    group 2 = sid:PO4
+    group 3 = sid:PO4
+    group 4 = sid:PO4 around_res: 3.0
+  # of mole names =          0
+ 
+Read_Ctrl_Restraints> No restraint in the system
+
+Read_Ctrl_QMMM> Parameters of QM/MM
+  qmtyp              = gaussian
+  qmcnt              = gaussian.com
+  qmexe              = runGau.sh
+  workdir            = qmmm_harm
+  savedir            = none
+  basename           = job
+  qmsave_period      = 10
+  qmmaxtrial         = 1
+  qmatm_select_index = 2
+  exclude_charge     = GROUP
+ 
+[STEP2] Setup MPI
+ 
+Setup_Mpi_Vib> Summary of Setup MPI
+  number of MPI processes                =          2
+  number of MPI processes in one replica =          1
+  number of OpenMP threads               =          8
+  total number of CPU cores              =         16
+     world_rank     country_no   country_rank
+              0              0              0  REAL        MASTER
+              1              1              0  REAL        MASTER
+
+[STEP3] Set Relevant Variables and Structures
+ 
+Input_Top> Summary of Topfile
+  num_atom_class  =          7  num_resi_type   =          1
+ 
+Input_Par> Summary of Parfile
+  num_bonds       =          5  num_angles      =          5
+  num_dihedrals   =          3  num_impropers   =          0
+  num_atom_cls    =          7  num_nbfix       =          0
+  num_cmap_terms  =          0
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          0
+  total_charge    =     -1.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =       4324
+ 
+Read_Rst_Binary> Summary of RST file
+  num_atoms       =       4324  iseed           =          0
+  boxsize (x,y,z) =      0.000     0.000     0.000
+  num_of_qm_charge           7
+
+Define_Molecule> Summary of molecules
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       1440  num_molecules   =       1440
+  num_segments    =          2  num_deg_freedom =      12972
+  total_charge    =     -1.000
+ 
+Setup_Boundary> Setup Variables for Boundary Condition
+  origin(x,y,z)   =      0.000     0.000     0.000
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :   15.00
+                contact atom list :    2034
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :    3.00
+                contact atom list :      45
+ 
+Setup_QMMM> Setup QM region
+  QM assignment info
+     1 PO4       1 PO42   P    PG3    assigned to QM atom    1 of element: P    15
+     2 PO4       1 PO42   O1   OG311  assigned to QM atom    2 of element: O     8
+     3 PO4       1 PO42   H1   HGP1   assigned to QM atom    3 of element: H     1
+     4 PO4       1 PO42   O2   OG311  assigned to QM atom    4 of element: O     8
+     5 PO4       1 PO42   H2   HGP1   assigned to QM atom    5 of element: H     1
+     6 PO4       1 PO42   O3   OG2P1  assigned to QM atom    6 of element: O     8
+     7 PO4       1 PO42   O4   OG2P1  assigned to QM atom    7 of element: O     8
+  number of QM atoms = 7
+ 
+  QM charges retreived from rstfile.
+ 
+ 
+  Check the control file for Gaussian [ gaussian.com ]
+  Passed the check!
+Setup_Enefunc_Cmap_Par> Natural spline is used to derive cmap coefs.
+
+Setup_Enefunc_Table> Setup Variables for LookupTable
+  num_solutes     =       4324  num_waters      =          0
+
+Define_Enefunc_CHARMM> Number of Interactions in Each Term
+  bond_ene        =       2878  angle_ene       =       1439
+  urey_ene        =          0
+  torsion_ene     =          0  improper_ene    =          0
+  cmap_ene        =          0
+  restraint_groups=          0  restraint_funcs =          0
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :    3.00
+                contact atom list :      45
+ 
+Setup_Vibration_Atoms> Atoms subject to vibrational analysis
+     1     1 PO4       1 PO42   P    PG3   
+     2     2 PO4       1 PO42   O1   OG311 
+     3     3 PO4       1 PO42   H1   HGP1  
+     4     4 PO4       1 PO42   O2   OG311 
+     5     5 PO4       1 PO42   H2   HGP1  
+     6     6 PO4       1 PO42   O3   OG2P1 
+     7     7 PO4       1 PO42   O4   OG2P1 
+  number of VIB atoms = 7
+ 
+Setup_Vibration_Atoms> Atoms punched to minfo file in addition
+     1   161 WT1     466 TIP3   OH2  OT    
+     2   162 WT1     466 TIP3   H1   HT    
+     3   163 WT1     466 TIP3   H2   HT    
+     4   416 WT1     978 TIP3   OH2  OT    
+     5   417 WT1     978 TIP3   H1   HT    
+     6   418 WT1     978 TIP3   H2   HT    
+     7   467 WT1    1060 TIP3   OH2  OT    
+     8   468 WT1    1060 TIP3   H1   HT    
+     9   469 WT1    1060 TIP3   H2   HT    
+    10   743 WT1    1593 TIP3   OH2  OT    
+    11   744 WT1    1593 TIP3   H1   HT    
+    12   745 WT1    1593 TIP3   H2   HT    
+    13   794 WT1    1707 TIP3   OH2  OT    
+    14   795 WT1    1707 TIP3   H1   HT    
+    15   796 WT1    1707 TIP3   H2   HT    
+    16  1220 WT1    2380 TIP3   OH2  OT    
+    17  1221 WT1    2380 TIP3   H1   HT    
+    18  1222 WT1    2380 TIP3   H2   HT    
+    19  1646 WT1    3030 TIP3   OH2  OT    
+    20  1647 WT1    3030 TIP3   H1   HT    
+    21  1648 WT1    3030 TIP3   H2   HT    
+    22  2051 WT1    3569 TIP3   OH2  OT    
+    23  2052 WT1    3569 TIP3   H1   HT    
+    24  2053 WT1    3569 TIP3   H2   HT    
+    25  2675 WT1    4544 TIP3   OH2  OT    
+    26  2676 WT1    4544 TIP3   H1   HT    
+    27  2677 WT1    4544 TIP3   H2   HT    
+    28  2726 WT1    4607 TIP3   OH2  OT    
+    29  2727 WT1    4607 TIP3   H1   HT    
+    30  2728 WT1    4607 TIP3   H2   HT    
+    31  2837 WT1    4857 TIP3   OH2  OT    
+    32  2838 WT1    4857 TIP3   H1   HT    
+    33  2839 WT1    4857 TIP3   H2   HT    
+    34  3380 WT1    5887 TIP3   OH2  OT    
+    35  3381 WT1    5887 TIP3   H1   HT    
+    36  3382 WT1    5887 TIP3   H2   HT    
+    37  3419 WT1    5946 TIP3   OH2  OT    
+    38  3420 WT1    5946 TIP3   H1   HT    
+    39  3421 WT1    5946 TIP3   H2   HT    
+    40  4028 WT1    7847 TIP3   OH2  OT    
+    41  4029 WT1    7847 TIP3   H1   HT    
+    42  4030 WT1    7847 TIP3   H2   HT    
+    43  4088 WT1    8119 TIP3   OH2  OT    
+    44  4089 WT1    8119 TIP3   H1   HT    
+    45  4090 WT1    8119 TIP3   H2   HT    
+  number of atoms = 45
+ 
+Setup_Vibration> 
+  WARNING: qmmaxtrial in [QMMM] is non-zero: qmmaxtrial =    1
+  WARNING: QM retry causes problems in numerical differentiations, and thus
+  WARNING: not recommended. If you encounter SCF convergence problems,
+  WARNING: try instead with increased SCF maximum iteration in a QM input.
+  WARNING: qmmaxtrial is reset to zero.
+ 
+[STEP4] Compute Single Point Energy for Molecules
+ 
+SKIPPED: Energy calculation is omitted when QMMM is performed
+ 
+[STEP5] Perform Vibrational Analysis
+ 
+Enter vibrational analysis
+ 
+  Cartesian coordinates of atoms for vib. analysis
+     1          1 PO4       1 PO42   P            -5.0163538043    -10.7070478641     -5.3933744057
+     2          2 PO4       1 PO42   O1           -5.5887843127    -10.8719651719     -3.8516605158
+     3          3 PO4       1 PO42   H1           -5.4584037370    -11.7796902351     -3.5105868636
+     4          4 PO4       1 PO42   O2           -5.7356315706     -9.2959064435     -5.7860111831
+     5          5 PO4       1 PO42   H2           -6.7182708841     -9.3566167716     -5.7007316088
+     6          6 PO4       1 PO42   O3           -3.5032952675    -10.4556393788     -5.4259096579
+     7          7 PO4       1 PO42   O4           -5.5484994690    -11.8692887520     -6.2683944271
+ 
+  Generate Hessian matrix by num. diff. of gradients  
+    Loop over atoms
+      Done for    1   P   +X      replicaID =     2
+      Done for    0   input       replicaID =     1      energy =       -418534.175410
+      Done for    1   P   +Y      replicaID =     2
+      Done for    1   P   -X      replicaID =     1
+      Done for    1   P   +Z      replicaID =     2
+      Done for    1   P   -Y      replicaID =     1
+      Done for    2   O1  +X      replicaID =     2
+      Done for    1   P   -Z      replicaID =     1
+      Done for    2   O1  +Y      replicaID =     2
+      Done for    2   O1  -X      replicaID =     1
+      Done for    2   O1  +Z      replicaID =     2
+      Done for    2   O1  -Y      replicaID =     1
+      Done for    3   H1  +X      replicaID =     2
+      Done for    2   O1  -Z      replicaID =     1
+      Done for    3   H1  +Y      replicaID =     2
+      Done for    3   H1  -X      replicaID =     1
+      Done for    3   H1  +Z      replicaID =     2
+      Done for    3   H1  -Y      replicaID =     1
+      Done for    4   O2  +X      replicaID =     2
+      Done for    3   H1  -Z      replicaID =     1
+      Done for    4   O2  +Y      replicaID =     2
+      Done for    4   O2  -X      replicaID =     1
+      Done for    4   O2  +Z      replicaID =     2
+      Done for    4   O2  -Y      replicaID =     1
+      Done for    5   H2  +X      replicaID =     2
+      Done for    4   O2  -Z      replicaID =     1
+      Done for    5   H2  +Y      replicaID =     2
+      Done for    5   H2  -X      replicaID =     1
+      Done for    5   H2  +Z      replicaID =     2
+      Done for    5   H2  -Y      replicaID =     1
+      Done for    6   O3  +X      replicaID =     2
+      Done for    5   H2  -Z      replicaID =     1
+      Done for    6   O3  +Y      replicaID =     2
+      Done for    6   O3  -X      replicaID =     1
+      Done for    6   O3  +Z      replicaID =     2
+      Done for    6   O3  -Y      replicaID =     1
+      Done for    7   O4  +X      replicaID =     2
+      Done for    6   O3  -Z      replicaID =     1
+      Done for    7   O4  +Y      replicaID =     2
+      Done for    7   O4  -X      replicaID =     1
+      Done for    7   O4  +Z      replicaID =     2
+      Done for    7   O4  -Y      replicaID =     1
+      Done for    7   O4  -Z      replicaID =     1
+ 
+  RMSD of the gradient at the input geometry =    0.260731D+00 [kcal mol-1 Angs-1]
+ 
+ 
+  Harmonic frequencies and normal displacement vectors
+          mode             1           2           3           4           5 
+          omega        124.0746    155.2240    163.3555    193.6224    229.7926 
+         IR int.         6.2214      6.3166      5.2954      5.4273      2.6843 
+         1   P    X      0.2346     -0.0515      0.3457      0.1001     -0.1798 
+         1   P    Y     -0.0189      0.5414     -0.0774      0.2183      0.0164 
+         1   P    Z      0.3535      0.0365     -0.3183     -0.3370     -0.1018 
+         2   O1   X      0.5614      0.0416      0.4925      0.1735      0.2288 
+         2   O1   Y     -0.0534      0.5479      0.1813     -0.2838     -0.2496 
+         2   O1   Z      0.3863      0.0932     -0.1251     -0.2708      0.0215 
+         3   H1   X      0.0853     -0.0011      0.0729      0.0569      0.0502 
+         3   H1   Y     -0.0342      0.1316      0.0383     -0.0794     -0.0778 
+         3   H1   Z      0.0647      0.0087     -0.0341     -0.0995     -0.0334 
+         4   O2   X      0.0929     -0.0789      0.1680      0.0992     -0.6168 
+         4   O2   Y      0.0086      0.3269     -0.1650      0.3312     -0.2433 
+         4   O2   Z      0.4808     -0.1542     -0.4897      0.3275      0.0039 
+         5   H2   X      0.0221     -0.0185      0.0469      0.0232     -0.1538 
+         5   H2   Y     -0.0125      0.0654     -0.0352      0.0600     -0.1022 
+         5   H2   Z      0.0852     -0.0264     -0.0810      0.0433      0.0239 
+         6   O3   X      0.1526     -0.0283      0.2297      0.0833     -0.2021 
+         6   O3   Y      0.0279      0.3733     -0.0094      0.0960      0.5016 
+         6   O3   Z     -0.0186     -0.0024     -0.2637     -0.1879     -0.1870 
+         7   O4   X      0.0278      0.0018      0.1384     -0.0283      0.0910 
+         7   O4   Y      0.0467      0.2383     -0.1651      0.3578     -0.1494 
+         7   O4   Z      0.2542      0.1893     -0.0016     -0.4607     -0.0037 
+ 
+          mode             6           7           8           9          10 
+          omega        249.7330    387.6672    399.3254    504.1626    517.0473 
+         IR int.         9.2463      3.0368     10.1337     21.4906     63.7429 
+         1   P    X     -0.3680      0.0739      0.0973     -0.1699      0.3005 
+         1   P    Y     -0.0625     -0.0308     -0.0870     -0.3964     -0.0742 
+         1   P    Z     -0.1423     -0.1287     -0.1024     -0.0502      0.2351 
+         2   O1   X      0.2565     -0.2937     -0.0745      0.0461     -0.3127 
+         2   O1   Y      0.1963      0.1107      0.5034      0.2220      0.0170 
+         2   O1   Z      0.1222     -0.2074     -0.0310      0.1240      0.0756 
+         3   H1   X      0.0395     -0.1512      0.1830      0.0803     -0.0754 
+         3   H1   Y      0.0450      0.0130      0.2307      0.1204      0.0271 
+         3   H1   Z      0.0281     -0.0620      0.1921      0.1796      0.0845 
+         4   O2   X     -0.1268      0.1121     -0.3406      0.4362     -0.0207 
+         4   O2   Y      0.0646      0.1357     -0.1912     -0.0209     -0.3698 
+         4   O2   Z      0.0253      0.3624      0.3432      0.1070     -0.0665 
+         5   H2   X     -0.0344      0.0317     -0.0807      0.1028     -0.0008 
+         5   H2   Y      0.0258      0.0584     -0.1000      0.1010     -0.1538 
+         5   H2   Z      0.0002      0.1446      0.1225     -0.0357     -0.0379 
+         6   O3   X     -0.2067      0.0300      0.1004     -0.2596      0.2051 
+         6   O3   Y     -0.4227      0.0995     -0.2323      0.5165      0.2089 
+         6   O3   Z     -0.3793     -0.5515      0.0367      0.0438     -0.4091 
+         7   O4   X     -0.5729      0.1173      0.3206     -0.1105     -0.3502 
+         7   O4   Y      0.0213     -0.3902      0.0219     -0.1368      0.4260 
+         7   O4   Z      0.0092      0.3742     -0.3441     -0.3166     -0.0881 
+ 
+          mode            11          12          13          14          15 
+          omega        547.2317    563.0260    728.9471    825.5831    897.5638 
+         IR int.        54.6441    102.2922    118.3779     62.8860    278.0614 
+         1   P    X      0.2033     -0.0062     -0.0195      0.2083     -0.1022 
+         1   P    Y     -0.0632     -0.0737      0.0062     -0.0898      0.4188 
+         1   P    Z     -0.2699      0.0040      0.0370     -0.3079     -0.4771 
+         2   O1   X      0.0742      0.1394      0.0210     -0.2089     -0.1243 
+         2   O1   Y      0.1348      0.2139      0.0592     -0.0928     -0.0478 
+         2   O1   Z     -0.3581      0.1381     -0.0770      0.5767      0.3879 
+         3   H1   X     -0.0674     -0.8335     -0.0760     -0.0366      0.0598 
+         3   H1   Y      0.0291     -0.2012     -0.0065     -0.0359     -0.0675 
+         3   H1   Z     -0.0808     -0.3071     -0.0471      0.1271     -0.0811 
+         4   O2   X     -0.1080     -0.0363      0.0095     -0.2140      0.2907 
+         4   O2   Y     -0.1250     -0.0662      0.0486      0.3945     -0.5057 
+         4   O2   Z      0.2223      0.0387      0.2073     -0.0717      0.1634 
+         5   H2   X     -0.0229     -0.0015     -0.0607     -0.0590      0.0689 
+         5   H2   Y     -0.1059      0.0026     -0.3008     -0.0234     -0.0800 
+         5   H2   Z      0.0562      0.0989     -0.9119     -0.0783     -0.0134 
+         6   O3   X      0.1423     -0.0370     -0.0309      0.3316     -0.0807 
+         6   O3   Y      0.1612     -0.0192     -0.0268      0.0561     -0.0492 
+         6   O3   Z      0.4818      0.0411     -0.0339      0.0497      0.0529 
+         7   O4   X     -0.5319      0.0883      0.0618     -0.1639      0.0553 
+         7   O4   Y     -0.0747      0.0337     -0.0496     -0.2704      0.0312 
+         7   O4   Z      0.2439     -0.2266      0.0069     -0.1335      0.0978 
+ 
+          mode            16          17          18          19          20 
+          omega       1061.4762   1127.5991   1169.8361   1250.5531   3515.1669 
+         IR int.       163.3270    257.4871    250.3912    205.3087    206.9934 
+         1   P    X      0.2130      0.2481     -0.3968     -0.3884      0.0036 
+         1   P    Y     -0.3229     -0.2263     -0.3377     -0.1231     -0.0008 
+         1   P    Z     -0.3468      0.0054     -0.1589     -0.0331      0.0006 
+         2   O1   X      0.0016     -0.1187     -0.0171      0.0301      0.0005 
+         2   O1   Y     -0.0786      0.1691      0.0602      0.0057     -0.0006 
+         2   O1   Z      0.0592      0.1513      0.0334     -0.0121     -0.0008 
+         3   H1   X     -0.1732      0.3864      0.0784      0.0120     -0.0020 
+         3   H1   Y      0.0762     -0.1899     -0.0558     -0.0048      0.0092 
+         3   H1   Z      0.3281     -0.7127     -0.2050     -0.0187     -0.0045 
+         4   O2   X     -0.0596     -0.0421     -0.0609      0.1336      0.2471 
+         4   O2   Y      0.1442      0.1182     -0.0755      0.1623      0.0061 
+         4   O2   Z     -0.0301     -0.0116      0.0455     -0.0565     -0.0183 
+         5   H2   X     -0.0079      0.0019     -0.0489      0.0868     -0.9649 
+         5   H2   Y     -0.0692     -0.1266      0.4353     -0.7821     -0.0403 
+         5   H2   Z     -0.0048      0.0456     -0.1551      0.2481      0.0765 
+         6   O3   X     -0.4130     -0.2936      0.4909      0.2746     -0.0032 
+         6   O3   Y     -0.0473     -0.0027      0.0834      0.0646      0.0009 
+         6   O3   Z      0.0287     -0.0038      0.0070     -0.0074     -0.0005 
+         7   O4   X      0.1941      0.0080      0.1439      0.0923      0.0001 
+         7   O4   Y      0.4540      0.0889      0.3209      0.0990      0.0032 
+         7   O4   Z      0.3598      0.0113      0.2186      0.0712      0.0003 
+ 
+          mode            21 
+          omega       3652.4400 
+         IR int.       126.5055 
+         1   P    X     -0.0012 
+         1   P    Y      0.0033 
+         1   P    Z     -0.0003 
+         2   O1   X     -0.0284 
+         2   O1   Y      0.2252 
+         2   O1   Z     -0.0935 
+         3   H1   X      0.1265 
+         3   H1   Y     -0.8971 
+         3   H1   Z      0.3448 
+         4   O2   X      0.0031 
+         4   O2   Y     -0.0018 
+         4   O2   Z      0.0007 
+         5   H2   X     -0.0097 
+         5   H2   Y      0.0002 
+         5   H2   Z      0.0006 
+         6   O3   X     -0.0018 
+         6   O3   Y     -0.0004 
+         6   O3   Z      0.0015 
+         7   O4   X     -0.0000 
+         7   O4   Y      0.0010 
+         7   O4   Z      0.0022 
+ 
+ 
+[STEP6] Deallocate Arrays
+ 
+Output_Time> Averaged timer profile (Min, Max)
+  total time      =     124.957
+    setup         =       0.122
+    dynamics      =     124.836
+      energy      =     121.584
+      integrator  =       0.000
+      pairlist    =       0.053 (       0.042,       0.063)
+  energy           
+    bond          =       0.006 (       0.005,       0.006)
+    angle         =       0.001 (       0.001,       0.002)
+    dihedral      =       0.001 (       0.001,       0.001)
+    nonbond       =       0.389 (       0.376,       0.403)
+      pme real    =       0.389 (       0.376,       0.403)
+      pme recip   =       0.000 (       0.000,       0.000)
+    solvation     =       0.000 (       0.000,       0.000)
+      polar       =       0.000 (       0.000,       0.000)
+      non-polar   =       0.000 (       0.000,       0.000)
+    restraint     =       0.000 (       0.000,       0.000)
+    qmmm          =     121.185 (     117.940,     124.430)
+  integrator       
+    constraint    =       0.000 (       0.000,       0.000)
+    update        =       0.000 (       0.000,       0.000)
+    comm_coord    =       0.000 (       0.000,       0.000)
+    comm_force    =       0.000 (       0.000,       0.000)
+    comm_migrate  =       0.000 (       0.000,       0.000)
+
