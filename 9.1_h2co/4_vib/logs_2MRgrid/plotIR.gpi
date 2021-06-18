@@ -1,0 +1,38 @@
+set terminal pdf enhanced
+set terminal pdf size 3.5,2.5
+
+set xlabel font "Arial,14"
+set xtics  font "Arial,14"
+set mxtics 2
+set xlabel "wavenumber / cm^{-1}"
+
+set ylabel font "Arial,14"
+set ylabel 'IR intensity'
+unset ytics
+
+set key font "Arial,12"
+set key left
+
+set yrange [0:20]
+set xrange [1000:3200]
+set xtics  500
+
+set out "plotIR_vci.pdf"
+plot "vci-IR_mrpes.spectrum" w l t "1MR:CCSD(T)/2-3MR:B3LYP", \
+     "vci-IR_b3lyp.spectrum" w l t "B3LYP"
+
+set out "plotIR_mrpes.pdf"
+plot "../1_harmonic/harmonic.spectrum" w l t "Harmonic", \
+     "vqdpt-IR_mrpes.spectrum" w l t "VQDPT2", \
+     "vci-IR_mrpes.spectrum" w l t "VCI"
+
+set xrange [2600:3000]
+set xtics  100
+set out "plotIR2_vci.pdf"
+plot "vci-IR_mrpes.spectrum" w l t "1MR:CCSD(T)/2-3MR:B3LYP", \
+     "vci-IR_b3lyp.spectrum" w l t "B3LYP"
+
+set out "plotIR2_mrpes.pdf"
+plot "../1_harmonic/harmonic.spectrum" w l t "Harmonic", \
+     "vqdpt-IR_mrpes.spectrum" w l t "VQDPT2", \
+     "vci-IR_mrpes.spectrum" w l t "VCI"

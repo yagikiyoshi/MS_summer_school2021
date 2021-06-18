@@ -22,3 +22,5 @@ mv vqdpt-IR.spectrum vqdpt-IR_${level}.spectrum
 
 rm mode_type?
 rm cho.basis
+
+gnuplot plotIR.gpi

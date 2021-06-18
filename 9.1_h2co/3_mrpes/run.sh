@@ -19,7 +19,7 @@ mkdir $b3lypdir
 mv minfo.files *pot *dipole $b3lypdir
 cp ../2_qff/prop_no_1.mop   $b3lypdir
 
-sleep 30 
+sleep 10 
 
 java RunMakePES -f makePES2.xml >& makePES2.out
 mkdir $ccsdtdir
