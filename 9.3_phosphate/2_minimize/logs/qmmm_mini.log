@@ -1,0 +1,1923 @@
+****************************************************
+*                                                  *
+*                  GENESIS ATDYN                   *
+*                                                  *
+*        A Molecular Dynamics Simulator with       *
+*            Atomic Decomposition Scheme           *
+*                                                  *
+*               Developed by RIKEN                 *
+*                                                  *
+****************************************************
+ 
+[STEP0] Architecture and Compiler Information
+ 
+GENESIS_Information> GENESIS Information
+  version      = 1.6.0
+  commit ID    = 1.6.0 [2020-12-20 21:42:07 +0900]
+  precision    = double
+  nonbonding   = CPU
+
+Build_Information> Compiler Information
+  build host   = yagi@lemon.novalocal
+  fortran      = ifort (IFORT) 19.0.5.281 20190815
+  option       = -xHost -O3 -ip -mkl=parallel  -assume byterecl -qopenmp 
+  C            = icc (ICC) 19.0.5.281 20190815
+  option       = -O3 -ip -axCORE-AVX2  -qopenmp
+  defined var. =  -DMPI -DOMP -DFFTE -DLAPACK -DDSFMT_MEXP=19937 -DINTEL
+  link option  = 
+  -assume byterecl -qopenmp  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_
+ lapack95_lp64 
+
+Runtime_Information> Machine and Library Information
+  date       = 2021/06/19 00:21:04
+  cpu model    = Intel(R) Xeon(R) Platinum 8260 CPU @ 2.40GHz
+  exec. host   = yagi@lemon.novalocal
+  LD library   = 
+ /APL/ISV/x86_64/intel/impi/2019.5.281/intel64/lib/release:/APL/ISV/x86_64/intel
+ /impi/2019.5.281/intel64/lib:/APL/ISV/x86_64/intel/impi/2019.5.281/intel64/libf
+ abric/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_lib
+ raries_2019/linux/compiler/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe
+ _2019.5.075/compilers_and_libraries_2019/linux/compiler/lib/intel64_lin:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /mpi/intel64/lib:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_
+ and_libraries_2019/linux/mpi/intel64/libfabric/lib:/APL/ISV/x86_64/intel/parall
+ el_studio_xe_2019.5.075/compilers_and_libraries_2019/linel64:/APL/ISV/x86_64/in
+ tel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux/compiler/l
+ ib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_li
+ braries_2019/linux/mkl/lib/intel64:/APL/ISV/x86_64/intel/parallel_studio_xe_201
+ 9.5.075/compilers_and_libraries_2019/linux/tbb/lib/intel64/gcc4.7:/APL/ISV/x86_
+ 64/intel/debugger_2019/iga/lib:/APL/ISV/x86_64/intel/debugger_tel64/lib:/APL/IS
+ V/x86_64/intel/parallel_studio_xe_2019.5.075/compilers_and_libraries_2019/linux
+ /daal/lib/intel64_lin:/APL/ISV/x86_64/intel/parallel_studio_xe_2019.5.075/compi
+ lers_and_libraries_2019/linux/daal/../tbb/lib/intel64_lin/gcc4.7
+
+[STEP1] Read Control Parameters
+ 
+Read_Ctrl_Input> Input Files
+  topfile = ../1_setup/po4.rtf
+  parfile = ../1_setup/po4.prm
+  psffile = ../1_setup/cmd_100.psf
+  pdbfile = ../1_setup/cmd_100.pdb
+  rstfile = ../1_setup/qmmm_prod.rst
+ 
+Read_Ctrl_Output> Output Files
+  dcdfile    = qmmm_mini.dcd
+  rstfile    = qmmm_mini.rst
+  pdbfile    = qmmm_mini.pdb
+ 
+Read_Ctrl_Energy>  WARNING: water_model is not available
+Read_Ctrl_Energy> Parameters of Energy Calculations
+  forcefield      =     CHARMM
+  switchdist      =     16.000  cutoffdist      =     18.000
+  pairlistdist    =     19.500  dielec_const    =      1.000
+ vdW force_switch =         no
+  electrostatic   =  CUTOFF
+  implicit_solvent=       none
+  table_order     =          3
+  table_density   =     20.000
+  water_model     =       NONE
+  output_style    =    GENESIS
+  dispersion_corr =       none
+  nonb_limiter    =      no
+ 
+Read_Ctrl_Minimize> Parameters of MIN
+  method                     =      LBFGS  nsteps                     =        500
+  eneout_period              =          1  crdout_period              =          5
+  rstout_period              =          1  nbupdate_period            =          1
+  fixatm_select_index        = 1
+  tol_rmsg                   =   0.36E+00  tol_maxg                   =   0.54E+00
+  verbose                    =         no
+  ncorrection                =         10
+  lbfgs_bnd                  =        yes  lbfgs_bnd_qmonly           =         no
+  lbfgs_bnd_maxmove          =    0.10000
+  macro                      =        yes  start_micro                =          2
+  nsteps_micro               =        100
+  tol_rmsg_micro             =   0.27E+00  tol_maxg_micro             =   0.41E+00
+  macro_select_index         =  qmatm
+  check_structure            =         no  fix_ring_error             =         no
+  fix_chirality_error        =         no
+ 
+Read_Ctrl_Boundary> Parameters of Boundary Condition
+  type            =       NOBC
+  spherical_pot   =         no  restart         =          T
+ 
+Read_Ctrl_Selection> Parameters of Selection
+  # of groups     =          2
+    group 1 = not (sid:PO4 around_res: 15.0 or sid:PO4)
+    group 2 = sid:PO4
+  # of mole names =          0
+ 
+Read_Ctrl_Restraints> No restraint in the system
+
+Read_Ctrl_Fitting_MD> Parameters of Fitting
+  fitting method  =  TR+ROT   
+  fitting atom    = group1
+  mass_weight     =         no
+ 
+Read_Ctrl_QMMM> Parameters of QM/MM
+  qmtyp              = gaussian
+  qmcnt              = gaussian.com
+  qmexe              = runGau.sh
+  workdir            = qmmm_mini
+  savedir            = none
+  basename           = job
+  qmsave_period      = 10
+  qmmaxtrial         = 1
+  qmatm_select_index = 2
+  exclude_charge     = GROUP
+ 
+[STEP2] Setup MPI
+ 
+Setup_Mpi_Md> Summary of Setup MPI
+  number of MPI processes   =          1
+  number of OpenMP threads  =         16
+  total number of CPU cores =         16
+
+[STEP3] Set Relevant Variables and Structures
+ 
+Input_Top> Summary of Topfile
+  num_atom_class  =          7  num_resi_type   =          1
+ 
+Input_Par> Summary of Parfile
+  num_bonds       =          5  num_angles      =          5
+  num_dihedrals   =          3  num_impropers   =          0
+  num_atom_cls    =          7  num_nbfix       =          0
+  num_cmap_terms  =          0
+ 
+Read_Psf> Summary of Psffile
+  psftype         =      xplor
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_HB_donors   =          0  num_HB_acceptors=          0
+  num_NB_exclusion=          0  num_groups      =          0
+  total_charge    =     -1.000
+ 
+Read_Pdb> there are no segment (renamed "A   ")
+ 
+Read_Pdb> Summary of Data in PDB file
+  num_atoms       =       4324
+ 
+Read_Rst_Binary> Summary of RST file
+  num_atoms       =       4324  iseed           =   20210816
+  boxsize (x,y,z) =      0.000     0.000     0.000
+  spherical_pot     =      yes
+  nfunctions                 1  num_fixatm              2010
+  num_of_qm_charge           7
+
+Define_Molecule> Summary of molecules
+  num_atoms       =       4324  num_bonds       =       2884
+  num_angles      =       1447  num_dihedrals   =          6
+  num_impropers   =          0  num_cmap_terms  =          0
+  num_residues    =       1440  num_molecules   =       1440
+  num_segments    =          2  num_deg_freedom =      12972
+  total_charge    =     -1.000
+ 
+Setup_Boundary> Setup Variables for Boundary Condition
+  origin(x,y,z)   =      0.000     0.000     0.000
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :   15.00
+                contact atom list :    1959
+ 
+Setup_QMMM> Setup QM region
+  QM assignment info
+     1 PO4       1 PO42   P    PG3    assigned to QM atom    1 of element: P    15
+     2 PO4       1 PO42   O1   OG311  assigned to QM atom    2 of element: O     8
+     3 PO4       1 PO42   H1   HGP1   assigned to QM atom    3 of element: H     1
+     4 PO4       1 PO42   O2   OG311  assigned to QM atom    4 of element: O     8
+     5 PO4       1 PO42   H2   HGP1   assigned to QM atom    5 of element: H     1
+     6 PO4       1 PO42   O3   OG2P1  assigned to QM atom    6 of element: O     8
+     7 PO4       1 PO42   O4   OG2P1  assigned to QM atom    7 of element: O     8
+  number of QM atoms = 7
+ 
+  QM charges retreived from rstfile.
+ 
+ 
+  Check the control file for Gaussian [ gaussian.com ]
+  Passed the check!
+Setup_Enefunc_Cmap_Par> Natural spline is used to derive cmap coefs.
+
+Setup_Enefunc_Table> Setup Variables for LookupTable
+  num_solutes     =       4324  num_waters      =          0
+
+Define_Enefunc_CHARMM> Number of Interactions in Each Term
+  bond_ene        =       2878  angle_ene       =       1439
+  urey_ene        =          0
+  torsion_ene     =          0  improper_ene    =          0
+  cmap_ene        =          0
+  restraint_groups=          0  restraint_funcs =          0
+ 
+Setup_Fitting_Atdyn> NO fitting is applied, skip
+  fitting method  =  NO
+ 
+Select_Contacts> mode        : Resi
+                 sel atoms A :       7
+                 sel atoms B :    4317
+                 distance    :   15.00
+                contact atom list :    1959
+ 
+Setup_MinAtoms> Atoms info in minimize
+  number of fixed atoms     = 2358
+  number of minimized atoms = 1966
+ 
+  Atoms optimized during macro-iteration
+         1 PO4       1 PO42   P    PG3   
+         2 PO4       1 PO42   O1   OG311 
+         3 PO4       1 PO42   H1   HGP1  
+         4 PO4       1 PO42   O2   OG311 
+         5 PO4       1 PO42   H2   HGP1  
+         6 PO4       1 PO42   O3   OG2P1 
+         7 PO4       1 PO42   O4   OG2P1 
+  number of atoms in macro-iteration = 7
+  number of atoms in micro-iteration = 1959
+ 
+[STEP4] Compute Single Point Energy for Molecules
+ 
+SKIPPED: Energy calculation is omitted when QMMM is performed
+ 
+[STEP5] Perform Energy Minimization
+ 
+INFO:       STEP   POTENTIAL_ENE            RMSG            MAXG            BOND           ANGLE    UREY-BRADLEY         VDWAALS           ELECT              QM
+ --------------- --------------- --------------- --------------- ---------------
+INFO:          0    -416581.3022         13.6939         67.8008          0.1021          0.0141          0.0000       1393.5704     -13933.5471    -404041.4419
+
+  maxg =    67.8008 at          6 PO4       1 PO42   O3   OG2P1 
+
+INFO:          1    -416496.9656         14.9851        265.3249          0.1021          0.0141          0.0000       1399.2334     -13933.5471    -403962.7682
+
+  maxg =   265.3249 at          1 PO4       1 PO42   P    PG3   
+
+INFO:          2    -416583.3024         13.6493         57.5110          0.1021          0.0141          0.0000       1394.0049     -13933.5471    -404043.8765
+
+  maxg =    57.5110 at       3839 WT1    7110 TIP3   OH2  OT    
+
++++++ Start micro iteration 3 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -416582.52562026  RMSG =      13.6366  MAXG =      57.5120
+     STEP        2 POTENTIAL_ENE =     -385398.92146707  RMSG =     142.8472  MAXG =     319.0660
+     STEP        3 POTENTIAL_ENE =     -416879.82621487  RMSG =       6.3226  MAXG =      39.9787
+     STEP        4 POTENTIAL_ENE =     -416973.69883870  RMSG =       3.9139  MAXG =      18.1933
+     STEP        5 POTENTIAL_ENE =     -417055.88589664  RMSG =       4.2317  MAXG =      19.5777
+     STEP        6 POTENTIAL_ENE =     -417232.15100157  RMSG =       4.9445  MAXG =      28.4983
+     STEP        7 POTENTIAL_ENE =     -417335.26319252  RMSG =       8.1482  MAXG =      46.9190
+     STEP        8 POTENTIAL_ENE =     -417484.22311966  RMSG =       3.8939  MAXG =      17.7262
+     STEP        9 POTENTIAL_ENE =     -417580.17996123  RMSG =       2.5555  MAXG =      13.5852
+     STEP       10 POTENTIAL_ENE =     -417619.23097673  RMSG =       2.8526  MAXG =      20.5335
+     STEP       11 POTENTIAL_ENE =     -417669.94642643  RMSG =       2.7780  MAXG =      17.4905
+     STEP       12 POTENTIAL_ENE =     -417724.37902783  RMSG =       2.3609  MAXG =      12.5853
+     STEP       13 POTENTIAL_ENE =     -417799.69425996  RMSG =       3.3409  MAXG =      31.0906
+     STEP       14 POTENTIAL_ENE =     -417825.73890568  RMSG =       3.8434  MAXG =      29.1573
+     STEP       15 POTENTIAL_ENE =     -417850.97488204  RMSG =       1.8451  MAXG =      16.6928
+     STEP       16 POTENTIAL_ENE =     -417870.20106080  RMSG =       1.7470  MAXG =       9.7462
+     STEP       17 POTENTIAL_ENE =     -417895.68875305  RMSG =       2.3037  MAXG =      16.7308
+     STEP       18 POTENTIAL_ENE =     -417933.03253152  RMSG =       2.5762  MAXG =      19.2668
+     STEP       19 POTENTIAL_ENE =     -417936.54791256  RMSG =       4.7786  MAXG =      45.1644
+     STEP       20 POTENTIAL_ENE =     -417954.45266667  RMSG =       2.4768  MAXG =      23.7185
+     STEP       21 POTENTIAL_ENE =     -417974.56683986  RMSG =       1.3431  MAXG =       7.5613
+     STEP       22 POTENTIAL_ENE =     -417989.06717728  RMSG =       1.3507  MAXG =       8.8950
+     STEP       23 POTENTIAL_ENE =     -418003.75421945  RMSG =       1.6203  MAXG =      11.7759
+     STEP       24 POTENTIAL_ENE =     -418026.07768566  RMSG =       2.3855  MAXG =      20.9758
+     STEP       25 POTENTIAL_ENE =     -418047.17511676  RMSG =       1.7496  MAXG =      10.7222
+     STEP       26 POTENTIAL_ENE =     -418061.91414518  RMSG =       1.1957  MAXG =       7.1460
+     STEP       27 POTENTIAL_ENE =     -418071.84337867  RMSG =       1.2786  MAXG =       8.7447
+     STEP       28 POTENTIAL_ENE =     -418083.14287834  RMSG =       1.3717  MAXG =       8.1650
+     STEP       29 POTENTIAL_ENE =     -418100.09254651  RMSG =       1.3449  MAXG =       7.4892
+     STEP       30 POTENTIAL_ENE =     -418111.21315944  RMSG =       2.8806  MAXG =      19.1634
+     STEP       31 POTENTIAL_ENE =     -418127.32280844  RMSG =       1.0943  MAXG =       8.3174
+     STEP       32 POTENTIAL_ENE =     -418132.13148773  RMSG =       0.9125  MAXG =       6.3737
+     STEP       33 POTENTIAL_ENE =     -418142.63066519  RMSG =       1.4466  MAXG =      12.9125
+     STEP       34 POTENTIAL_ENE =     -418156.73060883  RMSG =       1.1350  MAXG =       6.2654
+     STEP       35 POTENTIAL_ENE =     -418169.38816617  RMSG =       1.2284  MAXG =       8.3654
+     STEP       36 POTENTIAL_ENE =     -418174.63442724  RMSG =       1.9389  MAXG =      16.5675
+     STEP       37 POTENTIAL_ENE =     -418183.05033985  RMSG =       0.8583  MAXG =       5.9746
+     STEP       38 POTENTIAL_ENE =     -418187.73539435  RMSG =       0.7562  MAXG =       4.4833
+     STEP       39 POTENTIAL_ENE =     -418197.21618151  RMSG =       1.1157  MAXG =       7.8497
+     STEP       40 POTENTIAL_ENE =     -418204.66289716  RMSG =       2.1592  MAXG =      26.3988
+     STEP       41 POTENTIAL_ENE =     -418214.61803152  RMSG =       1.0303  MAXG =       6.8411
+     STEP       42 POTENTIAL_ENE =     -418220.48847523  RMSG =       0.6985  MAXG =       4.2026
+     STEP       43 POTENTIAL_ENE =     -418224.69344020  RMSG =       0.8320  MAXG =       7.3803
+     STEP       44 POTENTIAL_ENE =     -418231.27263544  RMSG =       1.3726  MAXG =      11.3599
+     STEP       45 POTENTIAL_ENE =     -418239.26791954  RMSG =       0.9935  MAXG =       6.7881
+     STEP       46 POTENTIAL_ENE =     -418245.79289082  RMSG =       0.7232  MAXG =       4.3362
+     STEP       47 POTENTIAL_ENE =     -418250.66752881  RMSG =       1.1536  MAXG =       8.8177
+     STEP       48 POTENTIAL_ENE =     -418254.88831474  RMSG =       0.7570  MAXG =       4.7622
+     STEP       49 POTENTIAL_ENE =     -418259.05275454  RMSG =       0.7975  MAXG =       4.7131
+     STEP       50 POTENTIAL_ENE =     -418266.62432057  RMSG =       1.0512  MAXG =       9.9064
+     STEP       51 POTENTIAL_ENE =     -418268.23097299  RMSG =       1.8464  MAXG =      15.6024
+     STEP       52 POTENTIAL_ENE =     -418273.75937779  RMSG =       0.7116  MAXG =       3.2942
+     STEP       53 POTENTIAL_ENE =     -418276.52125012  RMSG =       0.5252  MAXG =       2.4881
+     STEP       54 POTENTIAL_ENE =     -418279.82229842  RMSG =       0.7147  MAXG =       4.3807
+     STEP       55 POTENTIAL_ENE =     -418285.36326658  RMSG =       0.8658  MAXG =       5.3219
+     STEP       56 POTENTIAL_ENE =     -418280.85454197  RMSG =       2.9666  MAXG =      20.7144
+     STEP       57 POTENTIAL_ENE =     -418289.21297474  RMSG =       1.2952  MAXG =       9.1816
+     STEP       58 POTENTIAL_ENE =     -418295.00323841  RMSG =       0.6382  MAXG =       4.0777
+     STEP       59 POTENTIAL_ENE =     -418298.21491838  RMSG =       0.5695  MAXG =       4.0831
+     STEP       60 POTENTIAL_ENE =     -418301.47709436  RMSG =       0.7865  MAXG =       5.5722
+     STEP       61 POTENTIAL_ENE =     -418305.15324039  RMSG =       0.7523  MAXG =       5.6581
+     STEP       62 POTENTIAL_ENE =     -418310.31122020  RMSG =       0.7401  MAXG =       4.3498
+     STEP       63 POTENTIAL_ENE =     -418312.82363617  RMSG =       1.2418  MAXG =      16.8975
+     STEP       64 POTENTIAL_ENE =     -418316.25085198  RMSG =       0.5142  MAXG =       3.7665
+     STEP       65 POTENTIAL_ENE =     -418318.01549135  RMSG =       0.5039  MAXG =       5.2326
+     STEP       66 POTENTIAL_ENE =     -418321.53518674  RMSG =       0.7272  MAXG =      12.4665
+     STEP       67 POTENTIAL_ENE =     -418325.40586795  RMSG =       1.0868  MAXG =      11.2612
+     STEP       68 POTENTIAL_ENE =     -418328.64760539  RMSG =       0.7854  MAXG =      11.9024
+     STEP       69 POTENTIAL_ENE =     -418330.87557060  RMSG =       0.4639  MAXG =       4.0987
+     STEP       70 POTENTIAL_ENE =     -418332.87441220  RMSG =       0.5511  MAXG =       4.8302
+     STEP       71 POTENTIAL_ENE =     -418334.92082316  RMSG =       0.7109  MAXG =      16.8538
+     STEP       72 POTENTIAL_ENE =     -418339.18268587  RMSG =       0.7414  MAXG =       9.9689
+     STEP       73 POTENTIAL_ENE =     -418339.79229312  RMSG =       1.4610  MAXG =      18.8351
+     STEP       74 POTENTIAL_ENE =     -418343.07426104  RMSG =       0.4709  MAXG =       4.3630
+     STEP       75 POTENTIAL_ENE =     -418344.09477694  RMSG =       0.3461  MAXG =       2.1702
+     STEP       76 POTENTIAL_ENE =     -418345.83459688  RMSG =       0.4948  MAXG =       5.1276
+     STEP       77 POTENTIAL_ENE =     -418348.26285796  RMSG =       0.6687  MAXG =      11.5664
+     STEP       78 POTENTIAL_ENE =     -418348.22922382  RMSG =       1.5257  MAXG =      11.3492
+     STEP       79 POTENTIAL_ENE =     -418349.95815570  RMSG =       0.8407  MAXG =       7.5400
+     STEP       80 POTENTIAL_ENE =     -418352.16697019  RMSG =       0.4447  MAXG =       3.2998
+     STEP       81 POTENTIAL_ENE =     -418353.75389050  RMSG =       0.3743  MAXG =       3.0835
+     STEP       82 POTENTIAL_ENE =     -418355.21413358  RMSG =       0.5185  MAXG =       4.6221
+     STEP       83 POTENTIAL_ENE =     -418357.19763958  RMSG =       0.6142  MAXG =       7.4475
+     STEP       84 POTENTIAL_ENE =     -418359.66360338  RMSG =       0.5110  MAXG =       6.5549
+     STEP       85 POTENTIAL_ENE =     -418361.36283960  RMSG =       0.8492  MAXG =       9.5621
+     STEP       86 POTENTIAL_ENE =     -418363.16214870  RMSG =       0.4014  MAXG =       2.4039
+     STEP       87 POTENTIAL_ENE =     -418364.07580979  RMSG =       0.3911  MAXG =       2.5848
+     STEP       88 POTENTIAL_ENE =     -418366.75060086  RMSG =       0.6118  MAXG =       8.3747
+     STEP       89 POTENTIAL_ENE =     -418367.66567034  RMSG =       1.2322  MAXG =      13.0736
+     STEP       90 POTENTIAL_ENE =     -418370.39130967  RMSG =       0.4629  MAXG =       5.5592
+     STEP       91 POTENTIAL_ENE =     -418371.56933153  RMSG =       0.3523  MAXG =       2.7397
+     STEP       92 POTENTIAL_ENE =     -418372.93992102  RMSG =       0.4427  MAXG =       4.4290
+     STEP       93 POTENTIAL_ENE =     -418375.37340516  RMSG =       0.6721  MAXG =       7.2255
+     STEP       94 POTENTIAL_ENE =     -418377.11579063  RMSG =       0.9579  MAXG =      11.0908
+     STEP       95 POTENTIAL_ENE =     -418379.74729419  RMSG =       0.4941  MAXG =       6.6818
+     STEP       96 POTENTIAL_ENE =     -418381.14436424  RMSG =       0.4082  MAXG =       3.6871
+     STEP       97 POTENTIAL_ENE =     -418382.52952535  RMSG =       0.4105  MAXG =       4.1312
+     STEP       98 POTENTIAL_ENE =     -418384.60661550  RMSG =       0.7182  MAXG =       7.8151
+     STEP       99 POTENTIAL_ENE =     -418386.87915345  RMSG =       0.5579  MAXG =       6.0266
+     STEP      100 POTENTIAL_ENE =     -418388.83247237  RMSG =       0.4318  MAXG =       4.2218
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:          3    -418390.5302          0.6341         13.9191        287.6190        184.6959          0.0000       1716.4014     -16529.2848    -404049.9616
+
+  maxg =    13.9191 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 4 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418390.83141804  RMSG =       0.4411  MAXG =       4.2559
+     STEP        2 POTENTIAL_ENE =     -404369.19945144  RMSG =      91.5279  MAXG =     398.3333
+     STEP        3 POTENTIAL_ENE =     -418391.37307805  RMSG =       0.5122  MAXG =       4.1379
+     STEP        4 POTENTIAL_ENE =     -418392.12749189  RMSG =       0.4010  MAXG =       3.4599
+     STEP        5 POTENTIAL_ENE =     -418393.91310836  RMSG =       0.3194  MAXG =       2.6023
+     STEP        6 POTENTIAL_ENE =     -418394.77174834  RMSG =       0.4562  MAXG =       6.0869
+     STEP        7 POTENTIAL_ENE =     -418395.62517746  RMSG =       0.3540  MAXG =       4.9578
+     STEP        8 POTENTIAL_ENE =     -418396.50152643  RMSG =       0.4741  MAXG =       4.3299
+     STEP        9 POTENTIAL_ENE =     -418397.24867783  RMSG =       0.3207  MAXG =       3.2201
+     STEP       10 POTENTIAL_ENE =     -418398.11870716  RMSG =       0.3685  MAXG =       5.4613
+     STEP       11 POTENTIAL_ENE =     -418399.45887771  RMSG =       0.4303  MAXG =       7.9564
+     STEP       12 POTENTIAL_ENE =     -418399.37202385  RMSG =       1.1231  MAXG =      15.1117
+     STEP       13 POTENTIAL_ENE =     -418400.16232294  RMSG =       0.5782  MAXG =       5.0427
+     STEP       14 POTENTIAL_ENE =     -418401.16624649  RMSG =       0.3621  MAXG =       3.2069
+     STEP       15 POTENTIAL_ENE =     -418402.35806492  RMSG =       0.3176  MAXG =       3.5791
+     STEP       16 POTENTIAL_ENE =     -418403.44288511  RMSG =       0.4510  MAXG =       4.2403
+     STEP       17 POTENTIAL_ENE =     -418404.63109090  RMSG =       0.5594  MAXG =       5.8750
+     STEP       18 POTENTIAL_ENE =     -418405.87029333  RMSG =       0.3656  MAXG =       3.3713
+     STEP       19 POTENTIAL_ENE =     -418407.15994795  RMSG =       0.3576  MAXG =       2.6971
+     STEP       20 POTENTIAL_ENE =     -418408.10088844  RMSG =       0.4626  MAXG =       7.0317
+     STEP       21 POTENTIAL_ENE =     -418409.49168438  RMSG =       0.4162  MAXG =       7.1889
+     STEP       22 POTENTIAL_ENE =     -418411.23916571  RMSG =       0.7662  MAXG =      12.3352
+     STEP       23 POTENTIAL_ENE =     -418413.00268509  RMSG =       0.4529  MAXG =       5.8934
+     STEP       24 POTENTIAL_ENE =     -418413.97404979  RMSG =       0.3609  MAXG =       3.9932
+     STEP       25 POTENTIAL_ENE =     -418415.58761015  RMSG =       0.5516  MAXG =       7.0065
+     STEP       26 POTENTIAL_ENE =     -418417.05731658  RMSG =       0.4916  MAXG =       6.6412
+     STEP       27 POTENTIAL_ENE =     -418418.21398107  RMSG =       0.3652  MAXG =       3.3515
+     STEP       28 POTENTIAL_ENE =     -418419.48372045  RMSG =       0.6350  MAXG =       7.8200
+     STEP       29 POTENTIAL_ENE =     -418420.46817304  RMSG =       0.3884  MAXG =       5.6543
+     STEP       30 POTENTIAL_ENE =     -418421.07636303  RMSG =       0.3304  MAXG =       3.9797
+     STEP       31 POTENTIAL_ENE =     -418423.03184941  RMSG =       0.5773  MAXG =       8.7004
+     STEP       32 POTENTIAL_ENE =     -418423.47192122  RMSG =       0.8190  MAXG =      14.9723
+     STEP       33 POTENTIAL_ENE =     -418424.64206990  RMSG =       0.3124  MAXG =       4.2539
+     STEP       34 POTENTIAL_ENE =     -418425.26029326  RMSG =       0.2314  MAXG =       2.0192
+     STEP       35 POTENTIAL_ENE =     -418426.25586819  RMSG =       0.3557  MAXG =       5.3506
+     STEP       36 POTENTIAL_ENE =     -418427.50561145  RMSG =       0.4825  MAXG =       8.7978
+     STEP       37 POTENTIAL_ENE =     -418428.51623401  RMSG =       0.7466  MAXG =      10.5993
+     STEP       38 POTENTIAL_ENE =     -418430.16008594  RMSG =       0.3762  MAXG =       6.4064
+     STEP       39 POTENTIAL_ENE =     -418430.83197436  RMSG =       0.3051  MAXG =       5.0106
+     STEP       40 POTENTIAL_ENE =     -418431.81591454  RMSG =       0.3398  MAXG =       4.0588
+     STEP       41 POTENTIAL_ENE =     -418433.20542743  RMSG =       0.5418  MAXG =      10.1478
+     STEP       42 POTENTIAL_ENE =     -418434.73702956  RMSG =       0.4763  MAXG =       7.2874
+     STEP       43 POTENTIAL_ENE =     -418436.05417658  RMSG =       0.3715  MAXG =       6.3492
+     STEP       44 POTENTIAL_ENE =     -418436.96711199  RMSG =       0.3255  MAXG =       4.8164
+     STEP       45 POTENTIAL_ENE =     -418437.80661891  RMSG =       0.3697  MAXG =       4.1647
+     STEP       46 POTENTIAL_ENE =     -418438.93470410  RMSG =       0.3405  MAXG =       4.9307
+     STEP       47 POTENTIAL_ENE =     -418440.10405709  RMSG =       0.7040  MAXG =       8.0602
+     STEP       48 POTENTIAL_ENE =     -418441.28442216  RMSG =       0.3380  MAXG =       4.9156
+     STEP       49 POTENTIAL_ENE =     -418441.80246187  RMSG =       0.2713  MAXG =       2.9486
+     STEP       50 POTENTIAL_ENE =     -418442.68348911  RMSG =       0.3659  MAXG =       8.6912
+     STEP       51 POTENTIAL_ENE =     -418443.64373188  RMSG =       0.3712  MAXG =       9.7649
+     STEP       52 POTENTIAL_ENE =     -418444.66737299  RMSG =       0.3304  MAXG =       8.8926
+     STEP       53 POTENTIAL_ENE =     -418445.33705587  RMSG =       0.7873  MAXG =       9.2987
+     STEP       54 POTENTIAL_ENE =     -418446.65030589  RMSG =       0.3067  MAXG =       3.0898
+     STEP       55 POTENTIAL_ENE =     -418447.07513283  RMSG =       0.2525  MAXG =       3.3225
+     STEP       56 POTENTIAL_ENE =     -418448.25338882  RMSG =       0.3181  MAXG =       4.3344
+     STEP       57 POTENTIAL_ENE =     -418448.51187395  RMSG =       1.0161  MAXG =      15.2170
+     STEP       58 POTENTIAL_ENE =     -418450.12253311  RMSG =       0.3327  MAXG =       2.9450
+     STEP       59 POTENTIAL_ENE =     -418450.62511338  RMSG =       0.2342  MAXG =       2.4040
+     STEP       60 POTENTIAL_ENE =     -418451.25857175  RMSG =       0.3003  MAXG =       4.1413
+     STEP       61 POTENTIAL_ENE =     -418452.07122737  RMSG =       0.5130  MAXG =       8.2691
+     STEP       62 POTENTIAL_ENE =     -418453.04104088  RMSG =       0.3562  MAXG =       3.9237
+     STEP       63 POTENTIAL_ENE =     -418453.81447068  RMSG =       0.2493  MAXG =       2.3115
+     STEP       64 POTENTIAL_ENE =     -418454.57670884  RMSG =       0.3654  MAXG =       5.9930
+     STEP       65 POTENTIAL_ENE =     -418455.23422280  RMSG =       0.3468  MAXG =       5.3301
+     STEP       66 POTENTIAL_ENE =     -418455.99370439  RMSG =       0.3172  MAXG =       4.6097
+     STEP       67 POTENTIAL_ENE =     -418456.69011382  RMSG =       0.6804  MAXG =       9.3716
+     STEP       68 POTENTIAL_ENE =     -418457.60600262  RMSG =       0.2626  MAXG =       2.6835
+     STEP       69 POTENTIAL_ENE =     -418457.97756982  RMSG =       0.2262  MAXG =       2.1155
+     STEP       70 POTENTIAL_ENE =     -418458.93424622  RMSG =       0.3234  MAXG =       5.2847
+     STEP       71 POTENTIAL_ENE =     -418459.22454483  RMSG =       0.8054  MAXG =      13.8240
+     STEP       72 POTENTIAL_ENE =     -418460.20058984  RMSG =       0.3350  MAXG =       4.6705
+     STEP       73 POTENTIAL_ENE =     -418460.80505456  RMSG =       0.2153  MAXG =       1.6422
+     STEP       74 POTENTIAL_ENE =     -418461.40815024  RMSG =       0.2731  MAXG =       3.8228
+     STEP       75 POTENTIAL_ENE =     -418462.34702277  RMSG =       0.3316  MAXG =       4.2678
+     STEP       76 POTENTIAL_ENE =     -418460.98643512  RMSG =       1.4144  MAXG =      19.9150
+     STEP       77 POTENTIAL_ENE =     -418463.03662999  RMSG =       0.5403  MAXG =       7.0198
+     STEP       78 POTENTIAL_ENE =     -418464.20242986  RMSG =       0.3027  MAXG =       3.2142
+     STEP       79 POTENTIAL_ENE =     -418464.95589876  RMSG =       0.3112  MAXG =       5.2493
+     STEP       80 POTENTIAL_ENE =     -418465.61100229  RMSG =       0.3548  MAXG =       8.4113
+     STEP       81 POTENTIAL_ENE =     -418466.16940717  RMSG =       0.2716  MAXG =       3.2724
+     STEP       82 POTENTIAL_ENE =     -418467.05718149  RMSG =       0.3231  MAXG =       3.9853
+     STEP       83 POTENTIAL_ENE =     -418467.74388674  RMSG =       0.3685  MAXG =       7.8579
+     STEP       84 POTENTIAL_ENE =     -418468.28104713  RMSG =       0.2457  MAXG =       2.7007
+     STEP       85 POTENTIAL_ENE =     -418468.87054363  RMSG =       0.2492  MAXG =       2.5946
+     STEP       86 POTENTIAL_ENE =     -418469.32531731  RMSG =       0.2978  MAXG =       4.9763
+     STEP       87 POTENTIAL_ENE =     -418469.91853948  RMSG =       0.2623  MAXG =       4.0369
+     STEP       88 POTENTIAL_ENE =     -418469.88383062  RMSG =       0.8210  MAXG =       9.5736
+     STEP       89 POTENTIAL_ENE =     -418470.37526440  RMSG =       0.4214  MAXG =       4.6178
+     STEP       90 POTENTIAL_ENE =     -418470.93190109  RMSG =       0.1942  MAXG =       2.5095
+     STEP       91 POTENTIAL_ENE =     -418471.24751501  RMSG =       0.1830  MAXG =       1.9985
+     STEP       92 POTENTIAL_ENE =     -418471.81090318  RMSG =       0.2942  MAXG =       4.7032
+     STEP       93 POTENTIAL_ENE =     -418472.22341330  RMSG =       0.4125  MAXG =       3.7397
+     STEP       94 POTENTIAL_ENE =     -418472.65203302  RMSG =       0.2279  MAXG =       2.0707
+     STEP       95 POTENTIAL_ENE =     -418473.08742658  RMSG =       0.1871  MAXG =       1.9528
+     STEP       96 POTENTIAL_ENE =     -418473.35450494  RMSG =       0.2196  MAXG =       1.9606
+     STEP       97 POTENTIAL_ENE =     -418473.94903909  RMSG =       0.4313  MAXG =       4.5389
+     STEP       98 POTENTIAL_ENE =     -418474.51800611  RMSG =       0.2744  MAXG =       2.4499
+     STEP       99 POTENTIAL_ENE =     -418474.85071898  RMSG =       0.2009  MAXG =       1.7533
+     STEP      100 POTENTIAL_ENE =     -418475.20280259  RMSG =       0.2163  MAXG =       2.0256
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:          4    -418475.2133          0.3883         11.9536        293.2871        192.2712          0.0000       1778.4268     -16684.7730    -404054.4254
+
+  maxg =    11.9536 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 5 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418475.54907481  RMSG =       0.2230  MAXG =       2.7227
+     STEP        2 POTENTIAL_ENE =     -407105.95890088  RMSG =      81.4702  MAXG =     403.2234
+     STEP        3 POTENTIAL_ENE =     -418475.68033096  RMSG =       0.2396  MAXG =       2.2824
+     STEP        4 POTENTIAL_ENE =     -418475.84270649  RMSG =       0.1811  MAXG =       1.3530
+     STEP        5 POTENTIAL_ENE =     -418476.18225683  RMSG =       0.1342  MAXG =       1.6089
+     STEP        6 POTENTIAL_ENE =     -418476.37957049  RMSG =       0.1682  MAXG =       2.9691
+     STEP        7 POTENTIAL_ENE =     -418476.63790234  RMSG =       0.1726  MAXG =       2.5347
+     STEP        8 POTENTIAL_ENE =     -418476.81953635  RMSG =       0.1519  MAXG =       2.2418
+     STEP        9 POTENTIAL_ENE =     -418477.02963971  RMSG =       0.1761  MAXG =       2.3110
+     STEP       10 POTENTIAL_ENE =     -418477.28709629  RMSG =       0.2526  MAXG =       7.1803
+     STEP       11 POTENTIAL_ENE =     -418477.50043355  RMSG =       0.2032  MAXG =       3.6729
+     STEP       12 POTENTIAL_ENE =     -418477.64992148  RMSG =       0.1340  MAXG =       1.9988
+     STEP       13 POTENTIAL_ENE =     -418477.86102932  RMSG =       0.1562  MAXG =       1.6890
+     STEP       14 POTENTIAL_ENE =     -418478.06674752  RMSG =       0.2076  MAXG =       2.4719
+     STEP       15 POTENTIAL_ENE =     -418478.43684855  RMSG =       0.2290  MAXG =       2.6921
+     STEP       16 POTENTIAL_ENE =     -418478.64797459  RMSG =       0.3346  MAXG =       6.4613
+     STEP       17 POTENTIAL_ENE =     -418478.91330944  RMSG =       0.1635  MAXG =       2.0222
+     STEP       18 POTENTIAL_ENE =     -418479.12378852  RMSG =       0.1483  MAXG =       1.4294
+     STEP       19 POTENTIAL_ENE =     -418479.35105735  RMSG =       0.1878  MAXG =       3.1094
+     STEP       20 POTENTIAL_ENE =     -418479.66401499  RMSG =       0.3996  MAXG =       5.7084
+     STEP       21 POTENTIAL_ENE =     -418480.03057913  RMSG =       0.2022  MAXG =       3.2655
+     STEP       22 POTENTIAL_ENE =     -418480.22441080  RMSG =       0.1491  MAXG =       1.2646
+     STEP       23 POTENTIAL_ENE =     -418480.49634690  RMSG =       0.2007  MAXG =       2.7579
+     STEP       24 POTENTIAL_ENE =     -418480.74970815  RMSG =       0.2776  MAXG =       6.1504
+     STEP       25 POTENTIAL_ENE =     -418481.07651949  RMSG =       0.2239  MAXG =       3.7380
+     STEP       26 POTENTIAL_ENE =     -418481.39870979  RMSG =       0.3927  MAXG =       7.1142
+     STEP       27 POTENTIAL_ENE =     -418481.71222048  RMSG =       0.1898  MAXG =       4.4357
+     STEP       28 POTENTIAL_ENE =     -418481.82175077  RMSG =       0.1418  MAXG =       2.4478
+     STEP       29 POTENTIAL_ENE =     -418482.16739472  RMSG =       0.1434  MAXG =       1.8289
+     STEP       30 POTENTIAL_ENE =     -418482.39848342  RMSG =       0.3889  MAXG =       9.6843
+     STEP       31 POTENTIAL_ENE =     -418482.71507161  RMSG =       0.1941  MAXG =       4.0243
+     STEP       32 POTENTIAL_ENE =     -418482.94489523  RMSG =       0.1442  MAXG =       1.7096
+     STEP       33 POTENTIAL_ENE =     -418483.12821712  RMSG =       0.1570  MAXG =       3.0868
+     STEP       34 POTENTIAL_ENE =     -418483.45669546  RMSG =       0.2536  MAXG =       2.3840
+     STEP       35 POTENTIAL_ENE =     -418483.79688643  RMSG =       0.2698  MAXG =       6.7284
+     STEP       36 POTENTIAL_ENE =     -418484.09836098  RMSG =       0.1659  MAXG =       1.3121
+     STEP       37 POTENTIAL_ENE =     -418484.42641555  RMSG =       0.1788  MAXG =       2.5722
+     STEP       38 POTENTIAL_ENE =     -418484.61160622  RMSG =       0.2226  MAXG =       5.1525
+     STEP       39 POTENTIAL_ENE =     -418484.86493032  RMSG =       0.1905  MAXG =       2.8952
+     STEP       40 POTENTIAL_ENE =     -418485.31924074  RMSG =       0.3426  MAXG =       4.0567
+     STEP       41 POTENTIAL_ENE =     -418485.55513927  RMSG =       0.2906  MAXG =       4.5433
+     STEP       42 POTENTIAL_ENE =     -418485.75430807  RMSG =       0.1597  MAXG =       2.5689
+     STEP       43 POTENTIAL_ENE =     -418485.94820010  RMSG =       0.1497  MAXG =       1.3885
+     STEP       44 POTENTIAL_ENE =     -418486.20461477  RMSG =       0.1910  MAXG =       2.4411
+     STEP       45 POTENTIAL_ENE =     -418486.68034560  RMSG =       0.2769  MAXG =       4.4038
+     STEP       46 POTENTIAL_ENE =     -418486.96836523  RMSG =       0.4592  MAXG =       4.8736
+     STEP       47 POTENTIAL_ENE =     -418487.46048583  RMSG =       0.1678  MAXG =       1.6951
+     STEP       48 POTENTIAL_ENE =     -418487.66260821  RMSG =       0.1648  MAXG =       1.8357
+     STEP       49 POTENTIAL_ENE =     -418487.99384765  RMSG =       0.2196  MAXG =       2.8874
+     STEP       50 POTENTIAL_ENE =     -418488.17785802  RMSG =       0.5554  MAXG =      12.9519
+     STEP       51 POTENTIAL_ENE =     -418488.80306444  RMSG =       0.2104  MAXG =       3.1803
+     STEP       52 POTENTIAL_ENE =     -418489.06832597  RMSG =       0.1680  MAXG =       1.6857
+     STEP       53 POTENTIAL_ENE =     -418489.31413466  RMSG =       0.1950  MAXG =       4.1137
+     STEP       54 POTENTIAL_ENE =     -418489.55969235  RMSG =       0.2338  MAXG =       2.6513
+     STEP       55 POTENTIAL_ENE =     -418489.93085623  RMSG =       0.2077  MAXG =       2.8547
+     STEP       56 POTENTIAL_ENE =     -418490.41963983  RMSG =       0.2161  MAXG =       3.1778
+     STEP       57 POTENTIAL_ENE =     -418490.65494228  RMSG =       0.2672  MAXG =       4.3915
+     STEP       58 POTENTIAL_ENE =     -418490.87754883  RMSG =       0.1709  MAXG =       1.6741
+     STEP       59 POTENTIAL_ENE =     -418491.17729650  RMSG =       0.1854  MAXG =       1.8222
+     STEP       60 POTENTIAL_ENE =     -418491.46243471  RMSG =       0.2523  MAXG =       3.7089
+     STEP       61 POTENTIAL_ENE =     -418491.73876040  RMSG =       0.3450  MAXG =       4.6380
+     STEP       62 POTENTIAL_ENE =     -418492.07399721  RMSG =       0.1673  MAXG =       1.4138
+     STEP       63 POTENTIAL_ENE =     -418492.34934401  RMSG =       0.1582  MAXG =       1.4144
+     STEP       64 POTENTIAL_ENE =     -418492.58824873  RMSG =       0.1885  MAXG =       2.1733
+     STEP       65 POTENTIAL_ENE =     -418492.77683402  RMSG =       0.4918  MAXG =       7.0677
+     STEP       66 POTENTIAL_ENE =     -418493.25464241  RMSG =       0.1659  MAXG =       1.9800
+     STEP       67 POTENTIAL_ENE =     -418493.46753405  RMSG =       0.1447  MAXG =       1.8157
+     STEP       68 POTENTIAL_ENE =     -418493.72080738  RMSG =       0.1873  MAXG =       2.3744
+     STEP       69 POTENTIAL_ENE =     -418493.96578319  RMSG =       0.4247  MAXG =       9.2699
+     STEP       70 POTENTIAL_ENE =     -418494.37098993  RMSG =       0.2089  MAXG =       3.1031
+     STEP       71 POTENTIAL_ENE =     -418494.70064881  RMSG =       0.1476  MAXG =       1.6455
+     STEP       72 POTENTIAL_ENE =     -418494.91338468  RMSG =       0.1709  MAXG =       3.3007
+     STEP       73 POTENTIAL_ENE =     -418495.09238893  RMSG =       0.3034  MAXG =       6.0540
+     STEP       74 POTENTIAL_ENE =     -418495.36234379  RMSG =       0.1706  MAXG =       1.9998
+     STEP       75 POTENTIAL_ENE =     -418495.78842137  RMSG =       0.1993  MAXG =       3.1207
+     STEP       76 POTENTIAL_ENE =     -418496.06542707  RMSG =       0.2128  MAXG =       4.6239
+     STEP       77 POTENTIAL_ENE =     -418495.79506918  RMSG =       0.7203  MAXG =      18.7412
+     STEP       78 POTENTIAL_ENE =     -418496.23366565  RMSG =       0.2972  MAXG =       6.2939
+     STEP       79 POTENTIAL_ENE =     -418496.51546207  RMSG =       0.1764  MAXG =       2.8527
+     STEP       80 POTENTIAL_ENE =     -418496.80151805  RMSG =       0.1768  MAXG =       1.9602
+     STEP       81 POTENTIAL_ENE =     -418497.14408248  RMSG =       0.2749  MAXG =       3.3207
+     STEP       82 POTENTIAL_ENE =     -418497.45009281  RMSG =       0.3044  MAXG =       4.8324
+     STEP       83 POTENTIAL_ENE =     -418497.72166815  RMSG =       0.1735  MAXG =       1.6404
+     STEP       84 POTENTIAL_ENE =     -418498.02216565  RMSG =       0.1780  MAXG =       2.0347
+     STEP       85 POTENTIAL_ENE =     -418498.23482193  RMSG =       0.2159  MAXG =       3.5882
+     STEP       86 POTENTIAL_ENE =     -418498.58469948  RMSG =       0.3411  MAXG =       3.9839
+     STEP       87 POTENTIAL_ENE =     -418498.93038106  RMSG =       0.2049  MAXG =       2.9475
+     STEP       88 POTENTIAL_ENE =     -418499.12266500  RMSG =       0.1907  MAXG =       3.0449
+     STEP       89 POTENTIAL_ENE =     -418499.30161625  RMSG =       0.2006  MAXG =       2.9257
+     STEP       90 POTENTIAL_ENE =     -418499.49018060  RMSG =       0.1717  MAXG =       2.3500
+     STEP       91 POTENTIAL_ENE =     -418499.78269628  RMSG =       0.1924  MAXG =       3.7002
+     STEP       92 POTENTIAL_ENE =     -418500.09700732  RMSG =       0.1997  MAXG =       3.3637
+     STEP       93 POTENTIAL_ENE =     -418500.02154171  RMSG =       0.4924  MAXG =       6.2222
+     STEP       94 POTENTIAL_ENE =     -418500.22752790  RMSG =       0.2103  MAXG =       2.8967
+     STEP       95 POTENTIAL_ENE =     -418500.37245369  RMSG =       0.1467  MAXG =       2.1148
+     STEP       96 POTENTIAL_ENE =     -418500.61531395  RMSG =       0.1591  MAXG =       2.8096
+     STEP       97 POTENTIAL_ENE =     -418500.81067945  RMSG =       0.2005  MAXG =       3.3437
+     STEP       98 POTENTIAL_ENE =     -418501.02633492  RMSG =       0.2623  MAXG =       4.1365
+     STEP       99 POTENTIAL_ENE =     -418501.24927181  RMSG =       0.1436  MAXG =       1.4824
+     STEP      100 POTENTIAL_ENE =     -418501.42266907  RMSG =       0.1460  MAXG =       1.9265
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:          5    -418501.0340          0.3248         11.7409        295.3396        192.7869          0.0000       1804.1806     -16739.5175    -404053.8237
+
+  maxg =    11.7409 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 6 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418501.19427645  RMSG =       0.1516  MAXG =       1.9695
+     STEP        2 POTENTIAL_ENE =     -409769.51908877  RMSG =      71.0529  MAXG =     384.1054
+     STEP        3 POTENTIAL_ENE =     -418501.26286674  RMSG =       0.1690  MAXG =       1.3264
+     STEP        4 POTENTIAL_ENE =     -418501.34442471  RMSG =       0.1270  MAXG =       0.9925
+     STEP        5 POTENTIAL_ENE =     -418501.51154029  RMSG =       0.0948  MAXG =       0.7974
+     STEP        6 POTENTIAL_ENE =     -418501.60890348  RMSG =       0.1241  MAXG =       2.0474
+     STEP        7 POTENTIAL_ENE =     -418501.74866098  RMSG =       0.1180  MAXG =       1.7058
+     STEP        8 POTENTIAL_ENE =     -418501.85440997  RMSG =       0.1375  MAXG =       2.0998
+     STEP        9 POTENTIAL_ENE =     -418501.96975673  RMSG =       0.1336  MAXG =       2.5200
+     STEP       10 POTENTIAL_ENE =     -418502.07610024  RMSG =       0.2561  MAXG =       5.4653
+     STEP       11 POTENTIAL_ENE =     -418502.21085810  RMSG =       0.1026  MAXG =       1.0535
+     STEP       12 POTENTIAL_ENE =     -418502.25965508  RMSG =       0.0943  MAXG =       1.1787
+     STEP       13 POTENTIAL_ENE =     -418502.42477841  RMSG =       0.1362  MAXG =       2.1875
+     STEP       14 POTENTIAL_ENE =     -418502.50809987  RMSG =       0.3264  MAXG =       3.8619
+     STEP       15 POTENTIAL_ENE =     -418502.68548626  RMSG =       0.1421  MAXG =       1.4358
+     STEP       16 POTENTIAL_ENE =     -418502.79789316  RMSG =       0.0999  MAXG =       0.9801
+     STEP       17 POTENTIAL_ENE =     -418502.89111974  RMSG =       0.1189  MAXG =       1.0560
+     STEP       18 POTENTIAL_ENE =     -418503.09042145  RMSG =       0.1533  MAXG =       1.4704
+     STEP       19 POTENTIAL_ENE =     -418503.07866799  RMSG =       0.4603  MAXG =       5.2811
+     STEP       20 POTENTIAL_ENE =     -418503.24950625  RMSG =       0.2296  MAXG =       2.6112
+     STEP       21 POTENTIAL_ENE =     -418503.47964797  RMSG =       0.1254  MAXG =       1.3820
+     STEP       22 POTENTIAL_ENE =     -418503.62983270  RMSG =       0.1132  MAXG =       1.2375
+     STEP       23 POTENTIAL_ENE =     -418503.76962624  RMSG =       0.2365  MAXG =       3.1550
+     STEP       24 POTENTIAL_ENE =     -418503.94006313  RMSG =       0.1398  MAXG =       1.8204
+     STEP       25 POTENTIAL_ENE =     -418504.12085610  RMSG =       0.1410  MAXG =       2.0554
+     STEP       26 POTENTIAL_ENE =     -418504.35626895  RMSG =       0.1882  MAXG =       3.1565
+     STEP       27 POTENTIAL_ENE =     -418504.42645045  RMSG =       0.3895  MAXG =      12.0764
+     STEP       28 POTENTIAL_ENE =     -418504.68678904  RMSG =       0.1555  MAXG =       1.5874
+     STEP       29 POTENTIAL_ENE =     -418504.82597831  RMSG =       0.1362  MAXG =       1.8074
+     STEP       30 POTENTIAL_ENE =     -418504.98974584  RMSG =       0.1710  MAXG =       3.0530
+     STEP       31 POTENTIAL_ENE =     -418505.26425807  RMSG =       0.1957  MAXG =       2.1147
+     STEP       32 POTENTIAL_ENE =     -418505.40281862  RMSG =       0.4080  MAXG =       7.8667
+     STEP       33 POTENTIAL_ENE =     -418505.70998749  RMSG =       0.1339  MAXG =       1.5395
+     STEP       34 POTENTIAL_ENE =     -418505.81018150  RMSG =       0.1131  MAXG =       1.1272
+     STEP       35 POTENTIAL_ENE =     -418505.92796733  RMSG =       0.1360  MAXG =       1.5633
+     STEP       36 POTENTIAL_ENE =     -418506.12049940  RMSG =       0.2180  MAXG =       2.3694
+     STEP       37 POTENTIAL_ENE =     -418506.36853529  RMSG =       0.1667  MAXG =       2.0430
+     STEP       38 POTENTIAL_ENE =     -418506.54321882  RMSG =       0.1226  MAXG =       1.6839
+     STEP       39 POTENTIAL_ENE =     -418506.67284964  RMSG =       0.1416  MAXG =       1.7810
+     STEP       40 POTENTIAL_ENE =     -418506.81933212  RMSG =       0.1450  MAXG =       1.6087
+     STEP       41 POTENTIAL_ENE =     -418507.00757366  RMSG =       0.1291  MAXG =       1.0063
+     STEP       42 POTENTIAL_ENE =     -418507.15434242  RMSG =       0.2385  MAXG =       3.8771
+     STEP       43 POTENTIAL_ENE =     -418507.28295764  RMSG =       0.1381  MAXG =       1.5928
+     STEP       44 POTENTIAL_ENE =     -418507.35136814  RMSG =       0.1045  MAXG =       1.6013
+     STEP       45 POTENTIAL_ENE =     -418507.52248660  RMSG =       0.0966  MAXG =       1.2566
+     STEP       46 POTENTIAL_ENE =     -418507.62066246  RMSG =       0.2469  MAXG =       3.0327
+     STEP       47 POTENTIAL_ENE =     -418507.75805292  RMSG =       0.1203  MAXG =       1.1509
+     STEP       48 POTENTIAL_ENE =     -418507.86173435  RMSG =       0.0964  MAXG =       0.9562
+     STEP       49 POTENTIAL_ENE =     -418507.96817623  RMSG =       0.1233  MAXG =       1.3217
+     STEP       50 POTENTIAL_ENE =     -418508.13279378  RMSG =       0.2298  MAXG =       4.1208
+     STEP       51 POTENTIAL_ENE =     -418508.33939010  RMSG =       0.1546  MAXG =       1.5863
+     STEP       52 POTENTIAL_ENE =     -418508.50007773  RMSG =       0.1163  MAXG =       1.3822
+     STEP       53 POTENTIAL_ENE =     -418508.64743264  RMSG =       0.2166  MAXG =       2.9680
+     STEP       54 POTENTIAL_ENE =     -418508.79056322  RMSG =       0.1405  MAXG =       1.2003
+     STEP       55 POTENTIAL_ENE =     -418508.94582141  RMSG =       0.1469  MAXG =       2.0341
+     STEP       56 POTENTIAL_ENE =     -418509.21602147  RMSG =       0.1786  MAXG =       2.4017
+     STEP       57 POTENTIAL_ENE =     -418509.31028057  RMSG =       0.3488  MAXG =       4.6788
+     STEP       58 POTENTIAL_ENE =     -418509.51732278  RMSG =       0.1547  MAXG =       1.9668
+     STEP       59 POTENTIAL_ENE =     -418509.67453417  RMSG =       0.1237  MAXG =       1.6237
+     STEP       60 POTENTIAL_ENE =     -418509.84876865  RMSG =       0.1854  MAXG =       2.1669
+     STEP       61 POTENTIAL_ENE =     -418510.06922691  RMSG =       0.3056  MAXG =       6.0120
+     STEP       62 POTENTIAL_ENE =     -418510.31253116  RMSG =       0.2347  MAXG =       2.9857
+     STEP       63 POTENTIAL_ENE =     -418510.54695248  RMSG =       0.1456  MAXG =       2.5188
+     STEP       64 POTENTIAL_ENE =     -418510.74941632  RMSG =       0.1846  MAXG =       2.3982
+     STEP       65 POTENTIAL_ENE =     -418510.93624922  RMSG =       0.1940  MAXG =       2.8636
+     STEP       66 POTENTIAL_ENE =     -418511.23113918  RMSG =       0.1812  MAXG =       2.0325
+     STEP       67 POTENTIAL_ENE =     -418511.25430421  RMSG =       0.4992  MAXG =       8.8179
+     STEP       68 POTENTIAL_ENE =     -418511.43100603  RMSG =       0.2552  MAXG =       3.9274
+     STEP       69 POTENTIAL_ENE =     -418511.66703359  RMSG =       0.1461  MAXG =       1.6845
+     STEP       70 POTENTIAL_ENE =     -418511.83154289  RMSG =       0.1302  MAXG =       1.5353
+     STEP       71 POTENTIAL_ENE =     -418511.98756529  RMSG =       0.2221  MAXG =       3.4671
+     STEP       72 POTENTIAL_ENE =     -418512.13847859  RMSG =       0.1316  MAXG =       1.8095
+     STEP       73 POTENTIAL_ENE =     -418512.22946196  RMSG =       0.1159  MAXG =       1.2832
+     STEP       74 POTENTIAL_ENE =     -418512.33286328  RMSG =       0.1481  MAXG =       3.6559
+     STEP       75 POTENTIAL_ENE =     -418512.43710089  RMSG =       0.1113  MAXG =       1.3660
+     STEP       76 POTENTIAL_ENE =     -418512.56163188  RMSG =       0.1131  MAXG =       1.5038
+     STEP       77 POTENTIAL_ENE =     -418512.66554928  RMSG =       0.1898  MAXG =       5.2981
+     STEP       78 POTENTIAL_ENE =     -418512.77355202  RMSG =       0.0958  MAXG =       0.9470
+     STEP       79 POTENTIAL_ENE =     -418512.84704125  RMSG =       0.0825  MAXG =       0.6952
+     STEP       80 POTENTIAL_ENE =     -418512.92373708  RMSG =       0.1090  MAXG =       3.2224
+     STEP       81 POTENTIAL_ENE =     -418513.00240977  RMSG =       0.1358  MAXG =       2.2017
+     STEP       82 POTENTIAL_ENE =     -418513.09203876  RMSG =       0.1004  MAXG =       1.1295
+     STEP       83 POTENTIAL_ENE =     -418513.21272166  RMSG =       0.1098  MAXG =       1.1584
+     STEP       84 POTENTIAL_ENE =     -418513.27224951  RMSG =       0.1392  MAXG =       2.6945
+     STEP       85 POTENTIAL_ENE =     -418513.33562667  RMSG =       0.1093  MAXG =       1.7775
+     STEP       86 POTENTIAL_ENE =     -418513.49534221  RMSG =       0.1180  MAXG =       1.4799
+     STEP       87 POTENTIAL_ENE =     -418513.57044634  RMSG =       0.1462  MAXG =       2.6039
+     STEP       88 POTENTIAL_ENE =     -418513.64306815  RMSG =       0.1149  MAXG =       1.7410
+     STEP       89 POTENTIAL_ENE =     -418513.77907088  RMSG =       0.1151  MAXG =       1.1461
+     STEP       90 POTENTIAL_ENE =     -418513.84965862  RMSG =       0.1642  MAXG =       2.3298
+     STEP       91 POTENTIAL_ENE =     -418513.92154678  RMSG =       0.1175  MAXG =       1.8644
+     STEP       92 POTENTIAL_ENE =     -418514.04924509  RMSG =       0.0860  MAXG =       1.3696
+     STEP       93 POTENTIAL_ENE =     -418514.10132573  RMSG =       0.1178  MAXG =       1.6463
+     STEP       94 POTENTIAL_ENE =     -418514.18037861  RMSG =       0.1124  MAXG =       1.4408
+     STEP       95 POTENTIAL_ENE =     -418514.29301008  RMSG =       0.2300  MAXG =       4.3400
+     STEP       96 POTENTIAL_ENE =     -418514.41074171  RMSG =       0.0981  MAXG =       1.1069
+     STEP       97 POTENTIAL_ENE =     -418514.46972851  RMSG =       0.0880  MAXG =       0.9509
+     STEP       98 POTENTIAL_ENE =     -418514.58806179  RMSG =       0.1124  MAXG =       1.8654
+     STEP       99 POTENTIAL_ENE =     -418514.58336710  RMSG =       0.3236  MAXG =       5.7808
+     STEP      100 POTENTIAL_ENE =     -418514.65223437  RMSG =       0.1571  MAXG =       2.8260
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:          6    -418514.7316          0.2621          9.2175        295.0761        193.2941          0.0000       1820.2237     -16767.7320    -404055.5934
+
+  maxg =     9.2175 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 7 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418514.97176932  RMSG =       0.1704  MAXG =       2.8591
+     STEP        2 POTENTIAL_ENE =     -404760.49789556  RMSG =      93.6310  MAXG =     369.6521
+     STEP        3 POTENTIAL_ENE =     -418515.01431672  RMSG =       0.1353  MAXG =       2.4637
+     STEP        4 POTENTIAL_ENE =     -418515.05492079  RMSG =       0.0818  MAXG =       1.0608
+     STEP        5 POTENTIAL_ENE =     -418515.09277394  RMSG =       0.0838  MAXG =       1.4936
+     STEP        6 POTENTIAL_ENE =     -418515.15346154  RMSG =       0.0853  MAXG =       1.5058
+     STEP        7 POTENTIAL_ENE =     -418515.19984602  RMSG =       0.1470  MAXG =       3.7168
+     STEP        8 POTENTIAL_ENE =     -418515.26026084  RMSG =       0.0753  MAXG =       1.2709
+     STEP        9 POTENTIAL_ENE =     -418515.30996516  RMSG =       0.0653  MAXG =       1.1383
+     STEP       10 POTENTIAL_ENE =     -418515.35742378  RMSG =       0.0869  MAXG =       1.4392
+     STEP       11 POTENTIAL_ENE =     -418515.40820245  RMSG =       0.1573  MAXG =       3.8002
+     STEP       12 POTENTIAL_ENE =     -418515.47311944  RMSG =       0.0761  MAXG =       1.1566
+     STEP       13 POTENTIAL_ENE =     -418515.51730850  RMSG =       0.0638  MAXG =       0.9233
+     STEP       14 POTENTIAL_ENE =     -418515.55312262  RMSG =       0.0715  MAXG =       1.2147
+     STEP       15 POTENTIAL_ENE =     -418515.59371647  RMSG =       0.1566  MAXG =       2.4889
+     STEP       16 POTENTIAL_ENE =     -418515.65424416  RMSG =       0.0776  MAXG =       1.3067
+     STEP       17 POTENTIAL_ENE =     -418515.70192949  RMSG =       0.0670  MAXG =       0.8898
+     STEP       18 POTENTIAL_ENE =     -418515.74453565  RMSG =       0.0704  MAXG =       0.9430
+     STEP       19 POTENTIAL_ENE =     -418515.76843050  RMSG =       0.1943  MAXG =       3.1160
+     STEP       20 POTENTIAL_ENE =     -418515.83409502  RMSG =       0.0817  MAXG =       1.3098
+     STEP       21 POTENTIAL_ENE =     -418515.88149220  RMSG =       0.0666  MAXG =       0.9821
+     STEP       22 POTENTIAL_ENE =     -418515.93986445  RMSG =       0.0952  MAXG =       1.5789
+     STEP       23 POTENTIAL_ENE =     -418516.02855638  RMSG =       0.1117  MAXG =       1.7356
+     STEP       24 POTENTIAL_ENE =     -418515.91398469  RMSG =       0.4063  MAXG =      11.3748
+     STEP       25 POTENTIAL_ENE =     -418516.07820916  RMSG =       0.1571  MAXG =       4.2167
+     STEP       26 POTENTIAL_ENE =     -418516.16756086  RMSG =       0.0916  MAXG =       1.4355
+     STEP       27 POTENTIAL_ENE =     -418516.24967341  RMSG =       0.0835  MAXG =       1.2360
+     STEP       28 POTENTIAL_ENE =     -418516.36705441  RMSG =       0.1378  MAXG =       3.2151
+     STEP       29 POTENTIAL_ENE =     -418516.43700832  RMSG =       0.1992  MAXG =       5.4309
+     STEP       30 POTENTIAL_ENE =     -418516.52125738  RMSG =       0.0937  MAXG =       1.9599
+     STEP       31 POTENTIAL_ENE =     -418516.57695929  RMSG =       0.0720  MAXG =       1.1034
+     STEP       32 POTENTIAL_ENE =     -418516.61761157  RMSG =       0.0967  MAXG =       3.2507
+     STEP       33 POTENTIAL_ENE =     -418516.69462344  RMSG =       0.1058  MAXG =       1.7890
+     STEP       34 POTENTIAL_ENE =     -418516.74161957  RMSG =       0.1786  MAXG =       5.3373
+     STEP       35 POTENTIAL_ENE =     -418516.80096873  RMSG =       0.0743  MAXG =       2.0837
+     STEP       36 POTENTIAL_ENE =     -418516.82736278  RMSG =       0.0559  MAXG =       0.9895
+     STEP       37 POTENTIAL_ENE =     -418516.85383614  RMSG =       0.0721  MAXG =       2.2029
+     STEP       38 POTENTIAL_ENE =     -418516.92186693  RMSG =       0.1018  MAXG =       3.3196
+     STEP       39 POTENTIAL_ENE =     -418516.90208847  RMSG =       0.2604  MAXG =       4.8982
+     STEP       40 POTENTIAL_ENE =     -418516.95409566  RMSG =       0.1281  MAXG =       4.0523
+     STEP       41 POTENTIAL_ENE =     -418517.00371610  RMSG =       0.0698  MAXG =       2.0087
+     STEP       42 POTENTIAL_ENE =     -418517.03907965  RMSG =       0.0518  MAXG =       0.6888
+     STEP       43 POTENTIAL_ENE =     -418517.07613201  RMSG =       0.0813  MAXG =       2.3789
+     STEP       44 POTENTIAL_ENE =     -418517.12013531  RMSG =       0.1019  MAXG =       3.3746
+     STEP       45 POTENTIAL_ENE =     -418517.16744201  RMSG =       0.0820  MAXG =       2.3047
+     STEP       46 POTENTIAL_ENE =     -418517.20234585  RMSG =       0.0969  MAXG =       1.2598
+     STEP       47 POTENTIAL_ENE =     -418517.23077098  RMSG =       0.0571  MAXG =       1.1188
+     STEP       48 POTENTIAL_ENE =     -418517.25001643  RMSG =       0.0631  MAXG =       1.7948
+     STEP       49 POTENTIAL_ENE =     -418517.30745906  RMSG =       0.0865  MAXG =       1.2396
+     STEP       50 POTENTIAL_ENE =     -418517.28173955  RMSG =       0.2356  MAXG =       5.1156
+     STEP       51 POTENTIAL_ENE =     -418517.33291059  RMSG =       0.0992  MAXG =       2.7335
+     STEP       52 POTENTIAL_ENE =     -418517.36359671  RMSG =       0.0606  MAXG =       0.9953
+     STEP       53 POTENTIAL_ENE =     -418517.39466415  RMSG =       0.0498  MAXG =       0.8803
+     STEP       54 POTENTIAL_ENE =     -418517.41916968  RMSG =       0.0724  MAXG =       1.6786
+     STEP       55 POTENTIAL_ENE =     -418517.45164549  RMSG =       0.0698  MAXG =       1.5478
+     STEP       56 POTENTIAL_ENE =     -418517.48963724  RMSG =       0.0642  MAXG =       1.2744
+     STEP       57 POTENTIAL_ENE =     -418517.50364561  RMSG =       0.1159  MAXG =       1.6204
+     STEP       58 POTENTIAL_ENE =     -418517.53079889  RMSG =       0.0461  MAXG =       0.9880
+     STEP       59 POTENTIAL_ENE =     -418517.54318766  RMSG =       0.0412  MAXG =       0.6639
+     STEP       60 POTENTIAL_ENE =     -418517.57032132  RMSG =       0.0607  MAXG =       0.8287
+     STEP       61 POTENTIAL_ENE =     -418517.60581425  RMSG =       0.0902  MAXG =       1.7632
+     STEP       62 POTENTIAL_ENE =     -418517.64193309  RMSG =       0.0953  MAXG =       1.3758
+     STEP       63 POTENTIAL_ENE =     -418517.67592732  RMSG =       0.0569  MAXG =       0.6759
+     STEP       64 POTENTIAL_ENE =     -418517.71257693  RMSG =       0.0668  MAXG =       0.9894
+     STEP       65 POTENTIAL_ENE =     -418517.74791204  RMSG =       0.0874  MAXG =       1.3262
+     STEP       66 POTENTIAL_ENE =     -418517.81748351  RMSG =       0.1187  MAXG =       1.9540
+     STEP       67 POTENTIAL_ENE =     -418517.86880861  RMSG =       0.1180  MAXG =       1.6190
+     STEP       68 POTENTIAL_ENE =     -418517.91868360  RMSG =       0.0774  MAXG =       0.8989
+     STEP       69 POTENTIAL_ENE =     -418517.97348602  RMSG =       0.0863  MAXG =       1.8028
+     STEP       70 POTENTIAL_ENE =     -418518.02490494  RMSG =       0.1104  MAXG =       1.5069
+     STEP       71 POTENTIAL_ENE =     -418518.10670019  RMSG =       0.1294  MAXG =       2.3890
+     STEP       72 POTENTIAL_ENE =     -418518.17496528  RMSG =       0.1411  MAXG =       1.9756
+     STEP       73 POTENTIAL_ENE =     -418518.24077626  RMSG =       0.0812  MAXG =       1.2301
+     STEP       74 POTENTIAL_ENE =     -418518.28574362  RMSG =       0.0722  MAXG =       0.8845
+     STEP       75 POTENTIAL_ENE =     -418518.35617849  RMSG =       0.1137  MAXG =       2.0499
+     STEP       76 POTENTIAL_ENE =     -418518.42592951  RMSG =       0.1233  MAXG =       2.0995
+     STEP       77 POTENTIAL_ENE =     -418518.47530424  RMSG =       0.0685  MAXG =       1.0257
+     STEP       78 POTENTIAL_ENE =     -418518.50467426  RMSG =       0.0667  MAXG =       0.9792
+     STEP       79 POTENTIAL_ENE =     -418518.53450721  RMSG =       0.0713  MAXG =       1.0306
+     STEP       80 POTENTIAL_ENE =     -418518.57860474  RMSG =       0.0663  MAXG =       0.9630
+     STEP       81 POTENTIAL_ENE =     -418518.59117863  RMSG =       0.1575  MAXG =       3.4140
+     STEP       82 POTENTIAL_ENE =     -418518.63592512  RMSG =       0.0498  MAXG =       0.7627
+     STEP       83 POTENTIAL_ENE =     -418518.64956296  RMSG =       0.0415  MAXG =       0.6825
+     STEP       84 POTENTIAL_ENE =     -418518.67425389  RMSG =       0.0590  MAXG =       1.3078
+     STEP       85 POTENTIAL_ENE =     -418518.70500329  RMSG =       0.0737  MAXG =       1.2987
+     STEP       86 POTENTIAL_ENE =     -418518.72263558  RMSG =       0.1191  MAXG =       2.8264
+     STEP       87 POTENTIAL_ENE =     -418518.75373049  RMSG =       0.0448  MAXG =       0.9455
+     STEP       88 POTENTIAL_ENE =     -418518.76996794  RMSG =       0.0452  MAXG =       0.8073
+     STEP       89 POTENTIAL_ENE =     -418518.78762496  RMSG =       0.0588  MAXG =       1.3148
+     STEP       90 POTENTIAL_ENE =     -418518.82048725  RMSG =       0.0816  MAXG =       1.5388
+     STEP       91 POTENTIAL_ENE =     -418518.83145238  RMSG =       0.1395  MAXG =       1.7789
+     STEP       92 POTENTIAL_ENE =     -418518.86831982  RMSG =       0.0486  MAXG =       1.0013
+     STEP       93 POTENTIAL_ENE =     -418518.88165337  RMSG =       0.0395  MAXG =       0.6133
+     STEP       94 POTENTIAL_ENE =     -418518.89875319  RMSG =       0.0522  MAXG =       0.9786
+     STEP       95 POTENTIAL_ENE =     -418518.92955059  RMSG =       0.0777  MAXG =       1.2450
+     STEP       96 POTENTIAL_ENE =     -418518.96054301  RMSG =       0.1045  MAXG =       2.9815
+     STEP       97 POTENTIAL_ENE =     -418518.99592515  RMSG =       0.0533  MAXG =       1.2225
+     STEP       98 POTENTIAL_ENE =     -418519.02059019  RMSG =       0.0513  MAXG =       0.9817
+     STEP       99 POTENTIAL_ENE =     -418519.04180387  RMSG =       0.0580  MAXG =       1.2219
+     STEP      100 POTENTIAL_ENE =     -418519.06903964  RMSG =       0.1107  MAXG =       1.5870
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:          7    -418519.1856          0.2373          8.2627        296.1215        193.8085          0.0000       1829.8986     -16783.1735    -404055.8407
+
+  maxg =     8.2627 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 8 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418520.00986165  RMSG =       0.1372  MAXG =       2.4552
+     STEP        2 POTENTIAL_ENE =     -407024.02090176  RMSG =      85.1426  MAXG =     401.1793
+     STEP        3 POTENTIAL_ENE =     -418520.03248082  RMSG =       0.1053  MAXG =       2.0771
+     STEP        4 POTENTIAL_ENE =     -418520.05522573  RMSG =       0.0557  MAXG =       1.0515
+     STEP        5 POTENTIAL_ENE =     -418520.06958617  RMSG =       0.0538  MAXG =       1.3700
+     STEP        6 POTENTIAL_ENE =     -418520.09728989  RMSG =       0.0569  MAXG =       1.2059
+     STEP        7 POTENTIAL_ENE =     -418520.11934979  RMSG =       0.0944  MAXG =       1.6657
+     STEP        8 POTENTIAL_ENE =     -418520.14848239  RMSG =       0.0567  MAXG =       1.1252
+     STEP        9 POTENTIAL_ENE =     -418520.17676595  RMSG =       0.0415  MAXG =       0.7050
+     STEP       10 POTENTIAL_ENE =     -418520.19203205  RMSG =       0.0657  MAXG =       1.1328
+     STEP       11 POTENTIAL_ENE =     -418520.20966721  RMSG =       0.0468  MAXG =       0.8479
+     STEP       12 POTENTIAL_ENE =     -418520.23215505  RMSG =       0.0447  MAXG =       0.9059
+     STEP       13 POTENTIAL_ENE =     -418520.25697392  RMSG =       0.0852  MAXG =       1.6298
+     STEP       14 POTENTIAL_ENE =     -418520.27887010  RMSG =       0.0558  MAXG =       1.1710
+     STEP       15 POTENTIAL_ENE =     -418520.29205630  RMSG =       0.0413  MAXG =       0.9260
+     STEP       16 POTENTIAL_ENE =     -418520.31523527  RMSG =       0.0535  MAXG =       0.9842
+     STEP       17 POTENTIAL_ENE =     -418520.33240740  RMSG =       0.0783  MAXG =       1.2934
+     STEP       18 POTENTIAL_ENE =     -418520.35254888  RMSG =       0.0611  MAXG =       1.1036
+     STEP       19 POTENTIAL_ENE =     -418520.38954450  RMSG =       0.0700  MAXG =       0.9168
+     STEP       20 POTENTIAL_ENE =     -418520.40255298  RMSG =       0.0887  MAXG =       1.2393
+     STEP       21 POTENTIAL_ENE =     -418520.41835317  RMSG =       0.0538  MAXG =       1.1329
+     STEP       22 POTENTIAL_ENE =     -418520.45086781  RMSG =       0.0522  MAXG =       0.8675
+     STEP       23 POTENTIAL_ENE =     -418520.48393321  RMSG =       0.0748  MAXG =       0.7329
+     STEP       24 POTENTIAL_ENE =     -418520.55336220  RMSG =       0.0987  MAXG =       1.3066
+     STEP       25 POTENTIAL_ENE =     -418520.48559309  RMSG =       0.3570  MAXG =       8.4447
+     STEP       26 POTENTIAL_ENE =     -418520.59798559  RMSG =       0.1475  MAXG =       3.3521
+     STEP       27 POTENTIAL_ENE =     -418520.68016334  RMSG =       0.0946  MAXG =       1.4558
+     STEP       28 POTENTIAL_ENE =     -418520.76533412  RMSG =       0.1064  MAXG =       1.9808
+     STEP       29 POTENTIAL_ENE =     -418520.85470949  RMSG =       0.1526  MAXG =       3.1691
+     STEP       30 POTENTIAL_ENE =     -418521.00153352  RMSG =       0.1688  MAXG =       2.7455
+     STEP       31 POTENTIAL_ENE =     -418521.17383764  RMSG =       0.2087  MAXG =       2.5816
+     STEP       32 POTENTIAL_ENE =     -418521.36137781  RMSG =       0.1315  MAXG =       1.6722
+     STEP       33 POTENTIAL_ENE =     -418521.49655606  RMSG =       0.1793  MAXG =       4.5965
+     STEP       34 POTENTIAL_ENE =     -418521.52624920  RMSG =       0.3545  MAXG =       8.8718
+     STEP       35 POTENTIAL_ENE =     -418521.61057300  RMSG =       0.2452  MAXG =       6.3742
+     STEP       36 POTENTIAL_ENE =     -418521.81604797  RMSG =       0.2455  MAXG =       4.5184
+     STEP       37 POTENTIAL_ENE =     -418522.07386720  RMSG =       0.1469  MAXG =       1.9135
+     STEP       38 POTENTIAL_ENE =     -418522.18523231  RMSG =       0.2876  MAXG =       6.6424
+     STEP       39 POTENTIAL_ENE =     -418522.35798934  RMSG =       0.1429  MAXG =       2.2467
+     STEP       40 POTENTIAL_ENE =     -418522.48880132  RMSG =       0.1377  MAXG =       2.1828
+     STEP       41 POTENTIAL_ENE =     -418522.74039736  RMSG =       0.1564  MAXG =       3.0229
+     STEP       42 POTENTIAL_ENE =     -418522.88067218  RMSG =       0.2658  MAXG =       5.3395
+     STEP       43 POTENTIAL_ENE =     -418523.03870413  RMSG =       0.1222  MAXG =       1.5014
+     STEP       44 POTENTIAL_ENE =     -418523.10439171  RMSG =       0.0950  MAXG =       1.5664
+     STEP       45 POTENTIAL_ENE =     -418523.19963181  RMSG =       0.0953  MAXG =       2.3997
+     STEP       46 POTENTIAL_ENE =     -418523.27635413  RMSG =       0.1767  MAXG =       4.1856
+     STEP       47 POTENTIAL_ENE =     -418523.37216068  RMSG =       0.1008  MAXG =       1.8509
+     STEP       48 POTENTIAL_ENE =     -418523.46538096  RMSG =       0.0835  MAXG =       1.4299
+     STEP       49 POTENTIAL_ENE =     -418523.50749621  RMSG =       0.0859  MAXG =       2.4852
+     STEP       50 POTENTIAL_ENE =     -418523.56575727  RMSG =       0.0838  MAXG =       2.7016
+     STEP       51 POTENTIAL_ENE =     -418523.62803114  RMSG =       0.0797  MAXG =       1.4859
+     STEP       52 POTENTIAL_ENE =     -418523.69761963  RMSG =       0.0807  MAXG =       1.5074
+     STEP       53 POTENTIAL_ENE =     -418523.73967975  RMSG =       0.1799  MAXG =       3.0432
+     STEP       54 POTENTIAL_ENE =     -418523.80648140  RMSG =       0.0738  MAXG =       1.5780
+     STEP       55 POTENTIAL_ENE =     -418523.84885568  RMSG =       0.0658  MAXG =       0.9540
+     STEP       56 POTENTIAL_ENE =     -418523.89425991  RMSG =       0.0778  MAXG =       1.2387
+     STEP       57 POTENTIAL_ENE =     -418523.94357894  RMSG =       0.1543  MAXG =       2.8230
+     STEP       58 POTENTIAL_ENE =     -418524.00580545  RMSG =       0.0709  MAXG =       1.9136
+     STEP       59 POTENTIAL_ENE =     -418524.04579739  RMSG =       0.0574  MAXG =       0.9133
+     STEP       60 POTENTIAL_ENE =     -418524.09161692  RMSG =       0.0802  MAXG =       0.8726
+     STEP       61 POTENTIAL_ENE =     -418524.12684591  RMSG =       0.1421  MAXG =       2.9771
+     STEP       62 POTENTIAL_ENE =     -418524.17380422  RMSG =       0.0729  MAXG =       1.4665
+     STEP       63 POTENTIAL_ENE =     -418524.21135591  RMSG =       0.0579  MAXG =       0.9818
+     STEP       64 POTENTIAL_ENE =     -418524.23969847  RMSG =       0.0702  MAXG =       1.0309
+     STEP       65 POTENTIAL_ENE =     -418524.28642824  RMSG =       0.1151  MAXG =       2.5070
+     STEP       66 POTENTIAL_ENE =     -418524.33120959  RMSG =       0.0826  MAXG =       1.0456
+     STEP       67 POTENTIAL_ENE =     -418524.36020178  RMSG =       0.0562  MAXG =       0.9626
+     STEP       68 POTENTIAL_ENE =     -418524.39658324  RMSG =       0.0677  MAXG =       1.1107
+     STEP       69 POTENTIAL_ENE =     -418524.42313137  RMSG =       0.0888  MAXG =       1.5121
+     STEP       70 POTENTIAL_ENE =     -418524.45440929  RMSG =       0.0728  MAXG =       1.1211
+     STEP       71 POTENTIAL_ENE =     -418524.49963805  RMSG =       0.1290  MAXG =       1.8793
+     STEP       72 POTENTIAL_ENE =     -418524.53802107  RMSG =       0.0736  MAXG =       1.2171
+     STEP       73 POTENTIAL_ENE =     -418524.55951391  RMSG =       0.0619  MAXG =       0.8870
+     STEP       74 POTENTIAL_ENE =     -418524.63487214  RMSG =       0.1154  MAXG =       1.8924
+     STEP       75 POTENTIAL_ENE =     -418524.66095565  RMSG =       0.1627  MAXG =       3.2383
+     STEP       76 POTENTIAL_ENE =     -418524.70654606  RMSG =       0.0670  MAXG =       1.2592
+     STEP       77 POTENTIAL_ENE =     -418524.73516366  RMSG =       0.0474  MAXG =       0.6110
+     STEP       78 POTENTIAL_ENE =     -418524.77307179  RMSG =       0.0667  MAXG =       1.0787
+     STEP       79 POTENTIAL_ENE =     -418524.82175024  RMSG =       0.0805  MAXG =       1.1292
+     STEP       80 POTENTIAL_ENE =     -418524.79706985  RMSG =       0.2538  MAXG =       7.5421
+     STEP       81 POTENTIAL_ENE =     -418524.86030377  RMSG =       0.1153  MAXG =       3.4663
+     STEP       82 POTENTIAL_ENE =     -418524.91218911  RMSG =       0.0539  MAXG =       0.9090
+     STEP       83 POTENTIAL_ENE =     -418524.94071667  RMSG =       0.0503  MAXG =       0.5253
+     STEP       84 POTENTIAL_ENE =     -418524.96904989  RMSG =       0.0818  MAXG =       1.5813
+     STEP       85 POTENTIAL_ENE =     -418525.00006152  RMSG =       0.0628  MAXG =       1.2948
+     STEP       86 POTENTIAL_ENE =     -418525.02569386  RMSG =       0.0477  MAXG =       0.9778
+     STEP       87 POTENTIAL_ENE =     -418525.04718658  RMSG =       0.0938  MAXG =       1.5770
+     STEP       88 POTENTIAL_ENE =     -418525.06803528  RMSG =       0.0474  MAXG =       0.6598
+     STEP       89 POTENTIAL_ENE =     -418525.07839479  RMSG =       0.0415  MAXG =       0.6217
+     STEP       90 POTENTIAL_ENE =     -418525.10688568  RMSG =       0.0522  MAXG =       1.1195
+     STEP       91 POTENTIAL_ENE =     -418525.09142983  RMSG =       0.1617  MAXG =       3.2836
+     STEP       92 POTENTIAL_ENE =     -418525.11665027  RMSG =       0.0571  MAXG =       1.3271
+     STEP       93 POTENTIAL_ENE =     -418525.12652886  RMSG =       0.0406  MAXG =       0.7964
+     STEP       94 POTENTIAL_ENE =     -418525.14135042  RMSG =       0.0321  MAXG =       0.4874
+     STEP       95 POTENTIAL_ENE =     -418525.14842451  RMSG =       0.0560  MAXG =       1.1178
+     STEP       96 POTENTIAL_ENE =     -418525.15701442  RMSG =       0.0360  MAXG =       0.6585
+     STEP       97 POTENTIAL_ENE =     -418525.16919324  RMSG =       0.0292  MAXG =       0.3352
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:          8    -418524.4541          0.2966         11.2712        297.1102        194.0433          0.0000       1833.1157     -16792.4049    -404056.3185
+
+  maxg =    11.2712 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 9 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418524.37099355  RMSG =       0.0408  MAXG =       0.7627
+     STEP        2 POTENTIAL_ENE =     -417064.37965840  RMSG =      29.1868  MAXG =     279.6569
+     STEP        3 POTENTIAL_ENE =     -418524.37571604  RMSG =       0.0441  MAXG =       0.6902
+     STEP        4 POTENTIAL_ENE =     -418524.38145298  RMSG =       0.0343  MAXG =       0.6596
+     STEP        5 POTENTIAL_ENE =     -418524.39505007  RMSG =       0.0294  MAXG =       0.4625
+     STEP        6 POTENTIAL_ENE =     -418524.40399663  RMSG =       0.0422  MAXG =       0.7691
+     STEP        7 POTENTIAL_ENE =     -418524.41559517  RMSG =       0.0358  MAXG =       0.6062
+     STEP        8 POTENTIAL_ENE =     -418524.41755654  RMSG =       0.0767  MAXG =       1.5224
+     STEP        9 POTENTIAL_ENE =     -418524.42681306  RMSG =       0.0258  MAXG =       0.4958
+     STEP       10 POTENTIAL_ENE =     -418524.43019906  RMSG =       0.0201  MAXG =       0.2585
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:          9    -418524.7234          0.2039          7.0667        297.1761        194.0672          0.0000       1833.3754     -16792.4969    -404056.8453
+
+  maxg =     7.0667 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 10 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418524.83197875  RMSG =       0.1155  MAXG =       3.1198
+     STEP        2 POTENTIAL_ENE =     -417226.41321458  RMSG =      28.1819  MAXG =     295.6118
+     STEP        3 POTENTIAL_ENE =     -418524.84327149  RMSG =       0.0997  MAXG =       2.6645
+     STEP        4 POTENTIAL_ENE =     -418524.86290609  RMSG =       0.0507  MAXG =       1.3449
+     STEP        5 POTENTIAL_ENE =     -418524.87384631  RMSG =       0.0528  MAXG =       1.6627
+     STEP        6 POTENTIAL_ENE =     -418524.91350683  RMSG =       0.0735  MAXG =       1.8985
+     STEP        7 POTENTIAL_ENE =     -418524.94770980  RMSG =       0.0880  MAXG =       1.7312
+     STEP        8 POTENTIAL_ENE =     -418524.97631816  RMSG =       0.0836  MAXG =       1.5387
+     STEP        9 POTENTIAL_ENE =     -418524.99745278  RMSG =       0.0359  MAXG =       0.7726
+     STEP       10 POTENTIAL_ENE =     -418525.00672704  RMSG =       0.0372  MAXG =       0.6589
+     STEP       11 POTENTIAL_ENE =     -418525.01764707  RMSG =       0.0440  MAXG =       0.6643
+     STEP       12 POTENTIAL_ENE =     -418525.02869722  RMSG =       0.0829  MAXG =       1.5829
+     STEP       13 POTENTIAL_ENE =     -418525.04259674  RMSG =       0.0323  MAXG =       0.5906
+     STEP       14 POTENTIAL_ENE =     -418525.04908150  RMSG =       0.0282  MAXG =       0.5340
+     STEP       15 POTENTIAL_ENE =     -418525.05624870  RMSG =       0.0342  MAXG =       0.5625
+     STEP       16 POTENTIAL_ENE =     -418525.06827624  RMSG =       0.0603  MAXG =       1.1068
+     STEP       17 POTENTIAL_ENE =     -418525.08011236  RMSG =       0.0373  MAXG =       0.5885
+     STEP       18 POTENTIAL_ENE =     -418525.08695108  RMSG =       0.0240  MAXG =       0.3103
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         10    -418525.3289          0.2654          8.9750        297.1852        194.1830          0.0000       1833.8129     -16793.3924    -404057.1176
+
+  maxg =     8.9750 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 11 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418525.41177189  RMSG =       0.1439  MAXG =       4.4304
+     STEP        2 POTENTIAL_ENE =     -417112.55997921  RMSG =      29.0100  MAXG =     293.3416
+     STEP        3 POTENTIAL_ENE =     -418525.42793789  RMSG =       0.1262  MAXG =       3.9529
+     STEP        4 POTENTIAL_ENE =     -418525.46065607  RMSG =       0.0686  MAXG =       2.2044
+     STEP        5 POTENTIAL_ENE =     -418525.48087507  RMSG =       0.0728  MAXG =       2.5816
+     STEP        6 POTENTIAL_ENE =     -418525.56205145  RMSG =       0.1000  MAXG =       2.5343
+     STEP        7 POTENTIAL_ENE =     -418525.60767181  RMSG =       0.1249  MAXG =       2.3948
+     STEP        8 POTENTIAL_ENE =     -418525.64413491  RMSG =       0.0568  MAXG =       1.2346
+     STEP        9 POTENTIAL_ENE =     -418525.65737403  RMSG =       0.0381  MAXG =       0.6168
+     STEP       10 POTENTIAL_ENE =     -418525.67284997  RMSG =       0.0518  MAXG =       1.1241
+     STEP       11 POTENTIAL_ENE =     -418525.69027985  RMSG =       0.0661  MAXG =       1.3234
+     STEP       12 POTENTIAL_ENE =     -418525.71268791  RMSG =       0.0733  MAXG =       1.4798
+     STEP       13 POTENTIAL_ENE =     -418525.73013051  RMSG =       0.0443  MAXG =       0.7053
+     STEP       14 POTENTIAL_ENE =     -418525.74087349  RMSG =       0.0378  MAXG =       0.6318
+     STEP       15 POTENTIAL_ENE =     -418525.75174343  RMSG =       0.0453  MAXG =       1.0082
+     STEP       16 POTENTIAL_ENE =     -418525.76895134  RMSG =       0.0606  MAXG =       1.2172
+     STEP       17 POTENTIAL_ENE =     -418525.78901164  RMSG =       0.0606  MAXG =       0.9754
+     STEP       18 POTENTIAL_ENE =     -418525.80415971  RMSG =       0.0388  MAXG =       0.6406
+     STEP       19 POTENTIAL_ENE =     -418525.81289147  RMSG =       0.0291  MAXG =       0.5235
+     STEP       20 POTENTIAL_ENE =     -418525.82030828  RMSG =       0.0362  MAXG =       0.5928
+     STEP       21 POTENTIAL_ENE =     -418525.82952700  RMSG =       0.0344  MAXG =       0.6779
+     STEP       22 POTENTIAL_ENE =     -418525.83933922  RMSG =       0.0311  MAXG =       0.4312
+     STEP       23 POTENTIAL_ENE =     -418525.84151794  RMSG =       0.0873  MAXG =       1.2130
+     STEP       24 POTENTIAL_ENE =     -418525.85382082  RMSG =       0.0281  MAXG =       0.4652
+     STEP       25 POTENTIAL_ENE =     -418525.85796587  RMSG =       0.0230  MAXG =       0.3516
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         11    -418525.9555          0.2692          9.1555        297.2776        194.2547          0.0000       1834.8629     -16795.5781    -404056.7727
+
+  maxg =     9.1555 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 12 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418525.82144738  RMSG =       0.2241  MAXG =       7.8820
+     STEP        2 POTENTIAL_ENE =     -416785.12161848  RMSG =      32.9011  MAXG =     344.9307
+     STEP        3 POTENTIAL_ENE =     -418525.84735649  RMSG =       0.2061  MAXG =       7.0404
+     STEP        4 POTENTIAL_ENE =     -418525.93059739  RMSG =       0.1049  MAXG =       3.9070
+     STEP        5 POTENTIAL_ENE =     -418525.97628955  RMSG =       0.1097  MAXG =       4.5657
+     STEP        6 POTENTIAL_ENE =     -418526.15720798  RMSG =       0.1500  MAXG =       4.5495
+     STEP        7 POTENTIAL_ENE =     -418526.27437020  RMSG =       0.1773  MAXG =       3.7971
+     STEP        8 POTENTIAL_ENE =     -418526.36386296  RMSG =       0.0967  MAXG =       2.6958
+     STEP        9 POTENTIAL_ENE =     -418526.39899049  RMSG =       0.0525  MAXG =       0.9685
+     STEP       10 POTENTIAL_ENE =     -418526.42278003  RMSG =       0.0606  MAXG =       1.5178
+     STEP       11 POTENTIAL_ENE =     -418526.44872518  RMSG =       0.0732  MAXG =       1.5454
+     STEP       12 POTENTIAL_ENE =     -418526.48160204  RMSG =       0.0786  MAXG =       1.5307
+     STEP       13 POTENTIAL_ENE =     -418526.50483202  RMSG =       0.0550  MAXG =       0.9012
+     STEP       14 POTENTIAL_ENE =     -418526.52282188  RMSG =       0.0514  MAXG =       1.0291
+     STEP       15 POTENTIAL_ENE =     -418526.54628419  RMSG =       0.0566  MAXG =       1.2345
+     STEP       16 POTENTIAL_ENE =     -418526.55908116  RMSG =       0.1416  MAXG =       2.5901
+     STEP       17 POTENTIAL_ENE =     -418526.59164049  RMSG =       0.0483  MAXG =       0.7399
+     STEP       18 POTENTIAL_ENE =     -418526.60216396  RMSG =       0.0316  MAXG =       0.5608
+     STEP       19 POTENTIAL_ENE =     -418526.61179918  RMSG =       0.0363  MAXG =       0.7533
+     STEP       20 POTENTIAL_ENE =     -418526.62821405  RMSG =       0.0470  MAXG =       1.0536
+     STEP       21 POTENTIAL_ENE =     -418526.63782975  RMSG =       0.1029  MAXG =       2.7298
+     STEP       22 POTENTIAL_ENE =     -418526.66013248  RMSG =       0.0350  MAXG =       0.5582
+     STEP       23 POTENTIAL_ENE =     -418526.66871787  RMSG =       0.0331  MAXG =       0.5072
+     STEP       24 POTENTIAL_ENE =     -418526.68054582  RMSG =       0.0393  MAXG =       0.9804
+     STEP       25 POTENTIAL_ENE =     -418526.69133207  RMSG =       0.0901  MAXG =       1.5804
+     STEP       26 POTENTIAL_ENE =     -418526.70864773  RMSG =       0.0417  MAXG =       0.8264
+     STEP       27 POTENTIAL_ENE =     -418526.72027664  RMSG =       0.0340  MAXG =       0.3903
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         12    -418526.5347          0.2830          9.1691        297.4027        194.3329          0.0000       1836.1038     -16797.6454    -404056.7287
+
+  maxg =     9.1691 at          2 PO4       1 PO42   O1   OG311 
+
++++++ Start micro iteration 13 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418526.37085528  RMSG =       0.0981  MAXG =       2.9963
+     STEP        2 POTENTIAL_ENE =     -417110.22183797  RMSG =      26.9663  MAXG =     349.2905
+     STEP        3 POTENTIAL_ENE =     -418526.38343800  RMSG =       0.0869  MAXG =       2.3978
+     STEP        4 POTENTIAL_ENE =     -418526.40078786  RMSG =       0.0519  MAXG =       1.7173
+     STEP        5 POTENTIAL_ENE =     -418526.41259353  RMSG =       0.0528  MAXG =       1.9031
+     STEP        6 POTENTIAL_ENE =     -418526.45468162  RMSG =       0.0698  MAXG =       1.4118
+     STEP        7 POTENTIAL_ENE =     -418526.46811842  RMSG =       0.1441  MAXG =       3.1016
+     STEP        8 POTENTIAL_ENE =     -418526.50157810  RMSG =       0.0536  MAXG =       1.2384
+     STEP        9 POTENTIAL_ENE =     -418526.51382485  RMSG =       0.0324  MAXG =       0.7761
+     STEP       10 POTENTIAL_ENE =     -418526.52291433  RMSG =       0.0361  MAXG =       0.6481
+     STEP       11 POTENTIAL_ENE =     -418526.53464443  RMSG =       0.0359  MAXG =       0.7272
+     STEP       12 POTENTIAL_ENE =     -418526.53587648  RMSG =       0.0986  MAXG =       2.2728
+     STEP       13 POTENTIAL_ENE =     -418526.54170227  RMSG =       0.0532  MAXG =       1.0285
+     STEP       14 POTENTIAL_ENE =     -418526.55173462  RMSG =       0.0291  MAXG =       0.6131
+     STEP       15 POTENTIAL_ENE =     -418526.56002795  RMSG =       0.0308  MAXG =       0.5782
+     STEP       16 POTENTIAL_ENE =     -418526.57293847  RMSG =       0.0446  MAXG =       0.9509
+     STEP       17 POTENTIAL_ENE =     -418526.58502891  RMSG =       0.0843  MAXG =       1.7315
+     STEP       18 POTENTIAL_ENE =     -418526.60290935  RMSG =       0.0479  MAXG =       0.9657
+     STEP       19 POTENTIAL_ENE =     -418526.62385013  RMSG =       0.0394  MAXG =       0.7115
+     STEP       20 POTENTIAL_ENE =     -418526.63551261  RMSG =       0.0392  MAXG =       0.6837
+     STEP       21 POTENTIAL_ENE =     -418526.63743078  RMSG =       0.1117  MAXG =       1.6505
+     STEP       22 POTENTIAL_ENE =     -418526.65603751  RMSG =       0.0352  MAXG =       0.6604
+     STEP       23 POTENTIAL_ENE =     -418526.66257822  RMSG =       0.0278  MAXG =       0.6645
+     STEP       24 POTENTIAL_ENE =     -418526.67544654  RMSG =       0.0411  MAXG =       0.6041
+     STEP       25 POTENTIAL_ENE =     -418526.69069265  RMSG =       0.0469  MAXG =       0.7001
+     STEP       26 POTENTIAL_ENE =     -418526.67526469  RMSG =       0.1631  MAXG =       4.0366
+     STEP       27 POTENTIAL_ENE =     -418526.69993554  RMSG =       0.0673  MAXG =       1.2627
+     STEP       28 POTENTIAL_ENE =     -418526.71420235  RMSG =       0.0354  MAXG =       0.7371
+     STEP       29 POTENTIAL_ENE =     -418526.72496432  RMSG =       0.0312  MAXG =       0.4781
+     STEP       30 POTENTIAL_ENE =     -418526.73950160  RMSG =       0.0462  MAXG =       0.7380
+     STEP       31 POTENTIAL_ENE =     -418526.74794030  RMSG =       0.0808  MAXG =       1.6127
+     STEP       32 POTENTIAL_ENE =     -418526.76039907  RMSG =       0.0356  MAXG =       0.8086
+     STEP       33 POTENTIAL_ENE =     -418526.76698242  RMSG =       0.0255  MAXG =       0.4121
+     STEP       34 POTENTIAL_ENE =     -418526.77242240  RMSG =       0.0308  MAXG =       0.6062
+     STEP       35 POTENTIAL_ENE =     -418526.78333224  RMSG =       0.0386  MAXG =       0.5488
+     STEP       36 POTENTIAL_ENE =     -418526.78592171  RMSG =       0.1063  MAXG =       1.6638
+     STEP       37 POTENTIAL_ENE =     -418526.80346826  RMSG =       0.0361  MAXG =       0.5753
+     STEP       38 POTENTIAL_ENE =     -418526.80933173  RMSG =       0.0237  MAXG =       0.4628
+     STEP       39 POTENTIAL_ENE =     -418526.81520364  RMSG =       0.0274  MAXG =       0.3712
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         13    -418526.8748          0.5393         29.9445        297.5400        194.2622          0.0000       1837.2279     -16799.8389    -404056.0660
+
+  maxg =    29.9445 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 14 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.44600415  RMSG =       0.0419  MAXG =       1.1419
+     STEP        2 POTENTIAL_ENE =     -417130.84721566  RMSG =      29.5265  MAXG =     321.5592
+     STEP        3 POTENTIAL_ENE =     -418527.44935190  RMSG =       0.0393  MAXG =       0.8544
+     STEP        4 POTENTIAL_ENE =     -418527.45336021  RMSG =       0.0294  MAXG =       0.5980
+     STEP        5 POTENTIAL_ENE =     -418527.46168053  RMSG =       0.0312  MAXG =       0.9296
+     STEP        6 POTENTIAL_ENE =     -418527.47017719  RMSG =       0.0307  MAXG =       0.6297
+     STEP        7 POTENTIAL_ENE =     -418527.47780912  RMSG =       0.0719  MAXG =       1.9341
+     STEP        8 POTENTIAL_ENE =     -418527.48876704  RMSG =       0.0286  MAXG =       0.4829
+     STEP        9 POTENTIAL_ENE =     -418527.49300100  RMSG =       0.0228  MAXG =       0.3780
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         14    -418527.3399          0.1683          6.3382        297.5308        194.2406          0.0000       1837.0121     -16799.3160    -404056.8074
+
+  maxg =     6.3382 at          5 PO4       1 PO42   H2   HGP1  
+
++++++ Start micro iteration 15 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.74246772  RMSG =       0.0405  MAXG =       1.2600
+     STEP        2 POTENTIAL_ENE =     -417833.20568321  RMSG =      19.5438  MAXG =     245.4255
+     STEP        3 POTENTIAL_ENE =     -418527.74650109  RMSG =       0.0377  MAXG =       0.9206
+     STEP        4 POTENTIAL_ENE =     -418527.75044727  RMSG =       0.0263  MAXG =       0.6818
+     STEP        5 POTENTIAL_ENE =     -418527.75575923  RMSG =       0.0274  MAXG =       0.6791
+     STEP        6 POTENTIAL_ENE =     -418527.76333070  RMSG =       0.0301  MAXG =       0.5230
+     STEP        7 POTENTIAL_ENE =     -418527.76921030  RMSG =       0.0732  MAXG =       1.5777
+     STEP        8 POTENTIAL_ENE =     -418527.77979498  RMSG =       0.0290  MAXG =       0.4953
+     STEP        9 POTENTIAL_ENE =     -418527.78456706  RMSG =       0.0233  MAXG =       0.4149
+     STEP       10 POTENTIAL_ENE =     -418527.79088242  RMSG =       0.0280  MAXG =       0.4117
+     STEP       11 POTENTIAL_ENE =     -418527.79729966  RMSG =       0.0388  MAXG =       0.6985
+     STEP       12 POTENTIAL_ENE =     -418527.80182624  RMSG =       0.0294  MAXG =       0.5460
+     STEP       13 POTENTIAL_ENE =     -418527.80470866  RMSG =       0.0156  MAXG =       0.2344
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         15    -418527.5347          0.1305          4.2938        297.5757        194.2133          0.0000       1836.9990     -16798.8228    -404057.4998
+
+  maxg =     4.2938 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 16 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.11891878  RMSG =       0.1125  MAXG =       3.6456
+     STEP        2 POTENTIAL_ENE =     -417506.53043079  RMSG =      24.9502  MAXG =     305.1720
+     STEP        3 POTENTIAL_ENE =     -418528.12873211  RMSG =       0.0976  MAXG =       2.8194
+     STEP        4 POTENTIAL_ENE =     -418528.14781942  RMSG =       0.0502  MAXG =       1.4649
+     STEP        5 POTENTIAL_ENE =     -418528.15856783  RMSG =       0.0516  MAXG =       1.7833
+     STEP        6 POTENTIAL_ENE =     -418528.19471909  RMSG =       0.0673  MAXG =       1.7667
+     STEP        7 POTENTIAL_ENE =     -418528.22234368  RMSG =       0.0940  MAXG =       2.0518
+     STEP        8 POTENTIAL_ENE =     -418528.25384782  RMSG =       0.0504  MAXG =       0.9309
+     STEP        9 POTENTIAL_ENE =     -418528.27015393  RMSG =       0.0352  MAXG =       0.6061
+     STEP       10 POTENTIAL_ENE =     -418528.28115649  RMSG =       0.0491  MAXG =       1.2361
+     STEP       11 POTENTIAL_ENE =     -418528.29108367  RMSG =       0.0410  MAXG =       1.0582
+     STEP       12 POTENTIAL_ENE =     -418528.30540908  RMSG =       0.0347  MAXG =       0.5674
+     STEP       13 POTENTIAL_ENE =     -418528.31330521  RMSG =       0.0649  MAXG =       1.1528
+     STEP       14 POTENTIAL_ENE =     -418528.32230910  RMSG =       0.0289  MAXG =       0.6532
+     STEP       15 POTENTIAL_ENE =     -418528.32702996  RMSG =       0.0262  MAXG =       0.6263
+     STEP       16 POTENTIAL_ENE =     -418528.33515007  RMSG =       0.0313  MAXG =       0.5823
+     STEP       17 POTENTIAL_ENE =     -418528.33995576  RMSG =       0.0589  MAXG =       1.0857
+     STEP       18 POTENTIAL_ENE =     -418528.34680705  RMSG =       0.0251  MAXG =       0.2929
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         16    -418527.6838          0.1675          6.6493        297.5031        194.3409          0.0000       1837.2927     -16799.0059    -404057.8145
+
+  maxg =     6.6493 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 17 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.66041394  RMSG =       0.0731  MAXG =       1.9810
+     STEP        2 POTENTIAL_ENE =     -417042.22308989  RMSG =      30.6449  MAXG =     303.9210
+     STEP        3 POTENTIAL_ENE =     -418527.66661863  RMSG =       0.0598  MAXG =       1.6036
+     STEP        4 POTENTIAL_ENE =     -418527.67412287  RMSG =       0.0333  MAXG =       0.6788
+     STEP        5 POTENTIAL_ENE =     -418527.67958931  RMSG =       0.0352  MAXG =       1.0412
+     STEP        6 POTENTIAL_ENE =     -418527.69318365  RMSG =       0.0431  MAXG =       1.2081
+     STEP        7 POTENTIAL_ENE =     -418527.70561909  RMSG =       0.0492  MAXG =       1.2097
+     STEP        8 POTENTIAL_ENE =     -418527.71483214  RMSG =       0.0503  MAXG =       0.9242
+     STEP        9 POTENTIAL_ENE =     -418527.72270275  RMSG =       0.0229  MAXG =       0.5074
+     STEP       10 POTENTIAL_ENE =     -418527.72693974  RMSG =       0.0251  MAXG =       0.4285
+     STEP       11 POTENTIAL_ENE =     -418527.73247499  RMSG =       0.0304  MAXG =       0.4350
+     STEP       12 POTENTIAL_ENE =     -418527.73386036  RMSG =       0.0655  MAXG =       1.5407
+     STEP       13 POTENTIAL_ENE =     -418527.74101298  RMSG =       0.0188  MAXG =       0.2726
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         17    -418527.7116          0.4528         17.2127        297.5959        194.3099          0.0000       1837.4208     -16799.0948    -404057.9434
+
+  maxg =    17.2127 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 18 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.68776369  RMSG =       0.0474  MAXG =       1.2678
+     STEP        2 POTENTIAL_ENE =     -417556.93342687  RMSG =      24.5890  MAXG =     311.9740
+     STEP        3 POTENTIAL_ENE =     -418527.69124786  RMSG =       0.0387  MAXG =       0.8963
+     STEP        4 POTENTIAL_ENE =     -418527.69467452  RMSG =       0.0251  MAXG =       0.6519
+     STEP        5 POTENTIAL_ENE =     -418527.69858869  RMSG =       0.0288  MAXG =       0.9909
+     STEP        6 POTENTIAL_ENE =     -418527.70663806  RMSG =       0.0356  MAXG =       1.0712
+     STEP        7 POTENTIAL_ENE =     -418527.71489334  RMSG =       0.0334  MAXG =       0.9374
+     STEP        8 POTENTIAL_ENE =     -418527.70979376  RMSG =       0.0824  MAXG =       1.9965
+     STEP        9 POTENTIAL_ENE =     -418527.71826769  RMSG =       0.0291  MAXG =       0.8816
+     STEP       10 POTENTIAL_ENE =     -418527.72107080  RMSG =       0.0144  MAXG =       0.2155
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         18    -418527.8310          0.2352          7.5389        297.6007        194.2966          0.0000       1837.3666     -16799.2799    -404057.8149
+
+  maxg =     7.5389 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 19 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.95034014  RMSG =       0.0479  MAXG =       1.7789
+     STEP        2 POTENTIAL_ENE =     -417984.36619279  RMSG =      18.1665  MAXG =     332.9848
+     STEP        3 POTENTIAL_ENE =     -418527.95452654  RMSG =       0.0397  MAXG =       0.9108
+     STEP        4 POTENTIAL_ENE =     -418527.95820290  RMSG =       0.0249  MAXG =       0.7147
+     STEP        5 POTENTIAL_ENE =     -418527.96182516  RMSG =       0.0261  MAXG =       1.0118
+     STEP        6 POTENTIAL_ENE =     -418527.96803894  RMSG =       0.0262  MAXG =       0.8088
+     STEP        7 POTENTIAL_ENE =     -418527.97166009  RMSG =       0.0462  MAXG =       1.2057
+     STEP        8 POTENTIAL_ENE =     -418527.97608383  RMSG =       0.0165  MAXG =       0.2695
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         19    -418527.9674          0.1349          4.4237        297.5829        194.3172          0.0000       1837.3951     -16799.1208    -404058.1418
+
+  maxg =     4.4237 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 20 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.07097336  RMSG =       0.0406  MAXG =       0.9621
+     STEP        2 POTENTIAL_ENE =     -417969.20294298  RMSG =      18.3445  MAXG =     297.4852
+     STEP        3 POTENTIAL_ENE =     -418528.07463801  RMSG =       0.0343  MAXG =       0.5466
+     STEP        4 POTENTIAL_ENE =     -418528.07751231  RMSG =       0.0231  MAXG =       0.4849
+     STEP        5 POTENTIAL_ENE =     -418528.08120681  RMSG =       0.0242  MAXG =       0.6293
+     STEP        6 POTENTIAL_ENE =     -418528.08595402  RMSG =       0.0215  MAXG =       0.4106
+     STEP        7 POTENTIAL_ENE =     -418528.08854320  RMSG =       0.0431  MAXG =       0.9567
+     STEP        8 POTENTIAL_ENE =     -418528.09253452  RMSG =       0.0189  MAXG =       0.3232
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         20    -418528.0709          0.1183          4.2462        297.6309        194.3337          0.0000       1837.5413     -16799.2318    -404058.3450
+
+  maxg =     4.2462 at          2 PO4       1 PO42   O1   OG311 
+
++++++ Start micro iteration 21 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418527.95821739  RMSG =       0.0381  MAXG =       1.2039
+     STEP        2 POTENTIAL_ENE =     -417627.12972386  RMSG =      23.1763  MAXG =     309.7271
+     STEP        3 POTENTIAL_ENE =     -418527.96107263  RMSG =       0.0327  MAXG =       0.6702
+     STEP        4 POTENTIAL_ENE =     -418527.96389481  RMSG =       0.0240  MAXG =       0.4661
+     STEP        5 POTENTIAL_ENE =     -418527.96896538  RMSG =       0.0259  MAXG =       0.6065
+     STEP        6 POTENTIAL_ENE =     -418527.97402073  RMSG =       0.0207  MAXG =       0.3493
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         21    -418528.1260          0.2014          7.0326        297.6283        194.3203          0.0000       1837.6835     -16799.1853    -404058.5728
+
+  maxg =     7.0326 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 22 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.19942638  RMSG =       0.0282  MAXG =       0.5408
+     STEP        2 POTENTIAL_ENE =     -417820.96677287  RMSG =      21.3603  MAXG =     324.9580
+     STEP        3 POTENTIAL_ENE =     -418528.20121436  RMSG =       0.0247  MAXG =       0.3473
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         22    -418528.1924          0.1073          3.3495        297.6327        194.3286          0.0000       1837.6849     -16799.2263    -404058.6123
+
+  maxg =     3.3495 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 23 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.20630813  RMSG =       0.0319  MAXG =       0.7417
+     STEP        2 POTENTIAL_ENE =     -417144.27665986  RMSG =      30.2800  MAXG =     273.8320
+     STEP        3 POTENTIAL_ENE =     -418528.20810640  RMSG =       0.0276  MAXG =       0.6182
+     STEP        4 POTENTIAL_ENE =     -418528.21013252  RMSG =       0.0232  MAXG =       0.4388
+     STEP        5 POTENTIAL_ENE =     -418528.21837884  RMSG =       0.0317  MAXG =       0.9997
+     STEP        6 POTENTIAL_ENE =     -418528.22621303  RMSG =       0.0289  MAXG =       0.7218
+     STEP        7 POTENTIAL_ENE =     -418528.23188545  RMSG =       0.0673  MAXG =       1.7427
+     STEP        8 POTENTIAL_ENE =     -418528.24124598  RMSG =       0.0237  MAXG =       0.4285
+     STEP        9 POTENTIAL_ENE =     -418528.24527550  RMSG =       0.0213  MAXG =       0.3691
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         23    -418528.2892          0.0792          3.1355        297.6085        194.3185          0.0000       1837.7523     -16799.4548    -404058.5136
+
+  maxg =     3.1355 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 24 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.43419406  RMSG =       0.0908  MAXG =       2.9673
+     STEP        2 POTENTIAL_ENE =     -416922.44243410  RMSG =      31.4438  MAXG =     279.9693
+     STEP        3 POTENTIAL_ENE =     -418528.44199917  RMSG =       0.0797  MAXG =       2.4379
+     STEP        4 POTENTIAL_ENE =     -418528.45561690  RMSG =       0.0454  MAXG =       1.2348
+     STEP        5 POTENTIAL_ENE =     -418528.46595086  RMSG =       0.0468  MAXG =       1.6910
+     STEP        6 POTENTIAL_ENE =     -418528.48842432  RMSG =       0.0539  MAXG =       1.6120
+     STEP        7 POTENTIAL_ENE =     -418528.51043324  RMSG =       0.0790  MAXG =       1.9366
+     STEP        8 POTENTIAL_ENE =     -418528.53817221  RMSG =       0.0497  MAXG =       1.0370
+     STEP        9 POTENTIAL_ENE =     -418528.55627350  RMSG =       0.0381  MAXG =       0.6558
+     STEP       10 POTENTIAL_ENE =     -418528.56892553  RMSG =       0.0575  MAXG =       1.4436
+     STEP       11 POTENTIAL_ENE =     -418528.57917221  RMSG =       0.0379  MAXG =       0.9946
+     STEP       12 POTENTIAL_ENE =     -418528.58906945  RMSG =       0.0340  MAXG =       0.5658
+     STEP       13 POTENTIAL_ENE =     -418528.59924805  RMSG =       0.0360  MAXG =       0.6718
+     STEP       14 POTENTIAL_ENE =     -418528.60231609  RMSG =       0.0701  MAXG =       1.3728
+     STEP       15 POTENTIAL_ENE =     -418528.61049082  RMSG =       0.0295  MAXG =       0.8023
+     STEP       16 POTENTIAL_ENE =     -418528.61571916  RMSG =       0.0237  MAXG =       0.5297
+     STEP       17 POTENTIAL_ENE =     -418528.62221157  RMSG =       0.0319  MAXG =       0.6516
+     STEP       18 POTENTIAL_ENE =     -418528.63137573  RMSG =       0.0340  MAXG =       0.5483
+     STEP       19 POTENTIAL_ENE =     -418528.61357888  RMSG =       0.1440  MAXG =       2.1159
+     STEP       20 POTENTIAL_ENE =     -418528.63540246  RMSG =       0.0476  MAXG =       0.7363
+     STEP       21 POTENTIAL_ENE =     -418528.64306281  RMSG =       0.0253  MAXG =       0.4312
+     STEP       22 POTENTIAL_ENE =     -418528.64882080  RMSG =       0.0222  MAXG =       0.4880
+     STEP       23 POTENTIAL_ENE =     -418528.65788569  RMSG =       0.0363  MAXG =       0.5633
+     STEP       24 POTENTIAL_ENE =     -418528.66355107  RMSG =       0.0576  MAXG =       0.6526
+     STEP       25 POTENTIAL_ENE =     -418528.67089891  RMSG =       0.0299  MAXG =       0.4347
+     STEP       26 POTENTIAL_ENE =     -418528.67742607  RMSG =       0.0247  MAXG =       0.4618
+     STEP       27 POTENTIAL_ENE =     -418528.68229329  RMSG =       0.0305  MAXG =       0.4684
+     STEP       28 POTENTIAL_ENE =     -418528.69320887  RMSG =       0.0441  MAXG =       0.5799
+     STEP       29 POTENTIAL_ENE =     -418528.69954941  RMSG =       0.0691  MAXG =       1.2152
+     STEP       30 POTENTIAL_ENE =     -418528.70996048  RMSG =       0.0296  MAXG =       0.3972
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         24    -418528.4345          0.2947         10.1957        297.6550        194.5094          0.0000       1838.3673     -16800.3875    -404058.5787
+
+  maxg =    10.1957 at          2 PO4       1 PO42   O1   OG311 
+
++++++ Start micro iteration 25 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.25400536  RMSG =       0.0386  MAXG =       0.7236
+     STEP        2 POTENTIAL_ENE =     -416972.79866057  RMSG =      31.1425  MAXG =     324.4390
+     STEP        3 POTENTIAL_ENE =     -418528.25783187  RMSG =       0.0372  MAXG =       0.3813
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         25    -418528.5335          0.1167          3.7179        297.6479        194.5023          0.0000       1838.2992     -16800.3500    -404058.6328
+
+  maxg =     3.7179 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 26 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.51106086  RMSG =       0.0511  MAXG =       1.1176
+     STEP        2 POTENTIAL_ENE =     -414219.32569276  RMSG =      53.6955  MAXG =     306.3849
+     STEP        3 POTENTIAL_ENE =     -418528.51461009  RMSG =       0.0382  MAXG =       0.9421
+     STEP        4 POTENTIAL_ENE =     -418528.51806820  RMSG =       0.0278  MAXG =       0.4737
+     STEP        5 POTENTIAL_ENE =     -418528.52469356  RMSG =       0.0330  MAXG =       0.8303
+     STEP        6 POTENTIAL_ENE =     -418528.53341435  RMSG =       0.0362  MAXG =       0.8661
+     STEP        7 POTENTIAL_ENE =     -418528.54477101  RMSG =       0.0482  MAXG =       1.0591
+     STEP        8 POTENTIAL_ENE =     -418528.55121170  RMSG =       0.0488  MAXG =       1.2786
+     STEP        9 POTENTIAL_ENE =     -418528.55763141  RMSG =       0.0192  MAXG =       0.2940
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         26    -418528.6316          0.0738          3.5797        297.6533        194.4946          0.0000       1838.1879     -16800.3201    -404058.6472
+
+  maxg =     3.5797 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 27 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.67957682  RMSG =       0.0288  MAXG =       0.8836
+     STEP        2 POTENTIAL_ENE =     -418030.60910492  RMSG =      16.7943  MAXG =     247.7246
+     STEP        3 POTENTIAL_ENE =     -418528.68252055  RMSG =       0.0330  MAXG =       0.5244
+     STEP        4 POTENTIAL_ENE =     -418528.68565746  RMSG =       0.0244  MAXG =       0.5896
+     STEP        5 POTENTIAL_ENE =     -418528.69137799  RMSG =       0.0190  MAXG =       0.3516
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         27    -418528.7011          0.0878          3.8945        297.6384        194.5789          0.0000       1838.2262     -16800.2833    -404058.8614
+
+  maxg =     3.8945 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 28 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.50871329  RMSG =       0.0280  MAXG =       0.7217
+     STEP        2 POTENTIAL_ENE =     -418146.91218711  RMSG =      14.1788  MAXG =     226.0780
+     STEP        3 POTENTIAL_ENE =     -418528.51188518  RMSG =       0.0331  MAXG =       0.6706
+     STEP        4 POTENTIAL_ENE =     -418528.51535983  RMSG =       0.0244  MAXG =       0.5418
+     STEP        5 POTENTIAL_ENE =     -418528.52182974  RMSG =       0.0247  MAXG =       0.3931
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         28    -418528.7465          0.0789          3.0821        297.6979        194.5258          0.0000       1838.2702     -16800.3281    -404058.9123
+
+  maxg =     3.0821 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 29 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418528.80995632  RMSG =       0.0334  MAXG =       0.9714
+     STEP        2 POTENTIAL_ENE =     -417944.28679174  RMSG =      16.6199  MAXG =     244.1893
+     STEP        3 POTENTIAL_ENE =     -418528.81379337  RMSG =       0.0359  MAXG =       0.8373
+     STEP        4 POTENTIAL_ENE =     -418528.81783282  RMSG =       0.0239  MAXG =       0.7007
+     STEP        5 POTENTIAL_ENE =     -418528.82277289  RMSG =       0.0245  MAXG =       0.4592
+     STEP        6 POTENTIAL_ENE =     -418528.82891144  RMSG =       0.0344  MAXG =       0.8099
+     STEP        7 POTENTIAL_ENE =     -418528.84118525  RMSG =       0.0391  MAXG =       0.6416
+     STEP        8 POTENTIAL_ENE =     -418528.83446745  RMSG =       0.1128  MAXG =       3.7246
+     STEP        9 POTENTIAL_ENE =     -418528.84624764  RMSG =       0.0470  MAXG =       1.0862
+     STEP       10 POTENTIAL_ENE =     -418528.85325359  RMSG =       0.0269  MAXG =       0.6154
+     STEP       11 POTENTIAL_ENE =     -418528.85923759  RMSG =       0.0213  MAXG =       0.4646
+     STEP       12 POTENTIAL_ENE =     -418528.86405288  RMSG =       0.0312  MAXG =       0.6361
+     STEP       13 POTENTIAL_ENE =     -418528.86966607  RMSG =       0.0299  MAXG =       0.6136
+     STEP       14 POTENTIAL_ENE =     -418528.87599264  RMSG =       0.0251  MAXG =       0.4208
+     STEP       15 POTENTIAL_ENE =     -418528.88440562  RMSG =       0.0490  MAXG =       0.8228
+     STEP       16 POTENTIAL_ENE =     -418528.89252436  RMSG =       0.0351  MAXG =       0.5724
+     STEP       17 POTENTIAL_ENE =     -418528.89906270  RMSG =       0.0317  MAXG =       0.5301
+     STEP       18 POTENTIAL_ENE =     -418528.91082235  RMSG =       0.0469  MAXG =       0.6275
+     STEP       19 POTENTIAL_ENE =     -418528.91527486  RMSG =       0.0654  MAXG =       0.9137
+     STEP       20 POTENTIAL_ENE =     -418528.92310129  RMSG =       0.0296  MAXG =       0.4753
+     STEP       21 POTENTIAL_ENE =     -418528.92911390  RMSG =       0.0241  MAXG =       0.5162
+     STEP       22 POTENTIAL_ENE =     -418528.93735078  RMSG =       0.0353  MAXG =       0.6067
+     STEP       23 POTENTIAL_ENE =     -418528.95186364  RMSG =       0.0453  MAXG =       0.8083
+     STEP       24 POTENTIAL_ENE =     -418528.94788076  RMSG =       0.1526  MAXG =       2.4277
+     STEP       25 POTENTIAL_ENE =     -418528.96225190  RMSG =       0.0777  MAXG =       1.2287
+     STEP       26 POTENTIAL_ENE =     -418528.98206677  RMSG =       0.0466  MAXG =       0.7686
+     STEP       27 POTENTIAL_ENE =     -418529.00099834  RMSG =       0.0380  MAXG =       0.7817
+     STEP       28 POTENTIAL_ENE =     -418529.02628755  RMSG =       0.0668  MAXG =       0.9558
+     STEP       29 POTENTIAL_ENE =     -418529.05248610  RMSG =       0.0787  MAXG =       1.0982
+     STEP       30 POTENTIAL_ENE =     -418529.08222466  RMSG =       0.0643  MAXG =       0.9987
+     STEP       31 POTENTIAL_ENE =     -418529.10219374  RMSG =       0.1347  MAXG =       2.0798
+     STEP       32 POTENTIAL_ENE =     -418529.13779478  RMSG =       0.0539  MAXG =       0.7328
+     STEP       33 POTENTIAL_ENE =     -418529.15369399  RMSG =       0.0520  MAXG =       0.6842
+     STEP       34 POTENTIAL_ENE =     -418529.20280349  RMSG =       0.0734  MAXG =       1.1366
+     STEP       35 POTENTIAL_ENE =     -418529.23647176  RMSG =       0.1418  MAXG =       2.0235
+     STEP       36 POTENTIAL_ENE =     -418529.28170411  RMSG =       0.0689  MAXG =       0.7977
+     STEP       37 POTENTIAL_ENE =     -418529.31332324  RMSG =       0.0565  MAXG =       0.7851
+     STEP       38 POTENTIAL_ENE =     -418529.34166671  RMSG =       0.0720  MAXG =       1.1646
+     STEP       39 POTENTIAL_ENE =     -418529.37572906  RMSG =       0.1061  MAXG =       2.6446
+     STEP       40 POTENTIAL_ENE =     -418529.41818917  RMSG =       0.0669  MAXG =       0.6410
+     STEP       41 POTENTIAL_ENE =     -418529.45613076  RMSG =       0.0578  MAXG =       0.9717
+     STEP       42 POTENTIAL_ENE =     -418529.47231023  RMSG =       0.0649  MAXG =       1.5206
+     STEP       43 POTENTIAL_ENE =     -418529.49046372  RMSG =       0.0550  MAXG =       0.9741
+     STEP       44 POTENTIAL_ENE =     -418529.54310152  RMSG =       0.0963  MAXG =       1.1891
+     STEP       45 POTENTIAL_ENE =     -418529.56514462  RMSG =       0.1101  MAXG =       1.4253
+     STEP       46 POTENTIAL_ENE =     -418529.58789520  RMSG =       0.0548  MAXG =       0.6359
+     STEP       47 POTENTIAL_ENE =     -418529.60732428  RMSG =       0.0426  MAXG =       0.5421
+     STEP       48 POTENTIAL_ENE =     -418529.62947985  RMSG =       0.0595  MAXG =       0.7955
+     STEP       49 POTENTIAL_ENE =     -418529.67099128  RMSG =       0.0837  MAXG =       1.0159
+     STEP       50 POTENTIAL_ENE =     -418529.69324735  RMSG =       0.1520  MAXG =       3.3422
+     STEP       51 POTENTIAL_ENE =     -418529.74324191  RMSG =       0.0561  MAXG =       0.7023
+     STEP       52 POTENTIAL_ENE =     -418529.76548266  RMSG =       0.0508  MAXG =       0.6584
+     STEP       53 POTENTIAL_ENE =     -418529.79110073  RMSG =       0.0645  MAXG =       1.1987
+     STEP       54 POTENTIAL_ENE =     -418529.83521543  RMSG =       0.1018  MAXG =       1.6754
+     STEP       55 POTENTIAL_ENE =     -418529.88155530  RMSG =       0.1001  MAXG =       1.7837
+     STEP       56 POTENTIAL_ENE =     -418529.92483695  RMSG =       0.0658  MAXG =       1.0153
+     STEP       57 POTENTIAL_ENE =     -418529.97912876  RMSG =       0.0800  MAXG =       1.5019
+     STEP       58 POTENTIAL_ENE =     -418530.01659372  RMSG =       0.0975  MAXG =       1.8860
+     STEP       59 POTENTIAL_ENE =     -418530.08011080  RMSG =       0.0987  MAXG =       1.3159
+     STEP       60 POTENTIAL_ENE =     -418530.11837672  RMSG =       0.2644  MAXG =       6.4615
+     STEP       61 POTENTIAL_ENE =     -418530.24653632  RMSG =       0.0859  MAXG =       0.8586
+     STEP       62 POTENTIAL_ENE =     -418530.28241918  RMSG =       0.0768  MAXG =       0.8673
+     STEP       63 POTENTIAL_ENE =     -418530.36976275  RMSG =       0.1277  MAXG =       2.5612
+     STEP       64 POTENTIAL_ENE =     -418530.51684775  RMSG =       0.1169  MAXG =       2.4568
+     STEP       65 POTENTIAL_ENE =     -418530.64319893  RMSG =       0.2322  MAXG =       3.0395
+     STEP       66 POTENTIAL_ENE =     -418530.77804487  RMSG =       0.1136  MAXG =       1.1857
+     STEP       67 POTENTIAL_ENE =     -418530.85325795  RMSG =       0.1309  MAXG =       2.0695
+     STEP       68 POTENTIAL_ENE =     -418530.97852903  RMSG =       0.1315  MAXG =       2.6211
+     STEP       69 POTENTIAL_ENE =     -418531.11093601  RMSG =       0.1989  MAXG =       3.3419
+     STEP       70 POTENTIAL_ENE =     -418531.25498239  RMSG =       0.1128  MAXG =       1.2991
+     STEP       71 POTENTIAL_ENE =     -418531.36074834  RMSG =       0.1005  MAXG =       1.2484
+     STEP       72 POTENTIAL_ENE =     -418531.48074044  RMSG =       0.1743  MAXG =       4.2891
+     STEP       73 POTENTIAL_ENE =     -418531.63858018  RMSG =       0.1358  MAXG =       2.0464
+     STEP       74 POTENTIAL_ENE =     -418531.75330439  RMSG =       0.1146  MAXG =       2.3745
+     STEP       75 POTENTIAL_ENE =     -418531.85514202  RMSG =       0.1069  MAXG =       1.4475
+     STEP       76 POTENTIAL_ENE =     -418531.92997878  RMSG =       0.1819  MAXG =       3.7266
+     STEP       77 POTENTIAL_ENE =     -418532.04699057  RMSG =       0.1036  MAXG =       1.9881
+     STEP       78 POTENTIAL_ENE =     -418532.16302544  RMSG =       0.1001  MAXG =       1.6227
+     STEP       79 POTENTIAL_ENE =     -418532.24940325  RMSG =       0.1339  MAXG =       3.4788
+     STEP       80 POTENTIAL_ENE =     -418532.36283869  RMSG =       0.1156  MAXG =       1.8273
+     STEP       81 POTENTIAL_ENE =     -418532.43872914  RMSG =       0.0974  MAXG =       1.4168
+     STEP       82 POTENTIAL_ENE =     -418532.51891456  RMSG =       0.0978  MAXG =       1.3408
+     STEP       83 POTENTIAL_ENE =     -418532.61628714  RMSG =       0.1289  MAXG =       1.7880
+     STEP       84 POTENTIAL_ENE =     -418532.72387923  RMSG =       0.1651  MAXG =       2.2680
+     STEP       85 POTENTIAL_ENE =     -418532.80803747  RMSG =       0.0979  MAXG =       1.3314
+     STEP       86 POTENTIAL_ENE =     -418532.85378775  RMSG =       0.0817  MAXG =       1.0692
+     STEP       87 POTENTIAL_ENE =     -418532.92074939  RMSG =       0.0900  MAXG =       1.5206
+     STEP       88 POTENTIAL_ENE =     -418532.99172782  RMSG =       0.1445  MAXG =       2.6768
+     STEP       89 POTENTIAL_ENE =     -418533.05188795  RMSG =       0.0797  MAXG =       1.3624
+     STEP       90 POTENTIAL_ENE =     -418533.09048462  RMSG =       0.0626  MAXG =       0.7582
+     STEP       91 POTENTIAL_ENE =     -418533.12260979  RMSG =       0.0708  MAXG =       0.9713
+     STEP       92 POTENTIAL_ENE =     -418533.17848195  RMSG =       0.1228  MAXG =       2.1603
+     STEP       93 POTENTIAL_ENE =     -418533.23409512  RMSG =       0.0856  MAXG =       1.0312
+     STEP       94 POTENTIAL_ENE =     -418533.27162450  RMSG =       0.0608  MAXG =       0.6659
+     STEP       95 POTENTIAL_ENE =     -418533.30292787  RMSG =       0.0677  MAXG =       0.7810
+     STEP       96 POTENTIAL_ENE =     -418533.32978915  RMSG =       0.0687  MAXG =       0.8669
+     STEP       97 POTENTIAL_ENE =     -418533.35936069  RMSG =       0.0582  MAXG =       0.6538
+     STEP       98 POTENTIAL_ENE =     -418533.39860605  RMSG =       0.1079  MAXG =       1.3207
+     STEP       99 POTENTIAL_ENE =     -418533.42734386  RMSG =       0.0792  MAXG =       1.2908
+     STEP      100 POTENTIAL_ENE =     -418533.44409497  RMSG =       0.0484  MAXG =       0.7426
+
++++++ STOP: Total number of iterations exceeds limit.+++++
+
+INFO:         29    -418533.3915          0.0671          1.3284        297.8536        195.0011          0.0000       1842.7533     -16809.8859    -404059.1136
+
+  maxg =     1.3284 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 30 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.55873353  RMSG =       0.1298  MAXG =       4.7269
+     STEP        2 POTENTIAL_ENE =     -415722.98300678  RMSG =      41.4453  MAXG =     374.2388
+     STEP        3 POTENTIAL_ENE =     -418533.57579037  RMSG =       0.1287  MAXG =       4.1788
+     STEP        4 POTENTIAL_ENE =     -418533.61459765  RMSG =       0.0830  MAXG =       2.2551
+     STEP        5 POTENTIAL_ENE =     -418533.65703332  RMSG =       0.0878  MAXG =       3.3986
+     STEP        6 POTENTIAL_ENE =     -418533.72483537  RMSG =       0.0911  MAXG =       2.8483
+     STEP        7 POTENTIAL_ENE =     -418533.77421516  RMSG =       0.1658  MAXG =       6.4185
+     STEP        8 POTENTIAL_ENE =     -418533.83719236  RMSG =       0.0671  MAXG =       1.1628
+     STEP        9 POTENTIAL_ENE =     -418533.86503212  RMSG =       0.0476  MAXG =       0.8315
+     STEP       10 POTENTIAL_ENE =     -418533.88723323  RMSG =       0.0554  MAXG =       1.1108
+     STEP       11 POTENTIAL_ENE =     -418533.91231210  RMSG =       0.1100  MAXG =       1.9538
+     STEP       12 POTENTIAL_ENE =     -418533.94395210  RMSG =       0.0546  MAXG =       1.0027
+     STEP       13 POTENTIAL_ENE =     -418533.96506771  RMSG =       0.0449  MAXG =       0.8231
+     STEP       14 POTENTIAL_ENE =     -418533.98467058  RMSG =       0.0516  MAXG =       0.9470
+     STEP       15 POTENTIAL_ENE =     -418534.00214302  RMSG =       0.0810  MAXG =       1.6811
+     STEP       16 POTENTIAL_ENE =     -418534.02214266  RMSG =       0.0443  MAXG =       0.9333
+     STEP       17 POTENTIAL_ENE =     -418534.03615342  RMSG =       0.0388  MAXG =       0.5699
+     STEP       18 POTENTIAL_ENE =     -418534.05089731  RMSG =       0.0475  MAXG =       0.8223
+     STEP       19 POTENTIAL_ENE =     -418534.06308642  RMSG =       0.0696  MAXG =       1.4423
+     STEP       20 POTENTIAL_ENE =     -418534.07598416  RMSG =       0.0359  MAXG =       0.5659
+     STEP       21 POTENTIAL_ENE =     -418534.08750362  RMSG =       0.0353  MAXG =       0.5064
+     STEP       22 POTENTIAL_ENE =     -418534.09791386  RMSG =       0.0401  MAXG =       0.7825
+     STEP       23 POTENTIAL_ENE =     -418534.10300761  RMSG =       0.1162  MAXG =       2.2782
+     STEP       24 POTENTIAL_ENE =     -418534.12469520  RMSG =       0.0377  MAXG =       0.6958
+     STEP       25 POTENTIAL_ENE =     -418534.13199484  RMSG =       0.0307  MAXG =       0.6745
+     STEP       26 POTENTIAL_ENE =     -418534.14456217  RMSG =       0.0410  MAXG =       0.6151
+     STEP       27 POTENTIAL_ENE =     -418534.16304552  RMSG =       0.0541  MAXG =       0.8961
+     STEP       28 POTENTIAL_ENE =     -418534.16692498  RMSG =       0.1224  MAXG =       1.9515
+     STEP       29 POTENTIAL_ENE =     -418534.19409531  RMSG =       0.0388  MAXG =       0.5889
+     STEP       30 POTENTIAL_ENE =     -418534.20252819  RMSG =       0.0329  MAXG =       0.4181
+     STEP       31 POTENTIAL_ENE =     -418534.21718796  RMSG =       0.0421  MAXG =       0.7188
+     STEP       32 POTENTIAL_ENE =     -418534.23552571  RMSG =       0.0580  MAXG =       0.5964
+     STEP       33 POTENTIAL_ENE =     -418534.24548833  RMSG =       0.0766  MAXG =       1.5745
+     STEP       34 POTENTIAL_ENE =     -418534.25977872  RMSG =       0.0310  MAXG =       0.5899
+     STEP       35 POTENTIAL_ENE =     -418534.26711797  RMSG =       0.0306  MAXG =       0.4943
+     STEP       36 POTENTIAL_ENE =     -418534.27693333  RMSG =       0.0399  MAXG =       0.8510
+     STEP       37 POTENTIAL_ENE =     -418534.29140325  RMSG =       0.0738  MAXG =       1.4563
+     STEP       38 POTENTIAL_ENE =     -418534.30721015  RMSG =       0.0444  MAXG =       0.7967
+     STEP       39 POTENTIAL_ENE =     -418534.31691304  RMSG =       0.0291  MAXG =       0.3934
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         30    -418533.6347          0.3683         14.9042        298.0787        195.1884          0.0000       1843.0808     -16810.5973    -404059.3854
+
+  maxg =    14.9042 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 31 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.08458472  RMSG =       0.0891  MAXG =       3.4841
+     STEP        2 POTENTIAL_ENE =     -417078.68271416  RMSG =      29.9084  MAXG =     331.2290
+     STEP        3 POTENTIAL_ENE =     -418533.09316743  RMSG =       0.0841  MAXG =       3.2222
+     STEP        4 POTENTIAL_ENE =     -418533.10919618  RMSG =       0.0534  MAXG =       1.8459
+     STEP        5 POTENTIAL_ENE =     -418533.12617766  RMSG =       0.0589  MAXG =       1.9166
+     STEP        6 POTENTIAL_ENE =     -418533.15836987  RMSG =       0.0648  MAXG =       2.1392
+     STEP        7 POTENTIAL_ENE =     -418533.17982426  RMSG =       0.0905  MAXG =       3.1916
+     STEP        8 POTENTIAL_ENE =     -418533.19940791  RMSG =       0.0332  MAXG =       0.6148
+     STEP        9 POTENTIAL_ENE =     -418533.20673988  RMSG =       0.0304  MAXG =       0.6820
+     STEP       10 POTENTIAL_ENE =     -418533.21969466  RMSG =       0.0421  MAXG =       0.9937
+     STEP       11 POTENTIAL_ENE =     -418533.22337633  RMSG =       0.0875  MAXG =       1.5287
+     STEP       12 POTENTIAL_ENE =     -418533.23574971  RMSG =       0.0320  MAXG =       0.5810
+     STEP       13 POTENTIAL_ENE =     -418533.24111947  RMSG =       0.0223  MAXG =       0.3483
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         31    -418533.8268          0.0885          2.8652        297.9638        195.1578          0.0000       1842.9497     -16810.6526    -404059.2455
+
+  maxg =     2.8652 at          5 PO4       1 PO42   H2   HGP1  
+
++++++ Start micro iteration 32 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.94521524  RMSG =       0.0373  MAXG =       0.9648
+     STEP        2 POTENTIAL_ENE =     -417557.29881536  RMSG =      24.4050  MAXG =     285.8291
+     STEP        3 POTENTIAL_ENE =     -418533.94847928  RMSG =       0.0375  MAXG =       0.9641
+     STEP        4 POTENTIAL_ENE =     -418533.95223722  RMSG =       0.0280  MAXG =       0.6438
+     STEP        5 POTENTIAL_ENE =     -418533.95976616  RMSG =       0.0275  MAXG =       0.8458
+     STEP        6 POTENTIAL_ENE =     -418533.96632384  RMSG =       0.0253  MAXG =       0.5619
+     STEP        7 POTENTIAL_ENE =     -418533.96879909  RMSG =       0.0614  MAXG =       2.6929
+     STEP        8 POTENTIAL_ENE =     -418533.97575931  RMSG =       0.0187  MAXG =       0.3394
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         32    -418533.8747          0.1427          5.3444        297.9835        195.1662          0.0000       1843.0959     -16810.5559    -404059.5645
+
+  maxg =     5.3444 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 33 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.67566517  RMSG =       0.0464  MAXG =       1.5687
+     STEP        2 POTENTIAL_ENE =     -417690.58306581  RMSG =      22.4712  MAXG =     289.3475
+     STEP        3 POTENTIAL_ENE =     -418533.67973120  RMSG =       0.0407  MAXG =       1.0494
+     STEP        4 POTENTIAL_ENE =     -418533.68368346  RMSG =       0.0267  MAXG =       0.7788
+     STEP        5 POTENTIAL_ENE =     -418533.68831769  RMSG =       0.0262  MAXG =       1.0972
+     STEP        6 POTENTIAL_ENE =     -418533.69366921  RMSG =       0.0222  MAXG =       0.6223
+     STEP        7 POTENTIAL_ENE =     -418533.69700631  RMSG =       0.0427  MAXG =       1.6651
+     STEP        8 POTENTIAL_ENE =     -418533.70169580  RMSG =       0.0216  MAXG =       0.6527
+     STEP        9 POTENTIAL_ENE =     -418533.70579038  RMSG =       0.0167  MAXG =       0.3667
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         33    -418533.8986          0.1322          4.3311        297.9679        195.2153          0.0000       1843.2929     -16810.7169    -404059.6578
+
+  maxg =     4.3311 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 34 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.83124786  RMSG =       0.0242  MAXG =       0.6895
+     STEP        2 POTENTIAL_ENE =     -418116.11007526  RMSG =      15.7522  MAXG =     270.4175
+     STEP        3 POTENTIAL_ENE =     -418533.83324764  RMSG =       0.0246  MAXG =       0.7074
+     STEP        4 POTENTIAL_ENE =     -418533.83507435  RMSG =       0.0190  MAXG =       0.4365
+     STEP        5 POTENTIAL_ENE =     -418533.83870231  RMSG =       0.0154  MAXG =       0.2113
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         34    -418533.9517          0.0789          2.2970        297.9857        195.1392          0.0000       1843.2026     -16810.6994    -404059.5798
+
+  maxg =     2.2970 at          7 PO4       1 PO42   O4   OG2P1 
+
++++++ Start micro iteration 35 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.04698261  RMSG =       0.0162  MAXG =       0.2647
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         35    -418533.9657          0.0439          2.0274        297.9857        195.1392          0.0000       1843.2277     -16810.6994    -404059.6189
+
+  maxg =     2.0274 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 36 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.03612752  RMSG =       0.0202  MAXG =       0.4364
+     STEP        2 POTENTIAL_ENE =     -418141.87629314  RMSG =      14.4393  MAXG =     250.8724
+     STEP        3 POTENTIAL_ENE =     -418534.03774645  RMSG =       0.0212  MAXG =       0.3095
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         36    -418533.9765          0.0401          1.2266        298.0185        195.1812          0.0000       1843.3033     -16810.7457    -404059.7337
+
+  maxg =     1.2266 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 37 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.07272308  RMSG =       0.0228  MAXG =       0.3306
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         37    -418533.9892          0.0408          1.3326        298.0185        195.1812          0.0000       1843.3525     -16810.7457    -404059.7956
+
+  maxg =     1.3326 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 38 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.22706515  RMSG =       0.0287  MAXG =       0.5208
+     STEP        2 POTENTIAL_ENE =     -417614.42376930  RMSG =      24.6424  MAXG =     271.8501
+     STEP        3 POTENTIAL_ENE =     -418534.22867107  RMSG =       0.0262  MAXG =       0.4721
+     STEP        4 POTENTIAL_ENE =     -418534.23050319  RMSG =       0.0216  MAXG =       0.3725
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         38    -418533.9927          0.1055          5.3946        298.0133        195.2128          0.0000       1843.4414     -16810.7595    -404059.9008
+
+  maxg =     5.3946 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 39 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.87734882  RMSG =       0.0232  MAXG =       0.4651
+     STEP        2 POTENTIAL_ENE =     -417543.29360517  RMSG =      25.9086  MAXG =     289.1235
+     STEP        3 POTENTIAL_ENE =     -418533.87835823  RMSG =       0.0201  MAXG =       0.4472
+     STEP        4 POTENTIAL_ENE =     -418533.87945487  RMSG =       0.0180  MAXG =       0.3062
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         39    -418534.0009          0.0503          2.1605        298.0039        195.2228          0.0000       1843.4083     -16810.7828    -404059.8533
+
+  maxg =     2.1605 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 40 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.03700689  RMSG =       0.0218  MAXG =       0.4043
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         40    -418534.0100          0.0396          1.3157        298.0039        195.2228          0.0000       1843.4288     -16810.7828    -404059.8829
+
+  maxg =     1.3157 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 41 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.02180983  RMSG =       0.0255  MAXG =       0.5339
+     STEP        2 POTENTIAL_ENE =     -417622.07802518  RMSG =      24.8131  MAXG =     276.8282
+     STEP        3 POTENTIAL_ENE =     -418534.02298645  RMSG =       0.0228  MAXG =       0.4699
+     STEP        4 POTENTIAL_ENE =     -418534.02437030  RMSG =       0.0198  MAXG =       0.4122
+     STEP        5 POTENTIAL_ENE =     -418534.03151412  RMSG =       0.0298  MAXG =       0.8316
+     STEP        6 POTENTIAL_ENE =     -418534.03839218  RMSG =       0.0279  MAXG =       0.5411
+     STEP        7 POTENTIAL_ENE =     -418534.04145657  RMSG =       0.0701  MAXG =       2.2234
+     STEP        8 POTENTIAL_ENE =     -418534.04970772  RMSG =       0.0186  MAXG =       0.3409
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         41    -418534.0429          0.0378          1.4162        297.9925        195.2384          0.0000       1843.4919     -16811.1852    -404059.5806
+
+  maxg =     1.4162 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 42 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.41844825  RMSG =       0.1014  MAXG =       2.7794
+     STEP        2 POTENTIAL_ENE =     -416668.39891807  RMSG =      34.3355  MAXG =     325.0448
+     STEP        3 POTENTIAL_ENE =     -418534.42666996  RMSG =       0.0890  MAXG =       2.3395
+     STEP        4 POTENTIAL_ENE =     -418534.44288365  RMSG =       0.0491  MAXG =       1.2203
+     STEP        5 POTENTIAL_ENE =     -418534.45452527  RMSG =       0.0513  MAXG =       1.6112
+     STEP        6 POTENTIAL_ENE =     -418534.48253956  RMSG =       0.0631  MAXG =       1.6101
+     STEP        7 POTENTIAL_ENE =     -418534.51011366  RMSG =       0.0747  MAXG =       1.9386
+     STEP        8 POTENTIAL_ENE =     -418534.53462745  RMSG =       0.0740  MAXG =       1.6897
+     STEP        9 POTENTIAL_ENE =     -418534.55269640  RMSG =       0.0341  MAXG =       0.8435
+     STEP       10 POTENTIAL_ENE =     -418534.56120263  RMSG =       0.0343  MAXG =       0.7344
+     STEP       11 POTENTIAL_ENE =     -418534.57057928  RMSG =       0.0395  MAXG =       1.0420
+     STEP       12 POTENTIAL_ENE =     -418534.57913049  RMSG =       0.0583  MAXG =       1.1487
+     STEP       13 POTENTIAL_ENE =     -418534.58705969  RMSG =       0.0245  MAXG =       0.3549
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         42    -418533.6165          0.3708         10.9236        298.0641        195.3309          0.0000       1843.5988     -16811.5589    -404059.0514
+
+  maxg =    10.9236 at          2 PO4       1 PO42   O1   OG311 
+
++++++ Start micro iteration 43 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.03642656  RMSG =       0.1016  MAXG =       2.4027
+     STEP        2 POTENTIAL_ENE =     -415790.72059399  RMSG =      41.6048  MAXG =     320.3522
+     STEP        3 POTENTIAL_ENE =     -418533.04513907  RMSG =       0.0886  MAXG =       2.0568
+     STEP        4 POTENTIAL_ENE =     -418533.06124487  RMSG =       0.0485  MAXG =       1.3825
+     STEP        5 POTENTIAL_ENE =     -418533.07242967  RMSG =       0.0517  MAXG =       1.5394
+     STEP        6 POTENTIAL_ENE =     -418533.10445248  RMSG =       0.0693  MAXG =       1.7497
+     STEP        7 POTENTIAL_ENE =     -418533.13256762  RMSG =       0.0702  MAXG =       1.5695
+     STEP        8 POTENTIAL_ENE =     -418533.13011701  RMSG =       0.1191  MAXG =       3.1139
+     STEP        9 POTENTIAL_ENE =     -418533.14712701  RMSG =       0.0557  MAXG =       1.0819
+     STEP       10 POTENTIAL_ENE =     -418533.15607702  RMSG =       0.0212  MAXG =       0.3895
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         43    -418534.0500          0.0739          2.5346        298.0360        195.2567          0.0000       1843.6578     -16811.6231    -404059.3773
+
+  maxg =     2.5346 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 44 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.18192089  RMSG =       0.1199  MAXG =       3.3919
+     STEP        2 POTENTIAL_ENE =     -417112.98973295  RMSG =      28.7311  MAXG =     288.2246
+     STEP        3 POTENTIAL_ENE =     -418534.19948280  RMSG =       0.1092  MAXG =       2.5558
+     STEP        4 POTENTIAL_ENE =     -418534.22491028  RMSG =       0.0586  MAXG =       1.3427
+     STEP        5 POTENTIAL_ENE =     -418534.24012721  RMSG =       0.0538  MAXG =       1.5915
+     STEP        6 POTENTIAL_ENE =     -418534.26646388  RMSG =       0.0496  MAXG =       1.0009
+     STEP        7 POTENTIAL_ENE =     -418534.27105546  RMSG =       0.1040  MAXG =       3.8233
+     STEP        8 POTENTIAL_ENE =     -418534.28782251  RMSG =       0.0394  MAXG =       1.1639
+     STEP        9 POTENTIAL_ENE =     -418534.29585421  RMSG =       0.0249  MAXG =       0.5283
+     STEP       10 POTENTIAL_ENE =     -418534.30258239  RMSG =       0.0275  MAXG =       0.6211
+     STEP       11 POTENTIAL_ENE =     -418534.31108995  RMSG =       0.0260  MAXG =       0.6675
+     STEP       12 POTENTIAL_ENE =     -418534.30012043  RMSG =       0.1187  MAXG =       2.0689
+     STEP       13 POTENTIAL_ENE =     -418534.31442956  RMSG =       0.0393  MAXG =       0.6364
+     STEP       14 POTENTIAL_ENE =     -418534.31998106  RMSG =       0.0195  MAXG =       0.2836
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         44    -418533.7642          0.2945          9.3219        298.0703        195.3401          0.0000       1843.6632     -16811.6025    -404059.2353
+
+  maxg =     9.3219 at          5 PO4       1 PO42   H2   HGP1  
+
++++++ Start micro iteration 45 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.46077728  RMSG =       0.1036  MAXG =       2.8048
+     STEP        2 POTENTIAL_ENE =     -416301.91153547  RMSG =      37.9152  MAXG =     270.2275
+     STEP        3 POTENTIAL_ENE =     -418533.46865920  RMSG =       0.0914  MAXG =       2.3456
+     STEP        4 POTENTIAL_ENE =     -418533.48471237  RMSG =       0.0443  MAXG =       1.1956
+     STEP        5 POTENTIAL_ENE =     -418533.49307426  RMSG =       0.0445  MAXG =       1.2501
+     STEP        6 POTENTIAL_ENE =     -418533.51618286  RMSG =       0.0539  MAXG =       1.4668
+     STEP        7 POTENTIAL_ENE =     -418533.53208343  RMSG =       0.0637  MAXG =       1.8245
+     STEP        8 POTENTIAL_ENE =     -418533.54420708  RMSG =       0.0325  MAXG =       0.6184
+     STEP        9 POTENTIAL_ENE =     -418533.54868588  RMSG =       0.0187  MAXG =       0.3455
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         45    -418534.0594          0.1042          3.3751        298.0335        195.2863          0.0000       1843.6466     -16811.7338    -404059.2920
+
+  maxg =     3.3751 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 46 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.19736610  RMSG =       0.0433  MAXG =       0.9418
+     STEP        2 POTENTIAL_ENE =     -417824.67390406  RMSG =      20.5559  MAXG =     267.5223
+     STEP        3 POTENTIAL_ENE =     -418534.20152343  RMSG =       0.0406  MAXG =       0.7384
+     STEP        4 POTENTIAL_ENE =     -418534.20571896  RMSG =       0.0278  MAXG =       0.5877
+     STEP        5 POTENTIAL_ENE =     -418534.21156181  RMSG =       0.0209  MAXG =       0.6668
+     STEP        6 POTENTIAL_ENE =     -418534.21453168  RMSG =       0.0167  MAXG =       0.3527
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         46    -418534.0812          0.1012          4.0116        297.9966        195.3142          0.0000       1843.5331     -16811.5340    -404059.3910
+
+  maxg =     4.0116 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 47 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418533.84702753  RMSG =       0.0220  MAXG =       0.3923
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         47    -418534.1044          0.1066          3.6767        297.9966        195.3142          0.0000       1843.5706     -16811.5340    -404059.4517
+
+  maxg =     3.6767 at          6 PO4       1 PO42   O3   OG2P1 
+
++++++ Start micro iteration 48 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.10464049  RMSG =       0.0272  MAXG =       0.5536
+     STEP        2 POTENTIAL_ENE =     -417869.90126234  RMSG =      20.4923  MAXG =     289.3554
+     STEP        3 POTENTIAL_ENE =     -418534.10641214  RMSG =       0.0225  MAXG =       0.2853
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         48    -418534.1224          0.0426          1.7716        298.0057        195.3141          0.0000       1843.6396     -16811.5712    -404059.5105
+
+  maxg =     1.7716 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 49 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.13441528  RMSG =       0.0242  MAXG =       0.4120
+     STEP        2 POTENTIAL_ENE =     -417154.08910689  RMSG =      30.7779  MAXG =     327.6436
+     STEP        3 POTENTIAL_ENE =     -418534.13548223  RMSG =       0.0171  MAXG =       0.4284
+     STEP        4 POTENTIAL_ENE =     -418534.13625791  RMSG =       0.0149  MAXG =       0.3177
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         49    -418534.1306          0.0278          0.8153        298.0268        195.3153          0.0000       1843.6670     -16811.5646    -404059.5752
+
+  maxg =     0.8153 at          5 PO4       1 PO42   H2   HGP1  
+
++++++ Start micro iteration 50 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.17796570  RMSG =       0.0172  MAXG =       0.5031
+     STEP        2 POTENTIAL_ENE =     -418111.28124097  RMSG =      16.6528  MAXG =     201.8763
+     STEP        3 POTENTIAL_ENE =     -418534.17882578  RMSG =       0.0205  MAXG =       0.6176
+     STEP        4 POTENTIAL_ENE =     -418534.18002668  RMSG =       0.0182  MAXG =       0.4595
+     STEP        5 POTENTIAL_ENE =     -418534.18617563  RMSG =       0.0219  MAXG =       0.4742
+     STEP        6 POTENTIAL_ENE =     -418534.18771829  RMSG =       0.0402  MAXG =       0.9347
+     STEP        7 POTENTIAL_ENE =     -418534.18986140  RMSG =       0.0189  MAXG =       0.4368
+     STEP        8 POTENTIAL_ENE =     -418534.19168192  RMSG =       0.0111  MAXG =       0.2242
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         50    -418534.1490          0.0305          0.8789        298.0282        195.3399          0.0000       1843.6781     -16811.6086    -404059.5866
+
+  maxg =     0.8789 at          2 PO4       1 PO42   O1   OG311 
+
++++++ Start micro iteration 51 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.15062602  RMSG =       0.0314  MAXG =       1.1054
+     STEP        2 POTENTIAL_ENE =     -418073.72720280  RMSG =      16.8836  MAXG =     241.0904
+     STEP        3 POTENTIAL_ENE =     -418534.15232189  RMSG =       0.0251  MAXG =       0.7055
+     STEP        4 POTENTIAL_ENE =     -418534.15389055  RMSG =       0.0181  MAXG =       0.4577
+     STEP        5 POTENTIAL_ENE =     -418534.15663337  RMSG =       0.0207  MAXG =       0.7026
+     STEP        6 POTENTIAL_ENE =     -418534.16032043  RMSG =       0.0235  MAXG =       0.5412
+     STEP        7 POTENTIAL_ENE =     -418534.16631613  RMSG =       0.0410  MAXG =       1.3009
+     STEP        8 POTENTIAL_ENE =     -418534.17313322  RMSG =       0.0330  MAXG =       0.6489
+     STEP        9 POTENTIAL_ENE =     -418534.17764740  RMSG =       0.0173  MAXG =       0.2536
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         51    -418534.1659          0.0521          2.3027        297.9807        195.4015          0.0000       1843.7989     -16811.7640    -404059.5829
+
+  maxg =     2.3027 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 52 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.14617217  RMSG =       0.0174  MAXG =       0.2672
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         52    -418534.1678          0.0522          2.7014        297.9807        195.4015          0.0000       1843.8587     -16811.7640    -404059.6447
+
+  maxg =     2.7014 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 53 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.20614990  RMSG =       0.0193  MAXG =       0.3991
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         53    -418534.1709          0.0326          1.0576        297.9807        195.4015          0.0000       1843.7844     -16811.7640    -404059.5735
+
+  maxg =     1.0576 at          4 PO4       1 PO42   O2   OG311 
+
++++++ Start micro iteration 54 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.36586421  RMSG =       0.0201  MAXG =       0.3828
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         54    -418534.1714          0.0602          2.5983        297.9807        195.4015          0.0000       1843.8675     -16811.7640    -404059.6571
+
+  maxg =     2.5983 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 55 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.07903477  RMSG =       0.0177  MAXG =       0.2583
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         55    -418534.1739          0.0304          0.9345        297.9807        195.4015          0.0000       1843.8267     -16811.7640    -404059.6188
+
+  maxg =     0.9345 at          1 PO4       1 PO42   P    PG3   
+
++++++ Start micro iteration 56 +++++ 
+
+     STEP        1 POTENTIAL_ENE =     -418534.15501227  RMSG =       0.0184  MAXG =       0.3004
+
++++++ STOP: RMSG and MAXG becomes sufficiently small.+++++
+
+INFO:         56    -418534.1754          0.0240          0.5225        297.9807        195.4015          0.0000       1843.8363     -16811.7640    -404059.6299
+
+  maxg =     0.5225 at          1 PO4       1 PO42   P    PG3   
+
+
+Final energy =   -418534.1754100773
+
+ >>>>> STOP: RMSG and MAXG becomes sufficiently small
+
+Check_Chirality> Check chirality
+ 
+  No suspicious residue was detected.
+ 
+ 
+[STEP6] Deallocate Arrays
+ 
+Output_Time> Averaged timer profile (Min, Max)
+  total time      =     326.635
+    setup         =       0.127
+    dynamics      =     326.509
+      energy      =     305.424
+      integrator  =       0.000
+      pairlist    =      18.634 (      18.634,      18.634)
+  energy           
+    bond          =       0.102 (       0.102,       0.102)
+    angle         =       0.053 (       0.053,       0.053)
+    dihedral      =       0.024 (       0.024,       0.024)
+    nonbond       =       9.408 (       9.408,       9.408)
+      pme real    =       9.408 (       9.408,       9.408)
+      pme recip   =       0.000 (       0.000,       0.000)
+    solvation     =       0.000 (       0.000,       0.000)
+      polar       =       0.000 (       0.000,       0.000)
+      non-polar   =       0.000 (       0.000,       0.000)
+    restraint     =       0.000 (       0.000,       0.000)
+    qmmm          =     295.793 (     295.793,     295.793)
+  integrator       
+    constraint    =       0.000 (       0.000,       0.000)
+    update        =       0.000 (       0.000,       0.000)
+    comm_coord    =       0.000 (       0.000,       0.000)
+    comm_force    =       0.000 (       0.000,       0.000)
+    comm_migrate  =       0.000 (       0.000,       0.000)
+

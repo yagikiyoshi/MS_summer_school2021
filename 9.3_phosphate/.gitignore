@@ -1,9 +1,9 @@
 *.wfn
 *.pdf
-*.chk
-*.Fchk
 *.dcd
 *.rst
 minfo.files
 pes
+qmmm_*.0
+qmmm_*.1
 
