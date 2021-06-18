@@ -1,6 +1,6 @@
 %nprocshared=16
 %chk=rhodamine2.chk
-%mem=1GB
+%mem=10GB
 #p opt b3lyp/cc-pvdz geom=connectivity
 
 Rhodamine (2)
