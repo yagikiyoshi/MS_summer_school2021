@@ -1,0 +1,58 @@
+#--- [  INPUT PARAMETER  ]
+ &mol minfofile='../1_harmonic/w3-b3lyp-dz_local.minfo' /
+ &sys maxmem=500 /
+
+#--- [  MRPES ]
+ &mrpes mopFile='prop_no_1.mop' mcs_cutoff=-1.0D-03 /
+
+#--- [  VIB  ]
+ &vib 
+  MR=3 vscf=.t.  vqdpt=.t.  prpt=.t. 
+  vmaxall=-1
+  vmax(7)=10
+  vmax(8)=10
+  vmax(9)=10
+  vmax(16)=10
+  vmax(17)=10
+  vmax(18)=10
+  vmax(25)=10
+  vmax(26)=10
+  vmax(27)=10
+  vmax(34)=10
+  vmax(35)=10
+  vmax(36)=10
+  vmax(43)=10
+  vmax(44)=10
+  vmax(45)=10
+  vmax(52)=10
+  vmax(53)=10
+  vmax(54)=10
+ /
+
+#--- [  VSCF  ]
+ &vscf Maxitr=20 Ethresh=1.D-03 / 
+
+ &states
+  fund=.t.
+ /
+
+#--- [  VQDPT  ]
+ &vqdpt 
+  maxSum=4
+  nGen=3 
+ /
+
+#--- [  PRPT  ]
+ &prpt
+  MR=3
+  vqdptprpt=.t.
+  infrared=.t.
+ /
+
+ &IRspectrum
+  minOmega=800.0
+  maxOmega=4000.0
+  delOmega=1.0
+  fwhm=5.0
+ /
+
