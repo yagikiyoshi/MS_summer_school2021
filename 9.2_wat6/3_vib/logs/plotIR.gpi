@@ -12,7 +12,7 @@ unset ytics
 
 set key font "Arial,12"
 
-set yrange [0:20]
+set yrange [0:50]
 set xrange [500:3850]
 set xtics  500
 set key left
@@ -21,8 +21,8 @@ set out "plotIR.pdf"
 plot "vqdpt-IR.spectrum" w l t "VQDPT2", \
      "../1_harmonic/harmonic.spectrum" w l t "Harmonic"
 
-set yrange [0:200]
-set xrange [3000:3850]
+set yrange [0:400]
+set xrange [2500:3850]
 set xtics  200
 set key right
 
