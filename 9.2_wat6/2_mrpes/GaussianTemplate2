@@ -1,0 +1,10 @@
+%chk=#basename#.chk
+%NprocShared=8
+%mem=10GB
+#P B3LYP/CC-PVDZ FREQ  NOSYMMETRY 
+
+Frequency at B3LYP/cc-pVDZ
+
+0  1  
+#coordinate#
+
