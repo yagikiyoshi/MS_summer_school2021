@@ -47,7 +47,7 @@ spherical_pot = yes
 
 [QMMM]
 qmtyp              = dftb+
-qmcnt              = dftb_01.hsd
+qmcnt              = dftb_template.hsd
 qmexe              = runDFTB.sh
 workdir            = /dev/shm/qmmm_prod
 savedir            = qmmm_prod

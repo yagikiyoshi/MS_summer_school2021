@@ -24,7 +24,7 @@ group2         = all             # selection group 2
 fitting_method = NO              # NO/TR+ROT/TR/TR+ZROT/XYTR/XYTR+ZROT
  
 [OPTION]
-centering      = YES             # shift center of mass (YES requres psf/prmtop/grotop)
+centering      = NO              # shift center of mass (YES requres psf/prmtop/grotop)
 centering_atom = 1               # atom group
 center_coord   = 0.0 0.0 0.0     # target center coordinates
 pbc_correct    = MOLECULE        # (NO/MOLECULE) (MOLECULE requres psf/prmtop/grotop)

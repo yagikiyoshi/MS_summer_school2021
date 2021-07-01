@@ -38,7 +38,7 @@ fix_layer     = 0.0
 
 [QMMM]
 qmtyp              = dftb+
-qmcnt              = dftb_01.hsd
+qmcnt              = dftb_template.hsd
 qmexe              = runDFTB.sh
 workdir            = /dev/shm/qmmm_mini
 savedir            = qmmm_mini
