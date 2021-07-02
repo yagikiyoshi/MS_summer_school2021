@@ -6,38 +6,19 @@
  &mrpes mopFile='prop_no_1.mop' mcs_cutoff=-1.0D-03 /
 
 #--- [  VIB  ]
- &vib 
-  MR=3 
-  vmaxall=10 
-  vscf=.t. 
-  vqdpt=.t. 
-  prpt=.t. 
- /
+ &vib MR=3 vscf=.t.  vqdpt=.t.  prpt=.t. 
+      vmaxall=10 /
 
 #--- [  VSCF  ]
  &vscf Maxitr=20 Ethresh=1.D-03 / 
 
- &states
-  fund=.t.
- /
+ &states fund=.t.  /
 
 #--- [  VQDPT  ]
- &vqdpt 
-  maxSum=4
-  nGen=3 
- /
+ &vqdpt maxSum=4 nGen=3 /
 
 #--- [  PRPT  ]
- &prpt
-  MR=3
-  vqdptprpt=.t.
-  infrared=.t.
- /
+ &prpt MR=3 vqdptprpt=.t.  infrared=.t.  /
 
- &IRspectrum
-  minOmega=800.0
-  maxOmega=4000.0
-  delOmega=1.0
-  fwhm=5.0
- /
+ &IRspectrum minOmega=800.0 maxOmega=4000.0 delOmega=1.0 fwhm=5.0 /
 
