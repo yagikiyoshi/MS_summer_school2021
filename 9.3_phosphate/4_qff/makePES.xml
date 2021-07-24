@@ -6,7 +6,7 @@
    <qchem>
       <program     value="generic" />
       <title       value="QM/MM: B3LYP-D3/cc-pVDZ" />
-      <xyzfile   value="makeQFF" />
+      <xyzfile     value="makeQFF" />
    </qchem>
    <qff>
       <stepsize  value="0.5" />
