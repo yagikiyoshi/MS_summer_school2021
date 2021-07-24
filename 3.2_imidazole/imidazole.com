@@ -1,7 +1,7 @@
 %NprocShared=16
 %chk=imidazole.chk
 %mem=1gb
-#P B3LYP/cc-pVDZ opt 
+#P B3LYP/cc-pVDZ opt pop=esp
 
 B3LYP/cc-pVDZ imidazole
 
