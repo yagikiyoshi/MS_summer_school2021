@@ -1,7 +1,7 @@
 *.wfn
 *.pdf
 *.dcd
-*.rst
+*/logs/*rst
 minfo.files
 pes
 qmmm_*.0
