@@ -1,0 +1,52 @@
+PSF EXT CMAP CHEQ
+
+         2 !NTITLE
+* PSF FOR BR                                                                    
+*  DATE:     4/29/16     21:26:54      CREATED BY USER: kyagi                   
+
+         7 !NATOM
+         1 PO4      1        PO42     P        PG3       1.54000       30.9740           0   0.00000     -0.301140E-02
+         2 PO4      1        PO42     O1       OG311   -0.810000       15.9994           0   0.00000     -0.301140E-02
+         3 PO4      1        PO42     H1       HGP1     0.440000       1.00800           0   0.00000     -0.301140E-02
+         4 PO4      1        PO42     O2       OG311   -0.810000       15.9994           0   0.00000     -0.301140E-02
+         5 PO4      1        PO42     H2       HGP1     0.440000       1.00800           0   0.00000     -0.301140E-02
+         6 PO4      1        PO42     O3       OG2P1   -0.900000       15.9994           0   0.00000     -0.301140E-02
+         7 PO4      1        PO42     O4       OG2P1   -0.900000       15.9994           0   0.00000     -0.301140E-02
+
+         6 !NBOND: bonds
+         1         2         1         4         1         6         1         7
+         4         5         2         3
+
+         8 !NTHETA: angles
+         2         1         4         2         1         6         2         1         7
+         4         1         6         4         1         7         6         1         7
+         1         2         3         1         4         5
+
+         6 !NPHI: dihedrals
+         2         1         4         5         3         2         1         4
+         3         2         1         6         3         2         1         7
+         5         4         1         6         5         4         1         7
+
+         0 !NIMPHI: impropers
+
+
+         0 !NDON: donors
+
+
+         0 !NACC: acceptors
+
+
+         0 !NNB
+
+         0         0         0         0         0         0         0
+
+         1         0 !NGRP NST2
+         0         2         0
+
+         1 !MOLNT
+         1         1         1         1         1         1         1
+
+         0         0 !NUMLP NUMLPH
+
+         0 !NCRTERM: cross-terms
+
